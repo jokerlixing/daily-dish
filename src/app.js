@@ -15,8 +15,8 @@
   const initialFilters = () => ({ cuisine:'', allCuisines:false, noSpicy:false, vegetarian:false, maxTime:0, query:'' });
   const state = { favorites:cleanIds(stored.favorites), history:cleanIds(stored.history).slice(0,20), filters:initialFilters(), current:null, menu:[], batchSize:1, busy:false, pool:recipes.slice(), dialogMode:'favorites', fridgeHasRun:false, checks:new Map() };
   const bag = new ShuffleBag();
-  const counts = [1,2,3,4,5,6,7,8,10];
-  const countWords = {1:'一',2:'两',3:'三',4:'四',5:'五',6:'六',7:'七',8:'八',10:'十'};
+  const counts = [1,2,3,4,5,6,7,8,9,10];
+  const countWords = {1:'一',2:'两',3:'三',4:'四',5:'五',6:'六',7:'七',8:'八',9:'九',10:'十'};
   let toastTimer, rollTimer, searchTimer;
 
   function persist(field) {
@@ -173,7 +173,7 @@
   $('#about-button').addEventListener('click',()=>{
     settleSearch();state.dialogMode='about';$('#dialog-title').textContent='好好吃饭，从这一桌开始';$('#dialog-eyebrow').textContent='给每个纠结吃什么的你';
     const grouped=cuisines.map(cuisine=>`${cuisine} ${recipes.filter(recipe=>recipe.cuisine===cuisine).length} 道`);
-    $('#dialog-content').innerHTML=`<div class="about-copy"><p>收录 <strong>${recipes.length} 道家常做法</strong>。支持一次随机 1、2、3、4、5、6、7、8、10 道菜；“全菜系随机”排除小吃，普通“随便都行”包含小吃。</p><div class="about-tags">${grouped.map(label=>`<span>${escape(label)}</span>`).join('')}</div><p>冰箱匹配会核对配方中的主食材。勾选默认调料时，认为有常用油盐、酱醋、糖淀粉、葱姜蒜；特色酱料、肉汤和主食不会被自动忽略。缺少的食材会明确列出，数量和新鲜程度仍请实际检查。</p><p>每道菜以 2 人份为参考，多菜组合可适当减少每道份量。“素菜”不含肉鱼，可能含蛋奶。做法为家常简化版本，实际时间随食材和设备变化。</p><p>图片使用真实菜品摄影，不使用 AI 生图或餐盘插画。摄影内容可能与家常配方的摆盘不同；同类菜参考会单独标注。点击照片来源可查看原作和授权信息。</p><p>收藏、历史、冰箱食材保存在当前浏览器，不上传，不会自动跨设备同步。文字菜单与筛选不依赖 AI 接口。</p><p class="about-small">菜谱参考和逐图来源见项目 <a href="https://github.com/jokerlixing/daily-dish" target="_blank" rel="noopener noreferrer">GitHub 仓库</a>中的 data 目录。</p></div>`;$('#collection-dialog').showModal();
+    $('#dialog-content').innerHTML=`<div class="about-copy"><p>收录 <strong>${recipes.length} 道家常做法</strong>。支持一次随机 1、2、3、4、5、6、7、8、9、10 道菜；“全菜系随机”排除小吃，普通“随便都行”包含小吃。</p><div class="about-tags">${grouped.map(label=>`<span>${escape(label)}</span>`).join('')}</div><p>冰箱匹配会核对配方中的主食材。勾选默认调料时，认为有常用油盐、酱醋、糖淀粉、葱姜蒜；特色酱料、肉汤和主食不会被自动忽略。缺少的食材会明确列出，数量和新鲜程度仍请实际检查。</p><p>每道菜以 2 人份为参考，多菜组合可适当减少每道份量。“素菜”不含肉鱼，可能含蛋奶。做法为家常简化版本，实际时间随食材和设备变化。</p><p>图片使用真实菜品摄影，不使用 AI 生图或餐盘插画。摄影内容可能与家常配方的摆盘不同；同类菜参考会单独标注。点击照片来源可查看原作和授权信息。</p><p>收藏、历史、冰箱食材保存在当前浏览器，不上传，不会自动跨设备同步。文字菜单与筛选不依赖 AI 接口。</p><p class="about-small">菜谱参考和逐图来源见项目 <a href="https://github.com/jokerlixing/daily-dish" target="_blank" rel="noopener noreferrer">GitHub 仓库</a>中的 data 目录。</p></div>`;$('#collection-dialog').showModal();
   });
   const now=new Date();$('#today-label').textContent=`${now.getMonth()+1} 月 ${now.getDate()} 日 · ${['星期日','星期一','星期二','星期三','星期四','星期五','星期六'][now.getDay()]} · 好好吃饭，今天也一样`;
   $('#total-count').textContent=recipes.length;syncFilterControls();draw(false);$('#shuffle-button').querySelector('span').textContent='帮我选一道';updateFavoriteCount();

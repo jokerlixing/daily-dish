@@ -8,7 +8,7 @@ A responsive, dependency-free Chinese recipe picker for desktop and mobile.
 
 ## 使用
 
-- 一次随机 **1、2、3、4、5、6、7、8、10 道菜**；点击菜单中的菜名查看完整做法，可收藏整桌菜单。
+- 一次随机 **1、2、3、4、5、6、7、8、9、10 道菜**；点击菜单中的菜名查看完整做法，可收藏整桌菜单。
 - **全菜系随机**覆盖八大菜系和家常菜，排除小吃分类及地方菜系中标为小吃的配方；“随便都行”包含小吃。
 - 菜系、不吃辣、素菜、时长、菜名和食材搜索可以组合使用。
 - 同一桌不重复；候选不足时显示实际数量，不重复凑数。
@@ -52,6 +52,7 @@ npm start
 - `scripts/core.test.mjs`：数据完整性、随机边界、筛选、冰箱匹配测试。
 - `scripts/photos.test.mjs`：逐菜照片覆盖、图片文件、来源信息与构建一致性检查。
 - `scripts/browser-check.cjs`：Playwright 浏览器检查；支持 `PLAYWRIGHT_MODULE`、`BROWSER_EXE`、`TEST_URL` 环境变量。
+- `scripts/layout-check.cjs`：12 种屏幕宽度下的按钮遮挡、真实点击位置和九道菜回归检查。
 
 `npm start` 只用于本地预览。生产部署为静态文件，可使用 GitHub Pages 的 `main` 分支根目录发布。照片路径均为相对路径，支持仓库子路径。
 

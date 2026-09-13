@@ -17,6 +17,8 @@ fs.mkdirSync(output,{recursive:true});
     const reset=async()=>{await search('xyz-no-results');await page.locator('#reset-filters').click();};
     await page.goto(url);await page.waitForSelector('#recipe-name');
     assert.equal(await page.locator('.cuisine-option').count(),11);
+    assert.deepEqual(await page.locator('.batch-option').evaluateAll(nodes=>nodes.map(node=>Number(node.dataset.count))),[1,2,3,4,5,6,7,8,9,10]);
+    assert.equal(await page.locator('[data-count="9"]').getAttribute('aria-label'),'随机九道菜');
     assert.equal(await page.locator('#total-count').textContent(),'168');
     assert.ok(await page.locator('.step-row').count()>=4);
     const sequence=[await page.locator('#recipe-name').textContent()];
@@ -32,7 +34,7 @@ fs.mkdirSync(output,{recursive:true});
     await page.locator('#all-cuisines').click();
     assert.equal(await page.locator('#all-cuisines').getAttribute('aria-pressed'),'true');
     assert.equal(await page.locator('#pool-count').textContent(),'不含小吃 · 123 道可选');
-    for(const count of [2,3,4,5,6,7,8,10]){
+    for(const count of [2,3,4,5,6,7,8,9,10]){
       await page.locator(`[data-count="${count}"]`).click();await ready();
       const ids=await page.locator('[data-menu-recipe]').evaluateAll(nodes=>nodes.map(n=>n.dataset.menuRecipe));
       assert.equal(ids.length,count);assert.equal(new Set(ids).size,count);
@@ -110,12 +112,12 @@ fs.mkdirSync(output,{recursive:true});
       await page.locator('#fridge-panel summary').click();await page.locator('#fridge-input').fill('鸡蛋、番茄、土豆、青菜');await page.locator('#find-fridge').click();
       const sizes=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,viewport:innerWidth}));
       assert.ok(sizes.scroll<=sizes.viewport,`${screen.width}px overflow: ${JSON.stringify(sizes)}`);
-      if(screen.width<=390){const rect=await page.locator('#shuffle-button').boundingBox();assert.ok(rect.y>=0&&rect.y+rect.height<=screen.height);}
+      if(screen.width<=390){assert.equal(await page.locator('#shuffle-dock').evaluate(el=>getComputedStyle(el).position),'static');assert.ok(await page.locator('#quick-draw').isVisible());}
       await page.locator('#fridge-panel summary').click();await page.locator('[data-count="1"]').click();await ready();await search('宫保鸡丁');
       await page.waitForFunction(()=>{const img=document.querySelector('#recipe img');return img&&img.complete&&img.naturalWidth>0;});
       await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:path.join(output,`upgrade-${screen.width}.png`),fullPage:true});await search('');
     }
-    ok('320, 390, 768, and 1440px menus and fridge layouts have no overflow; mobile draw control stays visible');
+    ok('320, 390, 768, and 1440px menus and fridge layouts have no overflow; mobile redraw remains in document flow');
     const offline=await browser.newContext({viewport:screens[1],offline:true,reducedMotion:'reduce'});
     const file=await offline.newPage();file.on('pageerror',error=>errors.push(error.message));const network=[];
     file.on('request',r=>{if(/^https?:/.test(r.url()))network.push(r.url());});
