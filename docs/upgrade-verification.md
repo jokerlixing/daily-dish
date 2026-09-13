@@ -34,3 +34,11 @@
 - `npm test`：24 / 24 通过，包括照片覆盖、文件格式、逐图许可信息与内嵌清单一致性。
 - Chrome 浏览器检查：14 组通过，覆盖四种屏幕尺寸，未发现运行时错误。
 - 145 张独立 WebP 均能完整解码，共 13,409,968 字节。78 道菜名匹配，90 道明确标注同类、主材或做法参考。
+
+## 线上结果
+
+- 仓库：[jokerlixing/daily-dish](https://github.com/jokerlixing/daily-dish)，公开仓库，仅同步 GitHub `origin/main`。
+- 部署：[GitHub Pages 正式网页](https://jokerlixing.github.io/daily-dish/)，来源为 `main` 分支根目录，HTTPS 开启。
+- 2026-09-14 00:45（Asia/Shanghai）线上验证：14 组浏览器检查全部通过，包括手机尺寸、随机菜单、冰箱、收藏及无运行时错误。
+- 正式网页 HTML 与本地构建 SHA-256 一致；全部 145 张独立图片 HTTP 200、类型正确、内容散列与本地资源一致。
+- HTML SHA-256：`440e65fdc684343c50548b9d19302870b4ca4bb44576ab28ac71199eb4d71f59`。
