@@ -2,7 +2,7 @@
   'use strict';
   const recipes = window.RECIPES;
   const photos = window.PHOTOS || {};
-  const { cuisines, filterRecipes, ShuffleBag, parseIngredients, matchFridge } = window.RecipeCore;
+  const { cuisines, categories, filterRecipes, ShuffleBag, parseIngredients, matchFridge } = window.RecipeCore;
   const $ = selector => document.querySelector(selector);
   const icon = name => `<svg class="icon" aria-hidden="true"><use href="#i-${name}"/></svg>`;
   const escape = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -11,10 +11,12 @@
   let storageAvailable = true, stored = {};
   try { const value = JSON.parse(localStorage.getItem(storageKey) || '{}'); if (value && typeof value === 'object' && !Array.isArray(value)) stored = value; } catch (_) { storageAvailable = false; }
   const byId = new Map(recipes.map(recipe => [recipe.id, recipe]));
-  const cleanIds = value => Array.isArray(value) ? [...new Set(value.filter(id => typeof id === 'string' && byId.has(id)))] : [];
+  const legacyIds = { 'sn-sesame-tangyuan':'es-ningbo-sesame-tangyuan' };
+  const cleanIds = value => Array.isArray(value) ? [...new Set(value.map(id=>legacyIds[id]||id).filter(id => typeof id === 'string' && byId.has(id)))] : [];
   const initialFilters = () => ({ cuisine:'', allCuisines:false, noSpicy:false, vegetarian:false, maxTime:0, query:'' });
   const state = { favorites:cleanIds(stored.favorites), history:cleanIds(stored.history).slice(0,20), filters:initialFilters(), current:null, menu:[], batchSize:1, busy:false, pool:recipes.slice(), dialogMode:'favorites', fridgeHasRun:false, checks:new Map() };
   const bag = new ShuffleBag();
+  const catalog = { page:1, pageSize:24, filters:{...initialFilters(),category:''} };
   const counts = [1,2,3,4,5,6,7,8,9,10];
   const countWords = {1:'一',2:'两',3:'三',4:'四',5:'五',6:'六',7:'七',8:'八',9:'九',10:'十'};
   let toastTimer, rollTimer, searchTimer;
@@ -112,8 +114,31 @@
     toast(storageAvailable?(existed?'已从收藏移除':'已收藏，喜欢的味道留住了'):'浏览器未允许保存，收藏仅在本次打开时有效');
   }
   function showStandalone(recipe, label) {
+    switchView('random');
     finishRoll();clearTimeout(searchTimer);state.menu=[];renderMenu();showRecipe(recipe);$('#recommendation-label').textContent=label;
     focusSection('#recipe-name');
+  }
+  function switchView(view) {
+    const browsing=view==='catalog';
+    if(browsing)settleSearch();
+    $('#random-view').hidden=browsing;$('#catalog-view').hidden=!browsing;
+    $('.skip-link').href=browsing?'#catalog-title':'#recipe';$('.skip-link').textContent=browsing?'跳到菜谱库':'跳到今日菜谱';
+    $('#random-view-button').setAttribute('aria-pressed',String(!browsing));$('#catalog-view-button').setAttribute('aria-pressed',String(browsing));
+    if(browsing)renderCatalog();
+  }
+  function renderCatalog() {
+    const list=filterRecipes(recipes,catalog.filters),pages=Math.max(1,Math.ceil(list.length/catalog.pageSize));
+    catalog.page=Math.min(pages,Math.max(1,catalog.page));
+    const start=(catalog.page-1)*catalog.pageSize,visible=list.slice(start,start+catalog.pageSize);
+    $('#catalog-result-count').textContent=`找到 ${list.length} 道${list.length?` · 当前 ${start+1}–${start+visible.length} 道`:''}`;
+    $('#catalog-grid').innerHTML=visible.map(recipe=>`<button class="catalog-card" data-catalog-recipe="${escape(recipe.id)}" aria-label="查看${escape(recipe.name)}做法"><span class="catalog-photo">${imageMarkup(recipe,true)}</span><span class="catalog-card-body"><span class="catalog-card-tags">${escape(recipe.category||recipe.type)} · ${escape(recipe.cuisine)}</span><strong>${escape(recipe.name)}</strong><span class="catalog-card-meta">${recipe.time} 分钟 <span>${escape(recipe.difficulty)} ${icon('arrow')}</span></span></span></button>`).join('');
+    $('#catalog-empty').hidden=!!list.length;$('#catalog-page').textContent=`${catalog.page} / ${pages}`;
+    $('#catalog-prev').disabled=catalog.page===1;$('#catalog-next').disabled=catalog.page===pages;
+    $('#category-options').querySelectorAll('button').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.category===catalog.filters.category)));
+  }
+  function applyCatalogFilters() {
+    catalog.page=1;catalog.filters.query=$('#catalog-search').value;catalog.filters.cuisine=$('#catalog-cuisine').value;
+    catalog.filters.maxTime=Number($('#catalog-time').value);catalog.filters.vegetarian=$('#catalog-vegetarian').checked;catalog.filters.noSpicy=$('#catalog-no-spicy').checked;renderCatalog();
   }
   function renderCollection() {
     const favorites=state.dialogMode==='favorites';const list=(favorites?state.favorites:state.history).map(id=>byId.get(id)).filter(Boolean);
@@ -157,7 +182,18 @@
     if(input.matches('[data-step]')){const i=Number(input.dataset.step);input.checked?checks.steps.add(i):checks.steps.delete(i);$('#steps-progress').textContent=`已完成 ${checks.steps.size} / ${state.current.steps.length} 步`;if(checks.steps.size===state.current.steps.length)toast('辛苦啦，趁热开饭！');}
   });
   $('#favorites-button').addEventListener('click',()=>openCollection('favorites'));$('#history-button').addEventListener('click',()=>openCollection('history'));
-  $('#home-button').addEventListener('click',()=>window.scrollTo({top:0,behavior:scrollBehavior()}));$('#close-dialog').addEventListener('click',()=>$('#collection-dialog').close());
+  $('#home-button').addEventListener('click',()=>{switchView('random');window.scrollTo({top:0,behavior:scrollBehavior()});});$('#close-dialog').addEventListener('click',()=>$('#collection-dialog').close());
+  $('.brand').addEventListener('click',()=>switchView('random'));
+  $('#random-view-button').addEventListener('click',()=>switchView('random'));$('#catalog-view-button').addEventListener('click',()=>switchView('catalog'));
+  $('#catalog-total').textContent=recipes.length;
+  $('#catalog-cuisine').innerHTML='<option value="">全部菜系</option>'+cuisines.map(cuisine=>`<option>${cuisine}</option>`).join('');
+  $('#category-options').innerHTML=[['','全部菜式'],...categories.map(category=>[category,category])].map(([value,label])=>`<button data-category="${value}" aria-pressed="${!value}">${label}<small>${recipes.filter(recipe=>!value||recipe.category===value).length}</small></button>`).join('');
+  $('#category-options').addEventListener('click',event=>{const button=event.target.closest('[data-category]');if(button){catalog.filters.category=button.dataset.category;applyCatalogFilters();}});
+  $('#catalog-search').addEventListener('input',applyCatalogFilters);
+  ['#catalog-cuisine','#catalog-time','#catalog-vegetarian','#catalog-no-spicy'].forEach(selector=>$(selector).addEventListener('change',applyCatalogFilters));
+  $('#catalog-reset').addEventListener('click',()=>{catalog.filters={...initialFilters(),category:''};$('#catalog-search').value='';$('#catalog-cuisine').value='';$('#catalog-time').value='0';$('#catalog-vegetarian').checked=false;$('#catalog-no-spicy').checked=false;applyCatalogFilters();});
+  [['#catalog-prev',-1],['#catalog-next',1]].forEach(([selector,offset])=>$(selector).addEventListener('click',()=>{catalog.page+=offset;renderCatalog();focusSection('#catalog-result-count');}));
+  $('#catalog-grid').addEventListener('click',event=>{const button=event.target.closest('[data-catalog-recipe]');if(button)showStandalone(byId.get(button.dataset.catalogRecipe),'从菜谱库里，选一道喜欢的菜');});
   $('#collection-dialog').addEventListener('click',event=>{if(event.target===$('#collection-dialog')){const rect=event.target.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)event.target.close();}});
   $('#dialog-content').addEventListener('click',event=>{const view=event.target.closest('[data-view]'),remove=event.target.closest('[data-remove]');if(view){$('#collection-dialog').close();showStandalone(byId.get(view.dataset.view),state.dialogMode==='favorites'?'从收藏里，找回喜欢的味道':'再看看这道菜');}if(remove){toggleFavorite(remove.dataset.remove);renderCollection();$('#dialog-content').querySelector('button')?.focus();}});
   $('#fridge-input').value=typeof stored.fridgeText==='string'?stored.fridgeText.slice(0,1000):'';
@@ -173,7 +209,8 @@
   $('#about-button').addEventListener('click',()=>{
     settleSearch();state.dialogMode='about';$('#dialog-title').textContent='好好吃饭，从这一桌开始';$('#dialog-eyebrow').textContent='给每个纠结吃什么的你';
     const grouped=cuisines.map(cuisine=>`${cuisine} ${recipes.filter(recipe=>recipe.cuisine===cuisine).length} 道`);
-    $('#dialog-content').innerHTML=`<div class="about-copy"><p>收录 <strong>${recipes.length} 道家常做法</strong>。支持一次随机 1、2、3、4、5、6、7、8、9、10 道菜；“全菜系随机”排除小吃，普通“随便都行”包含小吃。</p><div class="about-tags">${grouped.map(label=>`<span>${escape(label)}</span>`).join('')}</div><p>冰箱匹配会核对配方中的主食材。勾选默认调料时，认为有常用油盐、酱醋、糖淀粉、葱姜蒜；特色酱料、肉汤和主食不会被自动忽略。缺少的食材会明确列出，数量和新鲜程度仍请实际检查。</p><p>每道菜以 2 人份为参考，多菜组合可适当减少每道份量。“素菜”不含肉鱼，可能含蛋奶。做法为家常简化版本，实际时间随食材和设备变化。</p><p>图片使用真实菜品摄影，不使用 AI 生图或餐盘插画。摄影内容可能与家常配方的摆盘不同；同类菜参考会单独标注。点击照片来源可查看原作和授权信息。</p><p>收藏、历史、冰箱食材保存在当前浏览器，不上传，不会自动跨设备同步。文字菜单与筛选不依赖 AI 接口。</p><p class="about-small">菜谱参考和逐图来源见项目 <a href="https://github.com/jokerlixing/daily-dish" target="_blank" rel="noopener noreferrer">GitHub 仓库</a>中的 data 目录。</p></div>`;$('#collection-dialog').showModal();
+    const photographed=recipes.filter(recipe=>photos[recipe.id]?.src).length;
+    $('#dialog-content').innerHTML=`<div class="about-copy"><p>收录 <strong>${recipes.length} 道家常做法</strong>。支持一次随机 1、2、3、4、5、6、7、8、9、10 道菜；“全菜系随机”排除小吃、甜品、烘焙和饮品，普通“随便都行”包含全部菜式。</p><div class="about-tags">${grouped.map(label=>`<span>${escape(label)}</span>`).join('')}</div><p>“逛菜谱”可以按热菜、凉菜、汤羹、主食、小吃、甜品、烘焙和饮品浏览，再搭配菜系、时间和食材搜索；每页显示 24 道。</p><p>冰箱匹配会核对配方中的主食材。勾选默认调料时，认为有常用油盐、酱醋、糖淀粉、葱姜蒜；特色酱料、肉汤和主食不会被自动忽略。缺少的食材会明确列出，数量和新鲜程度仍请实际检查。</p><p>每道菜以 2 人份为参考，多菜组合可适当减少每道份量。“素菜”不含肉鱼，可能含蛋奶。做法为家常参考版本，实际时间随食材和设备变化。</p><p>当前 ${photographed} 道有照片${photographed<recipes.length?`，${recipes.length-photographed} 道实拍待补充`:''}。摄影内容可能与家常配方的摆盘不同；同类菜参考会单独标注。点击照片来源可查看原作和授权信息。</p><p>收藏、历史、冰箱食材保存在当前浏览器，不上传，不会自动跨设备同步。文字菜单与筛选不依赖 AI 接口。</p><p class="about-small">菜谱参考和逐图来源见项目 <a href="https://github.com/jokerlixing/daily-dish" target="_blank" rel="noopener noreferrer">GitHub 仓库</a>中的 data 目录。</p></div>`;$('#collection-dialog').showModal();
   });
   const now=new Date();$('#today-label').textContent=`${now.getMonth()+1} 月 ${now.getDate()} 日 · ${['星期日','星期一','星期二','星期三','星期四','星期五','星期六'][now.getDay()]} · 好好吃饭，今天也一样`;
   $('#total-count').textContent=recipes.length;syncFilterControls();draw(false);$('#shuffle-button').querySelector('span').textContent='帮我选一道';updateFavoriteCount();

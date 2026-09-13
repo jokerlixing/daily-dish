@@ -1965,18 +1965,6 @@
     "crop": null,
     "changes": "缩放并压缩为 WebP"
   },
-  "sn-sesame-tangyuan": {
-    "src": "assets/photos/es-ningbo-sesame-tangyuan.webp",
-    "alt": "煮熟的白汤圆实拍，作为黑芝麻汤圆的外观参考；内馅未展示",
-    "credit": "Huihermit",
-    "source": "https://commons.wikimedia.org/wiki/File:Chinese_Tangyuan.jpeg",
-    "license": "CC0",
-    "exact": false,
-    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "imageSource": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/38/Chinese_Tangyuan.jpeg/960px-Chinese_Tangyuan.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "crop": null,
-    "changes": "缩放并压缩为 WebP"
-  },
   "sn-shouzhua-bing": {
     "src": "assets/photos/sn-shouzhua-bing.webp",
     "alt": "葱抓饼实拍，作为鸡蛋手抓饼的同类外观参考；照片未加鸡蛋",

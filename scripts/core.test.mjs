@@ -4,18 +4,21 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
+import {isVegetarian,inferFlavor} from './recipe-metadata.mjs';
 const require=createRequire(import.meta.url);
-const {filterRecipes,ShuffleBag,cuisines,parseIngredients,matchFridge}=require('../src/core.js');
+const {filterRecipes,ShuffleBag,cuisines,categories,parseIngredients,matchFridge}=require('../src/core.js');
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const read=file=>fs.readFileSync(path.join(root,file),'utf8').replace(/^\uFEFF/,'');
 const recipeFiles=fs.readdirSync(path.join(root,'data')).filter(name=>name.endsWith('.json')&&!/^photos(?:[.-]|$)/i.test(name)).sort();
 const recipes=recipeFiles.flatMap(name=>JSON.parse(read(`data/${name}`)));
 
-test('168 recipes cover eight cuisines, everyday dishes and snacks without duplicate identities',()=>{
-  assert.equal(recipes.length,168);
+test('888 recipes cover eight cuisines, everyday dishes and snacks without duplicate identities',()=>{
+  assert.equal(recipes.length,888);
   assert.equal(new Set(recipes.map(r=>r.id)).size,recipes.length);
   assert.equal(new Set(recipes.map(r=>r.name)).size,recipes.length);
-  for(const cuisine of cuisines) assert.equal(recipes.filter(r=>r.cuisine===cuisine).length,cuisine==='小吃'?40:cuisine==='家常菜'?8:15,cuisine);
+  for(const cuisine of cuisines) assert.ok(recipes.filter(r=>r.cuisine===cuisine).length>=15,cuisine);
+  for(const category of categories) assert.ok(recipes.some(r=>r.category===category),category);
+  for(const recipe of recipes) assert.ok(cuisines.includes(recipe.cuisine)&&categories.includes(recipe.category),recipe.name);
 });
 test('every recipe has usable quantities, preparation steps, and valid filter metadata',()=>{
   for(const recipe of recipes){
@@ -28,6 +31,17 @@ test('every recipe has usable quantities, preparation steps, and valid filter me
     assert.ok(recipe.steps.length>=4&&recipe.steps.every(step=>typeof step==='string'&&step.length>8),recipe.name);
     for(const ingredient of recipe.ingredients)assert.ok(ingredient.name&&ingredient.amount,`${recipe.name}: missing ingredient amount`);
   }
+});
+test('vegetarian metadata distinguishes mushroom and plant names from seafood and animal seasonings',()=>{
+  for(const name of ['杏鲍菇','鸡毛菜','蟹味菇','羊肚菌','鱼腥草','牛蒡','肉桂粉','桂圆肉','鸡蛋','鹌鹑蛋','牛奶','素蚝油'])assert.equal(isVegetarian([{name}]),true,name);
+  for(const name of ['海米','鱼露','蚝油','猪油','鸡汤','鸡精','海蜇','吉利丁片','花甲','鹌鹑','鸡腿肉'])assert.equal(isVegetarian([{name}]),false,name);
+  for(const recipe of recipes)assert.equal(recipe.vegetarian,isVegetarian(recipe.ingredients),recipe.name);
+});
+test('unsweetened and salted drinks retain their actual flavor labels',()=>{
+  const drink=(name,ingredients)=>({name,category:'饮品',spicy:false,mainIngredients:ingredients.map(name=>({name})),keySeasonings:[]});
+  assert.equal(inferFlavor(drink('蒙古咸奶茶',['砖茶','牛奶','盐'])),'咸香');
+  assert.equal(inferFlavor(drink('美式咖啡',['咖啡豆','水'])),'咖啡香');
+  assert.equal(inferFlavor(drink('大麦茶',['烘焙大麦','水'])),'茶香');
 });
 test('combined filters return only matching recipes, including ingredient searches',()=>{
   const pool=filterRecipes(recipes,{noSpicy:true,vegetarian:true,maxTime:30,query:'鸡蛋'});
@@ -50,7 +64,8 @@ test('all-cuisines includes everyday dishes, overrides one cuisine and still res
   ];
   assert.deepEqual(filterRecipes(sample,{allCuisines:true,cuisine:'小吃',noSpicy:true,vegetarian:true,maxTime:15,query:'鸡蛋'}).map(r=>r.id),['home','sichuan']);
   assert.ok(filterRecipes(recipes,{allCuisines:true}).every(r=>r.cuisine!=='小吃'&&r.type!=='小吃'));
-  assert.equal(filterRecipes(recipes,{allCuisines:true}).length,123);
+  assert.ok(filterRecipes(recipes,{allCuisines:true}).length>123);
+  assert.ok(filterRecipes(recipes,{allCuisines:true}).every(r=>!['小吃','甜品','烘焙','饮品'].includes(r.category)));
   assert.deepEqual(filterRecipes(sample,{cuisine:'小吃'}).map(r=>r.id),['snack']);
 });
 test('a full random cycle has no repetitions and the next cycle does not repeat its boundary',()=>{
@@ -128,6 +143,7 @@ const dish=(id,names,time=20)=>({id,name:id,time,ingredients:names.map(name=>({n
 test('fridge input normalizes aliases, quantities, separators and cuts without losing food identity',()=>{
   assert.deepEqual(parseIngredients(' 西红柿，番茄、马铃薯2个;土豆块\n鸡蛋 蛋；去皮切丁胡萝卜，牛肉丝，鸡胸肉丁 '),['番茄','土豆','鸡蛋','胡萝卜','牛肉','鸡胸肉']);
   assert.deepEqual(parseIngredients('鱼豆腐、鱼、粉丝、鸡蛋清'),['鱼豆腐','鱼','粉丝','蛋清']);
+  assert.deepEqual(parseIngredients('已解冻肥牛卷、肥牛片'),['肥牛']);
   assert.deepEqual(parseIngredients('番茄 2 个，鸡蛋 200 g，切好的土豆'),['番茄','鸡蛋','土豆']);
   assert.deepEqual(parseIngredients(''),[]);
   assert.deepEqual(parseIngredients(null),[]);
@@ -178,6 +194,12 @@ test('empty, water-only and unrelated fridge contents do not recommend all recip
   const sample=[dish('eggs',['鸡蛋','盐']),dish('tomato',['番茄','水'])];
   for(const input of ['',[],null,['水'],['不存在的食材']])assert.deepEqual(matchFridge(sample,input),[]);
   assert.deepEqual(matchFridge(sample,['盐']),[]);
+});
+test('boiling and drinking water in dough recipes do not become missing food',()=>{
+  for(const name of ['沸水','冷水','饮用水','纯净水','凉白开']){
+    const row=matchFridge([dish('春饼',['面粉',name,'盐','食用油'])],['面粉'])[0];
+    assert.equal(row.canCook,true,name);assert.deepEqual(row.missing,[]);
+  }
 });
 
 test('explicit alternative ingredients work without treating required meat broth as water',()=>{

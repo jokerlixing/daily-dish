@@ -12,7 +12,7 @@ const url=process.env.TEST_URL||'http://localhost:4173/';
       const height=width<=375?740:900;await page.setViewportSize({width,height});await page.goto(url);await page.waitForSelector('[data-count="9"]');
       const layout=await page.evaluate(()=>{
         const controls=[...document.querySelectorAll('.selection-panel button,.selection-panel input,.selection-panel select')];
-        const covered=controls.flatMap(el=>{const r=el.getBoundingClientRect(),x=r.x+r.width/2,y=r.y+r.height/2;if(!r.width||!r.height||y<0||y>=innerHeight)return[];const hit=document.elementFromPoint(x,y);return el.contains(hit)?[]:[{control:el.getAttribute('aria-label')||el.textContent.trim(),cover:hit?.outerHTML.slice(0,140)}];});
+        const covered=controls.flatMap(el=>{const r=el.getBoundingClientRect(),x=Math.floor(r.x+r.width/2),y=Math.floor(r.y+r.height/2);if(!r.width||!r.height||y<0||y>=innerHeight)return[];const hit=document.elementFromPoint(x,y);return el.contains(hit)?[]:[{control:el.getAttribute('aria-label')||el.textContent.trim(),cover:hit?.outerHTML.slice(0,140)}];});
         return{covered,scrollWidth:document.documentElement.scrollWidth,width:innerWidth};
       });
       assert.deepEqual(layout.covered,[],`${width}px visible controls covered`);assert.ok(layout.scrollWidth<=layout.width,`${width}px horizontal overflow: ${JSON.stringify(layout)}`);

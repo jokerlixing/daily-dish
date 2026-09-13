@@ -1,13 +1,15 @@
 (function (root) {
   'use strict';
   const cuisines = ['川菜', '湘菜', '粤菜', '鲁菜', '苏菜', '浙菜', '闽菜', '徽菜', '家常菜', '小吃'];
+  const categories = ['热菜', '凉菜', '汤羹', '主食', '小吃', '甜品', '烘焙', '饮品'];
   function filterRecipes(recipes, filters = {}) {
     const query = (filters.query || '').trim().toLowerCase();
-    return recipes.filter(recipe => (filters.allCuisines ? recipe.cuisine !== '小吃' && recipe.type !== '小吃' : (!filters.cuisine || recipe.cuisine === filters.cuisine))
+    return recipes.filter(recipe => (filters.allCuisines ? recipe.cuisine !== '小吃' && recipe.type !== '小吃' && !['小吃','甜品','烘焙','饮品'].includes(recipe.category) : (!filters.cuisine || recipe.cuisine === filters.cuisine))
       && (!filters.noSpicy || !recipe.spicy)
       && (!filters.vegetarian || recipe.vegetarian)
       && (!filters.maxTime || recipe.time <= filters.maxTime)
-      && (!query || [recipe.name, recipe.cuisine, recipe.region || '', ...recipe.ingredients.map(i => i.name)].join(' ').toLowerCase().includes(query)));
+      && (!filters.category || recipe.category === filters.category)
+      && (!query || [recipe.name, recipe.cuisine, recipe.category || '', recipe.region || '', ...recipe.ingredients.map(i => i.name)].join(' ').toLowerCase().includes(query)));
   }
   class ShuffleBag {
     constructor(random = Math.random) { this.random = random; this.key = ''; this.bag = []; }
@@ -68,12 +70,13 @@
     '生抽': '酱油', '白糖': '糖', '细砂糖': '糖', '白砂糖': '糖', '砂糖': '糖', '糖粉': '糖',
     '香醋': '醋', '米醋': '醋', '陈醋': '醋', '白醋': '醋', '精盐': '盐', '食盐': '盐',
     '常温水': '水', '清水': '水', '开水': '水', '温水': '水', '热水': '水', '凉开水': '水',
+    '沸水':'水', '冷水':'水', '饮用水':'水', '纯净水':'水', '凉白开':'水',
     '米': '大米', '米饭': '熟米饭', '细面条': '面条', '细面': '面条', '面': '面条',
     '水磨糯米粉': '糯米粉', '澄粉': '小麦淀粉', '淮山': '山药', '荸荠净肉': '荸荠',
     // Explicit equivalents used by the shipped recipes. Do not strip all
     // qualifiers: 熟米饭, 干虾仁 and 郫县豆瓣酱 still describe distinct foods.
     '鲜虾': '虾', '细长红薯': '红薯', '猪五花肉': '五花肉', '菠萝果肉': '菠萝',
-    '无糖花生酱': '花生酱', '纯芝麻酱': '芝麻酱'
+    '无糖花生酱': '花生酱', '纯芝麻酱': '芝麻酱', '肥牛卷':'肥牛'
   };
   const pantry = new Set([
     '盐','食用油','香油','橄榄油','酱油','老抽','醋','糖','冰糖','红糖',
@@ -90,7 +93,7 @@
       .replace(/(?:切成|切)(?:细丝|薄片|小块|小丁|细末|丝|片|块|丁|末|段|碎)|剁碎|剁末|切碎/g, '')
       .replace(/^(?:适量|少许|少量)/, '')
       .replace(/(?:适量|少许|少量)$/, '');
-    name = name.replace(/^(?:(?:正规包装|购买的|市售|原味|新鲜|冷冻|即食|免洗|去皮|去骨|去壳|带皮|带骨|洗净|切好的|已充分泡发的|泡发的|无明显气味的|无盐))+/g, '');
+    name = name.replace(/^(?:(?:正规包装|购买的|市售|原味|新鲜|冷冻|已解冻|解冻的|即食|免洗|去皮|去骨|去壳|带皮|带骨|洗净|切好的|已充分泡发的|泡发的|无明显气味的|无盐))+/g, '');
     if (name.startsWith('鲜') && name.length > 2) name = name.slice(1);
     if (name.endsWith('净肉')) name = name.slice(0, -2);
     // Strip preparation cuts, not similarly ending foods such as 粉丝 or 虾片.
@@ -148,7 +151,7 @@
       || b.matched.length - a.matched.length || a.missing.length - b.missing.length || a.recipe.time - b.recipe.time);
   }
   function hash(value) { return [...value].reduce((total, char) => ((total * 31) + char.charCodeAt(0)) >>> 0, 7); }
-  const api = { cuisines, filterRecipes, ShuffleBag, hash, parseIngredients, matchFridge };
+  const api = { cuisines, categories, filterRecipes, ShuffleBag, hash, parseIngredients, matchFridge };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.RecipeCore = api;
 })(typeof window !== 'undefined' ? window : globalThis);

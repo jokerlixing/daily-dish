@@ -2,8 +2,8 @@
 
 所有采用的图片均为真实摄影，来源为 HowToCook 原始菜谱、Wikimedia Commons、Flickr 或逐图保留许可的 Unitools 镜像。未使用 AI 生图。图片仅作烹饪外观参考，不是本项目配方实测成品。
 
-当前覆盖 168 道菜：78 道菜名匹配、90 道明确标注同类/主材/做法参考。独立照片 145 张。
-尚未配图的菜谱：无。
+当前覆盖 167 道菜：78 道菜名匹配、89 道明确标注同类/主材/做法参考。独立照片 145 张。
+888 道草稿中新增 721 道尚未配图；现有 167 道也待按本次要求替换为美食天下实拍。
 
 同类参考的差异在网页可见图注中逐条说明，包括配料、荤素、地区、部位和制作方法；精确匹配也不意味着照片来自本页配方。
 
@@ -175,7 +175,6 @@
 | 芝麻酱热干面 | 芝麻酱热干面的实拍照片 | ZhengZhou | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) | [原始来源记录](https://commons.wikimedia.org/wiki/File:Hot_Dry_Noodles_stirred.jpg) |
 | 肉夹馍·家常快手版 | 肉夹馍·家常快手版的实拍照片 | Gary Soup | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) | [原始来源记录](https://commons.wikimedia.org/wiki/File:Roujiamo.jpg) |
 | 香菇咸豆花·家常版 | 咸豆腐脑实拍，照片配有辣酱、香菜和腌萝卜；本页为香菇家常版（参考） | Jpatokal | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) | [原始来源记录](https://commons.wikimedia.org/wiki/File:Tofu_brains_doufunao.jpg) |
-| 黑芝麻汤圆 | 煮熟的白汤圆实拍，作为黑芝麻汤圆的外观参考；内馅未展示（参考） | Huihermit | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) | [原始来源记录](https://commons.wikimedia.org/wiki/File:Chinese_Tangyuan.jpeg) |
 | 鸡蛋手抓饼 | 葱抓饼实拍，作为鸡蛋手抓饼的同类外观参考；照片未加鸡蛋（参考） | Joy | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) | [原始来源记录](https://commons.wikimedia.org/wiki/File:Cong_zhua_bing_(close-up).jpg) |
 | 香菇糯米烧麦 | 猪肉糯米烧卖实拍，作为香菇糯米烧麦的同类包点参考（参考） | jslander from Din Tai Fung Dumpling House in South Baldwin Avenue Arcadia, California | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) | [原始来源记录](https://commons.wikimedia.org/wiki/File:Pork_and_glutinous_rice_shaomai_by_jslander_at_Din_Tai_Fung,_Arcadia.jpg) |
 | 酸辣粉 | 酸辣粉实拍，照片含肥肠；本配方不含肥肠（参考） | Jpatokal | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) | [原始来源记录](https://commons.wikimedia.org/wiki/File:Hot_and_sour_noodles_with_pork_intestines.jpg) |

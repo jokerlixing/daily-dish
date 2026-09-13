@@ -34,8 +34,10 @@
       <div><p class="eyebrow" id="today-label">今天，也要好好吃饭</p><h1 id="page-title">今天吃啥？<br class="mobile-break"><span>让胃口碰个运气。</span></h1><p class="intro-copy">从八大菜系到街头小吃，一道菜，一点新鲜感。<br class="mobile-break">点一下，把纠结留给我们。</p></div>
       <div class="intro-stamp" aria-hidden="true"><span>饭 点 到 了</span><svg class="icon"><use href="#i-pot"/></svg><small>开 饭 大 吉</small></div>
     </section>
+    <div class="view-switch" role="group" aria-label="选菜方式"><button id="random-view-button" aria-pressed="true"><svg class="icon"><use href="#i-dice"/></svg>帮我随机选</button><button id="catalog-view-button" aria-pressed="false"><svg class="icon"><use href="#i-book"/></svg>逛菜谱 <span id="catalog-total"></span></button></div>
+    <div id="random-view">
     <section class="selection-panel" aria-label="选菜偏好">
-      <div class="filter-heading"><span class="small-label">今天想吃</span><span class="catalog-note"><strong id="total-count">168</strong> 道家常灵感 · 随心挑</span></div>
+      <div class="filter-heading"><span class="small-label">今天想吃</span><span class="catalog-note"><strong id="total-count">—</strong> 道家常灵感 · 随心挑</span></div>
       <div class="cuisine-options" id="cuisine-options" role="group" aria-label="选择菜系"></div>
       <div class="all-cuisines-row"><button class="all-cuisines-toggle" id="all-cuisines" aria-pressed="false"><span class="switch-track" aria-hidden="true"></span><span>全菜系随机 <small>只抽正餐，不含小吃</small></span></button></div>
       <div class="filter-bottom">
@@ -51,6 +53,19 @@
     <section id="empty-state" class="empty-state" hidden><svg class="icon"><use href="#i-search"/></svg><h2>这次的条件，有点挑嘴</h2><p>没有找到符合条件的菜。试试换个食材，或放宽一点筛选。</p><button class="button button-primary" id="reset-filters">清除筛选，随便吃点</button></section>
     <div class="shuffle-dock" id="shuffle-dock"><div class="shuffle-copy"><svg class="icon"><use href="#i-dice"/></svg><span><strong>不用想太多，吃点新花样</strong><small id="shuffle-hint">这一轮抽完前，不会重复推荐</small></span></div><button class="button button-primary shuffle-button" id="shuffle-button"><svg class="icon"><use href="#i-dice"/></svg><span>帮我选一道</span><svg class="icon arrow-icon"><use href="#i-arrow"/></svg></button></div>
     <section class="recipe-detail" id="recipe-detail" aria-label="食材和做法"></section>
+    </div>
+    <section id="catalog-view" class="catalog-view" aria-labelledby="catalog-title" hidden>
+      <div class="catalog-heading"><div><p class="eyebrow">按胃口，慢慢挑</p><h2 id="catalog-title">好好吃饭的灵感库</h2><p>八大菜系、家常菜与地方风味，点一道就能看做法。</p></div></div>
+      <div class="catalog-filters">
+        <label class="catalog-search"><svg class="icon"><use href="#i-search"/></svg><input id="catalog-search" type="search" placeholder="搜索菜名、食材、菜系" aria-label="搜索全部菜谱" autocomplete="off"></label>
+        <div id="category-options" class="category-options" role="group" aria-label="选择菜式"></div>
+        <div class="catalog-selects"><label>菜系<select id="catalog-cuisine" aria-label="浏览菜系"></select></label><label>用时<select id="catalog-time" aria-label="浏览做饭时间"><option value="0">不限时间</option><option value="15">15 分钟内</option><option value="30">30 分钟内</option><option value="60">60 分钟内</option></select></label><label class="catalog-check"><input id="catalog-vegetarian" type="checkbox">素菜（可含蛋奶）</label><label class="catalog-check"><input id="catalog-no-spicy" type="checkbox">不吃辣</label><button id="catalog-reset" class="text-button">清除筛选</button></div>
+      </div>
+      <div class="catalog-results-heading"><span id="catalog-result-count" role="status"></span><span>每页 24 道 · 点击查看做法</span></div>
+      <div id="catalog-grid" class="catalog-grid"></div>
+      <div id="catalog-empty" class="collection-empty" hidden><h3>还没有符合条件的菜</h3><p>试试更短的菜名，或清除一部分筛选。</p></div>
+      <nav class="catalog-pagination" aria-label="菜谱分页"><button id="catalog-prev" class="button button-light">上一页</button><span id="catalog-page"></span><button id="catalog-next" class="button button-light">下一页</button></nav>
+    </section>
     <footer class="site-footer"><span class="footer-brand">吃啥呢<span>每天的一点好胃口</span></span><p>每道菜为 2 人份家常参考做法，可按人数调整。<br>收藏只保存在当前浏览器 · 点击照片来源可查看摄影信息</p><button class="text-button" id="about-button">关于菜单与照片 <span>↗</span></button></footer>
   </main>
   <dialog id="collection-dialog" aria-labelledby="dialog-title"><div class="dialog-header"><div><p class="eyebrow" id="dialog-eyebrow">留住喜欢的味道</p><h2 id="dialog-title">我的收藏</h2></div><button class="icon-button" id="close-dialog" aria-label="关闭弹窗"><svg class="icon"><use href="#i-close"/></svg></button></div><div id="dialog-content" class="dialog-content"></div></dialog>

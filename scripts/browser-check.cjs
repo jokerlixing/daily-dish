@@ -19,21 +19,22 @@ fs.mkdirSync(output,{recursive:true});
     assert.equal(await page.locator('.cuisine-option').count(),11);
     assert.deepEqual(await page.locator('.batch-option').evaluateAll(nodes=>nodes.map(node=>Number(node.dataset.count))),[1,2,3,4,5,6,7,8,9,10]);
     assert.equal(await page.locator('[data-count="9"]').getAttribute('aria-label'),'随机九道菜');
-    assert.equal(await page.locator('#total-count').textContent(),'168');
+    assert.equal(await page.locator('#total-count').textContent(),'888');
+    const catalog=await page.evaluate(()=>window.RECIPES.map(r=>({id:r.id,cuisine:r.cuisine,type:r.type,category:r.category})));
     assert.ok(await page.locator('.step-row').count()>=4);
     const sequence=[await page.locator('#recipe-name').textContent()];
     for(let i=0;i<12;i++){await page.locator('#quick-draw').click();await ready();sequence.push(await page.locator('#recipe-name').textContent());}
     assert.equal(new Set(sequence).size,sequence.length);
-    ok('168 recipes load with ingredients and steps; 13 single recommendations do not repeat');
+    ok('888 recipes load with ingredients and steps; 13 single recommendations do not repeat');
     for(const cuisine of ['川菜','湘菜','粤菜','鲁菜','苏菜','浙菜','闽菜','徽菜','家常菜','小吃']){
       await page.locator(`[data-cuisine="${cuisine}"]`).click();
       assert.equal(await page.locator('.cuisine-badge').textContent(),cuisine);
-      assert.equal(await page.locator('#pool-count').textContent(),`${cuisine==='小吃'?40:cuisine==='家常菜'?8:15} 道可选`);
+      assert.equal(await page.locator('#pool-count').textContent(),`${catalog.filter(r=>r.cuisine===cuisine).length} 道可选`);
     }
     ok('all eight cuisines, everyday dishes, and snacks have the expected coverage');
     await page.locator('#all-cuisines').click();
     assert.equal(await page.locator('#all-cuisines').getAttribute('aria-pressed'),'true');
-    assert.equal(await page.locator('#pool-count').textContent(),'不含小吃 · 123 道可选');
+    assert.equal(await page.locator('#pool-count').textContent(),`不含小吃 · ${catalog.filter(r=>r.cuisine!=='小吃'&&r.type!=='小吃'&&!['小吃','甜品','烘焙','饮品'].includes(r.category)).length} 道可选`);
     for(const count of [2,3,4,5,6,7,8,9,10]){
       await page.locator(`[data-count="${count}"]`).click();await ready();
       const ids=await page.locator('[data-menu-recipe]').evaluateAll(nodes=>nodes.map(n=>n.dataset.menuRecipe));
@@ -51,8 +52,7 @@ fs.mkdirSync(output,{recursive:true});
     ok('all batch sizes produce distinct main dishes; menu selection, checklists, and batch favorite work');
     await page.locator('[data-cuisine="家常菜"]').click();
     assert.equal(await page.locator('#all-cuisines').getAttribute('aria-pressed'),'false');
-    assert.equal(await page.locator('[data-menu-recipe]').count(),8);
-    assert.match(await page.locator('#menu-description').textContent(),/只有 8 道/);
+    assert.equal(await page.locator('[data-menu-recipe]').count(),10);
     await search('番茄炒蛋');assert.ok(!await page.locator('#menu-section').isVisible());
     assert.equal(await page.locator('#recipe-name').textContent(),'番茄炒蛋');
     assert.match(await page.locator('#shuffle-hint').textContent(),/只有 1 道/);

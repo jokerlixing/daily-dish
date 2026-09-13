@@ -64,7 +64,8 @@
     ],
     "tip": "豆瓣酱已有咸味，先尝汤汁再决定是否额外加盐。",
     "vegetarian": false,
-    "spicy": true
+    "spicy": true,
+    "category": "热菜"
   },
   {
     "id": "nw-kung-pao-chicken",
@@ -143,7 +144,8 @@
     ],
     "tip": "鸡丁大小尽量一致，花生米出锅前再加入。",
     "vegetarian": false,
-    "spicy": true
+    "spicy": true,
+    "category": "热菜"
   },
   {
     "id": "nw-fish-fragrant-pork",
@@ -226,7 +228,8 @@
     ],
     "tip": "泡椒的酸香是关键；木耳现泡现用，不要在室温下浸泡过夜。",
     "vegetarian": false,
-    "spicy": true
+    "spicy": true,
+    "category": "热菜"
   },
   {
     "id": "nw-twice-cooked-pork",
@@ -289,7 +292,8 @@
     ],
     "tip": "煮熟的肉稍晾凉更容易切薄；煸出的油过多可舀出一些。",
     "vegetarian": false,
-    "spicy": true
+    "spicy": true,
+    "category": "热菜"
   },
   {
     "id": "nw-water-boiled-pork",
@@ -364,7 +368,8 @@
     ],
     "tip": "肉片切得薄且均匀，分批下锅，避免粘成一团导致夹生。",
     "vegetarian": false,
-    "spicy": true
+    "spicy": true,
+    "category": "热菜"
   },
   {
     "id": "nw-ants-climbing-tree",
@@ -431,7 +436,8 @@
     ],
     "tip": "不同粉丝吸水量不同；太干时沿锅边补少量热水。",
     "vegetarian": false,
-    "spicy": true
+    "spicy": true,
+    "category": "热菜"
   },
   {
     "id": "nw-pickled-greens-fish",
@@ -502,7 +508,8 @@
     ],
     "tip": "优先购买已处理鱼片，仍要检查残刺；酸菜较咸时不再额外加盐。",
     "vegetarian": false,
-    "spicy": true
+    "spicy": true,
+    "category": "热菜"
   },
   {
     "id": "nw-fish-fragrant-eggplant",
@@ -573,7 +580,8 @@
     ],
     "tip": "先蒸后烧可减少茄子的吸油量，翻动时轻一些。",
     "vegetarian": true,
-    "spicy": true
+    "spicy": true,
+    "category": "热菜"
   },
   {
     "id": "nw-dry-fried-green-beans",
@@ -628,7 +636,8 @@
     ],
     "tip": "四季豆必须彻底熟透；先焖熟再炒干能兼顾安全与口感。",
     "vegetarian": true,
-    "spicy": true
+    "spicy": true,
+    "category": "热菜"
   },
   {
     "id": "nw-white-oil-winter-melon",
@@ -687,7 +696,8 @@
     ],
     "tip": "这是用植物油和清水制作的家常素食版，不使用猪油或肉汤。",
     "vegetarian": true,
-    "spicy": false
+    "spicy": false,
+    "category": "热菜"
   },
   {
     "id": "nw-chili-pork",
@@ -746,7 +756,8 @@
     ],
     "tip": "螺丝椒辣度不一，可用一半普通青椒降低辣度。",
     "vegetarian": false,
-    "spicy": true
+    "spicy": true,
+    "category": "热菜"
   },
   {
     "id": "nw-chopped-chili-fish-head",
@@ -805,7 +816,8 @@
     ],
     "tip": "鱼头大小和厚度会影响时间，以最厚处熟透为准；小心鱼骨。",
     "vegetarian": false,
-    "spicy": true
+    "spicy": true,
+    "category": "热菜"
   },
   {
     "id": "nw-pickled-beans-pork",
@@ -864,7 +876,8 @@
     ],
     "tip": "使用正规包装酸豆角；若偏咸可先短暂浸水再挤干。",
     "vegetarian": false,
-    "spicy": true
+    "spicy": true,
+    "category": "热菜"
   },
   {
     "id": "nw-hand-torn-cabbage",
@@ -919,7 +932,8 @@
     ],
     "tip": "洗好的包菜尽量沥干，避免炒成水煮菜。",
     "vegetarian": true,
-    "spicy": true
+    "spicy": true,
+    "category": "热菜"
   },
   {
     "id": "nw-steamed-cured-meats",
@@ -974,7 +988,8 @@
     ],
     "tip": "不同商品腊味处理方式不同，先遵循包装说明；已有咸味，不再额外加盐。",
     "vegetarian": false,
-    "spicy": true
+    "spicy": true,
+    "category": "热菜"
   },
   {
     "id": "nw-farmhouse-bowl",
@@ -1029,7 +1044,8 @@
     ],
     "tip": "鸡蛋煎熟再切块，既容易翻炒，也能吸住酱汁。",
     "vegetarian": false,
-    "spicy": true
+    "spicy": true,
+    "category": "热菜"
   },
   {
     "id": "nw-hunan-beef",
@@ -1092,7 +1108,8 @@
     ],
     "tip": "逆着纹理切薄片可减少嚼劲；牛肉熟后不要长时间反复炒。",
     "vegetarian": false,
-    "spicy": true
+    "spicy": true,
+    "category": "热菜"
   },
   {
     "id": "nw-chili-steamed-taro",
@@ -1139,7 +1156,8 @@
     ],
     "tip": "生芋头汁可能使皮肤发痒，戴手套处理；芋头一定蒸到完全熟软。",
     "vegetarian": true,
-    "spicy": true
+    "spicy": true,
+    "category": "热菜"
   },
   {
     "id": "nw-grandma-preserved-greens",
@@ -1190,7 +1208,8 @@
     ],
     "tip": "选择配料仅含蔬菜及植物调味的外婆菜，才能保持这道菜为素食。",
     "vegetarian": true,
-    "spicy": true
+    "spicy": true,
+    "category": "热菜"
   },
   {
     "id": "nw-dongan-chicken",
@@ -1261,7 +1280,8 @@
     ],
     "tip": "家常版用鸡块充分焖熟，保留东安鸡酸辣风味；醋分两次加更有层次。",
     "vegetarian": false,
-    "spicy": true
+    "spicy": true,
+    "category": "热菜"
   },
   {
     "id": "nw-mushu-pork",
@@ -1328,7 +1348,8 @@
     ],
     "tip": "黄瓜最后下锅可保持脆口；木耳泡好后尽快烹调。",
     "vegetarian": false,
-    "spicy": false
+    "spicy": false,
+    "category": "热菜"
   },
   {
     "id": "nw-sweet-sour-pork",
@@ -1399,7 +1420,8 @@
     ],
     "tip": "肉条分批炸可避免油温骤降；300毫升是锅内用量，并非全部吃入。",
     "vegetarian": false,
-    "spicy": false
+    "spicy": false,
+    "category": "热菜"
   },
   {
     "id": "nw-oil-braised-shrimp",
@@ -1458,7 +1480,8 @@
     ],
     "tip": "开背便于去虾线和入味；加料酒时注意热油飞溅。",
     "vegetarian": false,
-    "spicy": false
+    "spicy": false,
+    "category": "热菜"
   },
   {
     "id": "nw-guota-tofu",
@@ -1525,7 +1548,8 @@
     ],
     "tip": "这里用清水制作蛋奶素可吃的家常版；豆腐擦干后更好挂糊。",
     "vegetarian": true,
-    "spicy": false
+    "spicy": false,
+    "category": "热菜"
   },
   {
     "id": "nw-vinegar-cabbage",
@@ -1588,7 +1612,8 @@
     ],
     "tip": "菜帮与菜叶分开下锅，能让整盘口感更一致。",
     "vegetarian": true,
-    "spicy": false
+    "spicy": false,
+    "category": "热菜"
   },
   {
     "id": "nw-candied-sweet-potato",
@@ -1627,7 +1652,8 @@
     ],
     "tip": "家常版用烤红薯代替油炸；热糖浆很烫，切勿直接触碰或入口。",
     "vegetarian": true,
-    "spicy": false
+    "spicy": false,
+    "category": "甜品"
   },
   {
     "id": "nw-radish-fritters",
@@ -1682,7 +1708,8 @@
     ],
     "tip": "丸子别做太大；350毫升是炸锅用油量，实际吸油量会少得多。",
     "vegetarian": true,
-    "spicy": false
+    "spicy": false,
+    "category": "小吃"
   },
   {
     "id": "nw-bean-sauce-chicken",
@@ -1749,7 +1776,8 @@
     ],
     "tip": "甜面酱较咸，不必额外加盐；炒酱时保持小火防止发苦。",
     "vegetarian": false,
-    "spicy": false
+    "spicy": false,
+    "category": "热菜"
   },
   {
     "id": "nw-yellow-braised-chicken",
@@ -1820,7 +1848,8 @@
     ],
     "tip": "想留汤拌饭就少收一会儿；锅中水快干时及时补热水。",
     "vegetarian": false,
-    "spicy": false
+    "spicy": false,
+    "category": "热菜"
   },
   {
     "id": "nw-clear-pork-meatball-soup",
@@ -1883,7 +1912,8 @@
     ],
     "tip": "丸子汤保持微沸，既不容易煮散，也有助于汤色清爽。",
     "vegetarian": false,
-    "spicy": false
+    "spicy": false,
+    "category": "汤羹"
   },
   {
     "id": "nw-huizhou-one-pot",
@@ -1959,7 +1989,8 @@
     ],
     "tip": "这是两人份简化版，用商品蛋饺节省准备时间；传统宴席版层次和食材更丰富。",
     "vegetarian": false,
-    "spicy": false
+    "spicy": false,
+    "category": "热菜"
   },
   {
     "id": "nw-huizhou-fermented-mandarin-fish",
@@ -2022,7 +2053,8 @@
     ],
     "tip": "使用正规商品腌鲜鳜鱼，不在家自行发酵；鱼已带盐味，先尝汁再调味。",
     "vegetarian": false,
-    "spicy": false
+    "spicy": false,
+    "category": "热菜"
   },
   {
     "id": "nw-pan-fried-hairy-tofu",
@@ -2077,7 +2109,8 @@
     ],
     "tip": "只使用正规包装、在保质期内的毛豆腐；普通豆腐长霉不能替代。",
     "vegetarian": true,
-    "spicy": false
+    "spicy": false,
+    "category": "热菜"
   },
   {
     "id": "nw-dried-bamboo-pork",
@@ -2144,7 +2177,8 @@
     ],
     "tip": "110分钟以泡发好的笋干为起点；若用干品，须按包装提前泡发，通常需要数小时至一夜。",
     "vegetarian": false,
-    "spicy": false
+    "spicy": false,
+    "category": "热菜"
   },
   {
     "id": "nw-wenzheng-bamboo-shoots",
@@ -2203,7 +2237,8 @@
     ],
     "tip": "以鲜春笋和火腿做家常版本；火腿已有咸味，通常无需另加盐。",
     "vegetarian": false,
-    "spicy": false
+    "spicy": false,
+    "category": "热菜"
   },
   {
     "id": "nw-zhonghe-soup",
@@ -2274,7 +2309,8 @@
     ],
     "tip": "家常版用少量虾仁补鲜；若另行熬骨汤，需额外预留熬汤时间。",
     "vegetarian": false,
-    "spicy": false
+    "spicy": false,
+    "category": "汤羹"
   },
   {
     "id": "nw-red-braised-fish-tail",
@@ -2345,7 +2381,8 @@
     ],
     "tip": "“划水”指鱼尾；鱼尾部分仍有鱼刺，食用时注意挑出。",
     "vegetarian": false,
-    "spicy": false
+    "spicy": false,
+    "category": "热菜"
   },
   {
     "id": "nw-daoban-cured-pork",
@@ -2392,7 +2429,8 @@
     ],
     "tip": "家常版使用耐热盘蒸制，不用普通砧板上锅；总时间不含特殊商品额外浸泡。",
     "vegetarian": false,
-    "spicy": false
+    "spicy": false,
+    "category": "热菜"
   },
   {
     "id": "nw-huangshan-pigeon-soup",
@@ -2447,7 +2485,8 @@
     ],
     "tip": "以人工养殖乳鸽制作，不使用野生鸟类；老鸽需更长炖煮时间。",
     "vegetarian": false,
-    "spicy": false
+    "spicy": false,
+    "category": "汤羹"
   },
   {
     "id": "nw-huizhou-tofu-skin-rolls",
@@ -2519,6 +2558,7 @@
     ],
     "tip": "这道菜的“鹅颈”指卷条形状，并不含鹅肉；家常版用煎制代替油炸。",
     "vegetarian": false,
-    "spicy": false
+    "spicy": false,
+    "category": "热菜"
   }
 ]
