@@ -36,14 +36,14 @@
   function imageMarkup(recipe, thumbnail=false) {
     const photo=photos[recipe.id];
     if(!photo?.src) return `<div class="photo-unavailable">${icon('pot')}<span>暂无对应实拍</span></div>`;
-    return `<img class="${thumbnail?'dish-thumbnail':'dish-photo'}" src="${escape(photo.src)}" alt="${escape(photo.alt || recipe.name+'实拍')}" loading="${thumbnail?'lazy':'eager'}" decoding="async" ${thumbnail?'':'fetchpriority="high"'}><span class="photo-error-message" hidden>照片暂时无法加载，菜谱仍可查看</span>${thumbnail&&photo.exact===false?'<span class="photo-ref-tag" aria-hidden="true">同类实拍</span>':''}`;
+    return `<img class="${thumbnail?'dish-thumbnail':'dish-photo'}" src="${escape(photo.src)}" alt="${escape(photo.alt || recipe.name+'实拍')}" loading="${thumbnail?'lazy':'eager'}" decoding="async" ${thumbnail?'':'fetchpriority="high"'}><span class="photo-error-message" hidden>照片暂时无法加载，菜谱仍可查看</span>${thumbnail&&photo.exact===false?'<span class="photo-ref-tag">参考图</span>':''}`;
   }
   function photoCaption(recipe) {
     const photo=photos[recipe.id];if(!photo)return '';
     const source=safeSource(photo.source);
-    const label=photo.exact===false?`同类菜品实拍参考：${photo.alt}`:(photo.alt||`${recipe.name}实拍`);
+    const label=photo.exact===false?`${photo.sourceTitle||'同类菜品'} · 实拍参考图`:(photo.alt||`${recipe.name}实拍`);
     const license=safeSource(photo.licenseUrl);
-    return `<figcaption class="photo-caption"><span>${escape(label)}<small>${escape(photo.credit||'')} · ${license?`<a href="${escape(license)}" target="_blank" rel="noopener noreferrer">${escape(photo.license||'查看许可')}</a>`:escape(photo.license||'')} · 已缩放</small></span>${source?`<a class="photo-source" href="${escape(source)}" target="_blank" rel="noopener noreferrer">照片来源 ↗</a>`:''}</figcaption>`;
+    return `<figcaption class="photo-caption"><span>${escape(label)}${photo.exact===false&&photo.referenceNote?`<small>${escape(photo.referenceNote)}</small>`:''}<small>${escape(photo.credit||'')} · ${license?`<a href="${escape(license)}" target="_blank" rel="noopener noreferrer">${escape(photo.license||'查看许可')}</a>`:escape(photo.license||'')} · 已缩放</small></span>${source?`<a class="photo-source" href="${escape(source)}" target="_blank" rel="noopener noreferrer">照片来源 ↗</a>`:''}</figcaption>`;
   }
   function recipeChecks(recipe) {
     if(!state.checks.has(recipe.id))state.checks.set(recipe.id,{ingredients:new Set(),steps:new Set()});
@@ -56,7 +56,7 @@
     if(!recipe)return;state.current=recipe;if(addHistory)rememberMany([recipe]);
     $('#recipe').hidden=false;$('#empty-state').hidden=true;$('#recipe-detail').hidden=false;
     const saved=state.favorites.includes(recipe.id),checks=recipeChecks(recipe);
-    $('#recipe').innerHTML=`<div class="recipe-summary"><div class="recipe-kicker"><span class="cuisine-badge">${escape(recipe.cuisine)}</span><span>${escape(recipe.region||recipe.flavor)} · ${escape(recipe.type)}</span></div><h2 id="recipe-name">${escape(recipe.name)}</h2><p class="recipe-description">${escape(recipe.description)}</p><div class="recipe-meta"><span>${icon('clock')}${recipe.time} 分钟</span><span>${icon('pot')}${escape(recipe.difficulty)}</span><span>${icon('book')}${recipe.servings} 人份</span></div><div class="recipe-actions"><button class="button button-light favorite-action" id="favorite-recipe" aria-pressed="${saved}">${icon('heart')}<span>${saved?'已收藏':'收藏这道菜'}</span></button><button class="text-button" id="start-cooking">看做法 ${icon('arrow')}</button></div></div><figure class="recipe-photo">${imageMarkup(recipe)}${photoCaption(recipe)}</figure>`;
+    $('#recipe').innerHTML=`<div class="recipe-summary"><div class="recipe-kicker"><span class="cuisine-badge">${escape(recipe.cuisine)}</span><span>${escape(recipe.region||recipe.flavor)} · ${escape(recipe.type)}</span></div><h2 id="recipe-name">${escape(recipe.name)}</h2><p class="recipe-description">${escape(recipe.description)}</p><div class="recipe-meta"><span>${icon('clock')}${recipe.time} 分钟</span><span>${icon('pot')}${escape(recipe.difficulty)}</span><span>${icon('book')}${recipe.servings} 人份</span></div><div class="recipe-actions"><button class="button button-light favorite-action" id="favorite-recipe" aria-pressed="${saved}">${icon('heart')}<span>${saved?'已收藏':'收藏这道菜'}</span></button><button class="text-button" id="start-cooking">看做法 ${icon('arrow')}</button></div></div><figure class="recipe-photo"><div class="dish-image-frame">${imageMarkup(recipe)}</div>${photoCaption(recipe)}</figure>`;
     $('#recipe-detail').innerHTML=`<section class="ingredients-section"><div class="detail-heading"><h3>${icon('leaf')}准备食材</h3><small>这道菜 ${recipe.servings} 人份 · 可勾选</small></div><ul class="ingredients-list">${recipe.ingredients.map((ingredient,i)=>`<li><label class="ingredient-row"><input type="checkbox" data-ingredient="${i}" ${checks.ingredients.has(i)?'checked':''} aria-label="已备好${escape(ingredient.name)}"><span class="ingredient-name">${escape(ingredient.name)}</span><span class="ingredient-amount">${escape(ingredient.amount)}</span></label></li>`).join('')}</ul><p class="ingredients-footnote">多道菜组合时，可按实际人数适当减少每道菜份量。</p></section><section class="steps-section" id="cooking-steps"><div class="detail-heading"><h3>${icon('pot')}跟着做就好</h3><small id="steps-progress">${checks.steps.size?`已完成 ${checks.steps.size} / ${recipe.steps.length} 步`:`${recipe.steps.length} 个步骤 · 家常做法`}</small></div><ol class="steps-list">${recipe.steps.map((step,i)=>`<li><label class="step-row"><span class="step-number" aria-hidden="true">${i+1}</span><span class="step-text">${escape(step)}</span><input type="checkbox" class="step-checkbox" data-step="${i}" ${checks.steps.has(i)?'checked':''} aria-label="完成第 ${i+1} 步"></label></li>`).join('')}</ol><div class="cooking-tip"><span class="tip-icon" aria-hidden="true">✳</span><div><strong>让这道菜更好吃的小诀窍</strong><p>${escape(recipe.tip)}</p></div></div></section>`;
     $('#recipe').classList.remove('is-rolling');$('#recipe').classList.add('revealed');
     $('#menu-grid').querySelectorAll('[data-menu-recipe]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.menuRecipe===recipe.id)));
@@ -133,12 +133,17 @@
     $('#catalog-result-count').textContent=`找到 ${list.length} 道${list.length?` · 当前 ${start+1}–${start+visible.length} 道`:''}`;
     $('#catalog-grid').innerHTML=visible.map(recipe=>`<button class="catalog-card" data-catalog-recipe="${escape(recipe.id)}" aria-label="查看${escape(recipe.name)}做法"><span class="catalog-photo">${imageMarkup(recipe,true)}</span><span class="catalog-card-body"><span class="catalog-card-tags">${escape(recipe.category||recipe.type)} · ${escape(recipe.cuisine)}</span><strong>${escape(recipe.name)}</strong><span class="catalog-card-meta">${recipe.time} 分钟 <span>${escape(recipe.difficulty)} ${icon('arrow')}</span></span></span></button>`).join('');
     $('#catalog-empty').hidden=!!list.length;$('#catalog-page').textContent=`${catalog.page} / ${pages}`;
+    $('#catalog-page-input').value=catalog.page;$('#catalog-page-input').max=pages;$('#catalog-page-input').disabled=!list.length;
+    $('#catalog-page-total').textContent=`/ ${pages}`;$('#catalog-go').disabled=!list.length;
     $('#catalog-prev').disabled=catalog.page===1;$('#catalog-next').disabled=catalog.page===pages;
     $('#category-options').querySelectorAll('button').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.category===catalog.filters.category)));
   }
   function applyCatalogFilters() {
     catalog.page=1;catalog.filters.query=$('#catalog-search').value;catalog.filters.cuisine=$('#catalog-cuisine').value;
     catalog.filters.maxTime=Number($('#catalog-time').value);catalog.filters.vegetarian=$('#catalog-vegetarian').checked;catalog.filters.noSpicy=$('#catalog-no-spicy').checked;renderCatalog();
+  }
+  function goToCatalogPage(page) {
+    catalog.page=page;renderCatalog();focusSection('#catalog-result-count');
   }
   function renderCollection() {
     const favorites=state.dialogMode==='favorites';const list=(favorites?state.favorites:state.history).map(id=>byId.get(id)).filter(Boolean);
@@ -192,7 +197,14 @@
   $('#catalog-search').addEventListener('input',applyCatalogFilters);
   ['#catalog-cuisine','#catalog-time','#catalog-vegetarian','#catalog-no-spicy'].forEach(selector=>$(selector).addEventListener('change',applyCatalogFilters));
   $('#catalog-reset').addEventListener('click',()=>{catalog.filters={...initialFilters(),category:''};$('#catalog-search').value='';$('#catalog-cuisine').value='';$('#catalog-time').value='0';$('#catalog-vegetarian').checked=false;$('#catalog-no-spicy').checked=false;applyCatalogFilters();});
-  [['#catalog-prev',-1],['#catalog-next',1]].forEach(([selector,offset])=>$(selector).addEventListener('click',()=>{catalog.page+=offset;renderCatalog();focusSection('#catalog-result-count');}));
+  [['#catalog-prev',-1],['#catalog-next',1]].forEach(([selector,offset])=>$(selector).addEventListener('click',()=>goToCatalogPage(catalog.page+offset)));
+  $('#catalog-page-form').addEventListener('submit',event=>{
+    event.preventDefault();
+    const input=$('#catalog-page-input'),page=Number(input.value),pages=Number(input.max);
+    if(input.disabled)return;
+    if(!Number.isInteger(page)||page<1||page>pages){toast(`请输入 1–${pages} 之间的整数页码`);input.value=catalog.page;input.focus();input.select();return;}
+    goToCatalogPage(page);
+  });
   $('#catalog-grid').addEventListener('click',event=>{const button=event.target.closest('[data-catalog-recipe]');if(button)showStandalone(byId.get(button.dataset.catalogRecipe),'从菜谱库里，选一道喜欢的菜');});
   $('#collection-dialog').addEventListener('click',event=>{if(event.target===$('#collection-dialog')){const rect=event.target.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)event.target.close();}});
   $('#dialog-content').addEventListener('click',event=>{const view=event.target.closest('[data-view]'),remove=event.target.closest('[data-remove]');if(view){$('#collection-dialog').close();showStandalone(byId.get(view.dataset.view),state.dialogMode==='favorites'?'从收藏里，找回喜欢的味道':'再看看这道菜');}if(remove){toggleFavorite(remove.dataset.remove);renderCollection();$('#dialog-content').querySelector('button')?.focus();}});

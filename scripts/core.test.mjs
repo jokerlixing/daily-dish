@@ -10,7 +10,7 @@ const {filterRecipes,ShuffleBag,cuisines,categories,parseIngredients,matchFridge
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const read=file=>fs.readFileSync(path.join(root,file),'utf8').replace(/^\uFEFF/,'');
 const recipeFiles=fs.readdirSync(path.join(root,'data')).filter(name=>name.endsWith('.json')&&!/^photos(?:[.-]|$)/i.test(name)).sort();
-const recipes=recipeFiles.flatMap(name=>JSON.parse(read(`data/${name}`)));
+const recipes=recipeFiles.map(name=>JSON.parse(read(`data/${name}`))).filter(Array.isArray).flat();
 
 test('888 recipes cover eight cuisines, everyday dishes and snacks without duplicate identities',()=>{
   assert.equal(recipes.length,888);

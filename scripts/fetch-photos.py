@@ -9,7 +9,7 @@ from __future__ import annotations
 import argparse, concurrent.futures, hashlib, html, io, json, re, sys, time
 from urllib.error import HTTPError
 from pathlib import Path
-from urllib.parse import quote, urlencode
+from urllib.parse import quote, urlencode, urlsplit
 from urllib.request import Request, urlopen
 from PIL import Image, ImageOps, ImageDraw, ImageFont
 
@@ -244,7 +244,69 @@ def curated():
             draw.text((col*300+3,row*240+202),rid+' #'+str(index),font=font,fill='#111')
         sheet.save(CACHE/('curated-'+str(offset//30+1)+'.jpg'),quality=91)
     print('CURATED',len(results),flush=True)
+def is_meishichina_source(value):
+    try:
+        host = (urlsplit(value or '').hostname or '').lower()
+    except ValueError:
+        return False
+    return host == 'meishichina.com' or host.endswith('.meishichina.com')
+
+def protect_authorized_photos():
+    """The legacy selection cache must never replace authorized photo imports."""
+    manifest_path = ROOT / 'data' / 'photos.json'
+    if not manifest_path.exists():
+        return
+    manifest = json.loads(manifest_path.read_text(encoding='utf-8-sig'))
+    protected = [rid for rid, entry in manifest.items()
+                 if is_meishichina_source(entry.get('source'))
+                 or entry.get('authorizationRef') == 'docs/photo-authorization.md']
+    if protected:
+        raise RuntimeError(f'旧 build 已停止：photos.json 包含 {len(protected)} 条已授权美食天下照片。'
+                           '请使用当前素材导入流程；旧 selected.json 不得覆盖这些记录。')
+
+def source_summary(manifest):
+    labels = set()
+    for entry in manifest.values():
+        source = entry.get('source', '')
+        try:
+            host = (urlsplit(source).hostname or '').lower()
+        except ValueError:
+            host = ''
+        if is_meishichina_source(source):
+            labels.add('美食天下（经用户授权转载）')
+        elif host == 'commons.wikimedia.org':
+            labels.add('Wikimedia Commons')
+        elif host == 'flickr.com' or host.endswith('.flickr.com'):
+            labels.add('Flickr')
+        elif host == 'github.com' and '/Anduin2017/HowToCook/' in source:
+            labels.add('HowToCook 原始菜谱')
+        elif host == 'github.com':
+            labels.add('GitHub 图像来源记录')
+        elif host:
+            labels.add(host)
+    if not labels:
+        return '当前尚未接入照片。'
+    return ('当前照片来源：' + '、'.join(sorted(labels)) + '。未使用 AI 生图。'
+            '图片仅作烹饪外观参考，不是本项目配方实测成品。')
+
+def rights_summary(manifest):
+    notice = '图片已按逐图 changes 记录处理；各图片的权利不受项目代码许可影响。'
+    if any('CC BY-SA' in entry.get('license', '') for entry in manifest.values()):
+        notice += 'CC BY-SA 图片的改编保留相同许可。'
+    if any(is_meishichina_source(entry.get('source')) for entry in manifest.values()):
+        notice += '美食天下照片经用户授权转载，原作者保留权利，详见[授权记录](../docs/photo-authorization.md)。'
+    return notice
+
+def license_markup(entry):
+    label = entry['license'].replace('|', '/')
+    if entry.get('authorizationRef'):
+        return '[' + label + '](../' + entry['authorizationRef'] + ')'
+    if entry.get('licenseUrl'):
+        return '[' + label + '](' + entry['licenseUrl'] + ')'
+    return label
+
 def build():
+    protect_authorized_photos()
     selected=json.loads((CACHE/'selected.json').read_text(encoding='utf-8'))
     OUT.mkdir(parents=True,exist_ok=True);result={}
     byid={r['id']:r for r in recipes()}
@@ -273,9 +335,9 @@ def build():
         for rid,entry in json.loads(extra.read_text(encoding='utf-8')).items():
             if rid not in result and (ROOT/entry['src']).exists():result[rid]=entry
     (ROOT/'data'/'photos.json').write_text(json.dumps(dict(sorted(result.items())),ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-    lines=['# 真实菜品照片来源与许可','', '所有图片来自公开原始菜谱或 Wikimedia Commons 文件页，未使用 AI 生图。图片仅作烹饪外观参考，不是本项目配方实测成品。','', '已对源图进行方向校正、等比例缩小和 WebP 压缩；单独注明时另有裁切。CC BY-SA 图片的改编仍按同一许可提供，项目其他文件的许可不影响这些图片。','', '| 菜谱 | 实际图像 / 匹配 | 作者 | 许可 | 来源 |','| --- | --- | --- | --- | --- |']
+    lines=['# 真实菜品照片来源与许可','', source_summary(result),'', rights_summary(result),'', '| 菜谱 | 实际图像 / 匹配 | 作者 | 许可 | 来源 |','| --- | --- | --- | --- | --- |']
     for rid,e in sorted(result.items()):
-        lines.append('| '+byid[rid]['name']+' | '+e['alt']+('（同类菜参考）' if not e['exact'] else '')+' | '+e['credit'].replace('|','/')+' | ['+e['license']+']('+e.get('licenseUrl',e['source'])+') | [原始文件页]('+e['source']+') |')
+        lines.append('| '+byid[rid]['name']+' | '+e['alt']+('（同类菜参考）' if not e['exact'] else '')+' | '+e['credit'].replace('|','/')+' | '+license_markup(e)+' | [原始文件页]('+e['source']+') |')
     (ROOT/'data'/'photo-credits.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
     print('TOTAL',len(result),'EXACT',sum(e['exact'] for e in result.values()),flush=True)
 def restore():
@@ -309,15 +371,15 @@ def finalize():
     path.write_text(json.dumps(dict(sorted(manifest.items())),ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     byid={r['id']:r for r in recipes()};missing=[r['name'] for r in byid.values() if r['id'] not in manifest]
     lines=['# 真实菜品照片来源与许可','',
-        '所有采用的图片均为真实摄影，来源为 HowToCook 原始菜谱、Wikimedia Commons、Flickr 或逐图保留许可的 Unitools 镜像。未使用 AI 生图。图片仅作烹饪外观参考，不是本项目配方实测成品。','',
+        source_summary(manifest),'',
         f'当前覆盖 {len(manifest)} 道菜：{sum(e["exact"] for e in manifest.values())} 道菜名匹配、{sum(not e["exact"] for e in manifest.values())} 道明确标注同类/主材/做法参考。独立照片 {len(canonical)} 张。',
         '尚未配图的菜谱：'+('、'.join(missing) if missing else '无')+'。','',
         '同类参考的差异在网页可见图注中逐条说明，包括配料、荤素、地区、部位和制作方法；精确匹配也不意味着照片来自本页配方。','',
-        '图片已等比例缩放、方向校正、压缩为 WebP，个别图片裁切至主要菜品。CC BY-SA 图片的改编保留相同许可；各图片许可不受项目代码许可影响。','',
+        rights_summary(manifest),'',
         '恢复资源：安装 Pillow 后运行 `python scripts/fetch-photos.py restore`。脚本仅下载 manifest 中已审定的缺失资源，保留已有文件，串行请求并遵守服务器 Retry-After。','',
         '| 菜谱 | 实际图像 / 匹配 | 作者 | 许可 | 来源 |','| --- | --- | --- | --- | --- |']
     for rid,e in sorted(manifest.items()):
-        lines.append('| '+byid[rid]['name']+' | '+e['alt']+('（参考）' if not e['exact'] else '')+' | '+e['credit'].replace('|','/')+' | ['+e['license']+']('+e['licenseUrl']+') | [原始来源记录]('+e['source']+') |')
+        lines.append('| '+byid[rid]['name']+' | '+e['alt']+('（参考）' if not e['exact'] else '')+' | '+e['credit'].replace('|','/')+' | '+license_markup(e)+' | [原始来源记录]('+e['source']+') |')
     (ROOT/'data'/'photo-credits.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
     used={entry['src'] for entry in manifest.values()}
     unused=[str(p.resolve()) for p in OUT.glob('*.webp') if p.relative_to(ROOT).as_posix() not in used]

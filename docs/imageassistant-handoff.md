@@ -1,5 +1,7 @@
 # 美食天下照片接入
 
+此文件保留早期图片助手接入调查。后续已使用用户指定的 `web-image-downloader` skill，通过可访问的来源补齐 888 道菜品照片；当前状态见 [2.1.0 更新记录](catalog-888-status.md)，以下素材交接事项已由该流程完成。
+
 用户已明确表示有美食天下网站的转载授权，并允许本项目使用。待取得素材后，保留原站菜谱页链接和原作者署名；第三方照片不适用本项目 MIT 许可。
 
 本次已检查 [ImageAssistant 官方网站](https://www.pullywood.com/ImageAssistant/) 和 [Chrome 应用商店](https://chromewebstore.google.com/detail/imageassistant-batch-imag/dbjbempljhcmhlfpfacalomonjpalpko?hl=zh)。当前会话未提供该扩展的调用工具，也未连接可操作的 Chrome/Edge，因此没有使用扩展下载任何图片。

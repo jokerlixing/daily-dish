@@ -64,7 +64,16 @@
       <div class="catalog-results-heading"><span id="catalog-result-count" role="status"></span><span>每页 24 道 · 点击查看做法</span></div>
       <div id="catalog-grid" class="catalog-grid"></div>
       <div id="catalog-empty" class="collection-empty" hidden><h3>还没有符合条件的菜</h3><p>试试更短的菜名，或清除一部分筛选。</p></div>
-      <nav class="catalog-pagination" aria-label="菜谱分页"><button id="catalog-prev" class="button button-light">上一页</button><span id="catalog-page"></span><button id="catalog-next" class="button button-light">下一页</button></nav>
+      <nav class="catalog-pagination" aria-label="菜谱分页">
+        <button id="catalog-prev" class="button button-light">上一页</button>
+        <form id="catalog-page-form" class="catalog-page-form" novalidate>
+          <input id="catalog-page-input" type="number" min="1" step="1" value="1" inputmode="numeric" aria-label="跳转页码" aria-describedby="catalog-page-total" autocomplete="off" required>
+          <span id="catalog-page-total"></span>
+          <button id="catalog-go" type="submit" class="button button-light">跳转</button>
+        </form>
+        <span id="catalog-page" class="sr-only"></span>
+        <button id="catalog-next" class="button button-light">下一页</button>
+      </nav>
     </section>
     <footer class="site-footer"><span class="footer-brand">吃啥呢<span>每天的一点好胃口</span></span><p>每道菜为 2 人份家常参考做法，可按人数调整。<br>收藏只保存在当前浏览器 · 点击照片来源可查看摄影信息</p><button class="text-button" id="about-button">关于菜单与照片 <span>↗</span></button></footer>
   </main>
