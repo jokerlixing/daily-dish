@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#183f32">
+  <meta name="description" content="今天吃啥，不用再纠结。八大菜系与地方小吃，随机推荐菜名、食材和家常做法。">
+  <title>吃啥呢 · 每天的一点好胃口</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23183f32'/%3E%3Cpath d='M12 30h40c-2 17-9 22-20 22S14 47 12 30' fill='%23eea743'/%3E%3Cpath d='m30 25 9-15m0 15 9-15' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <style>/* APP_STYLES */</style>
+</head>
+<body>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="i-dice" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="8" cy="8" r="1"/><circle cx="16" cy="8" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="8" cy="16" r="1"/><circle cx="16" cy="16" r="1"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20 3C10 2 3 6 4 13s11 10 15 1c1-3 1-7 1-11Z"/><path d="M4 21 15 9"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 5C8 2 3 4 3 4v15s5-2 9 1c4-3 9-1 9-1V4s-5-2-9 1v15"/></symbol>
+    <symbol id="i-pot" viewBox="0 0 24 24"><path d="M4 9h16v8a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V9Zm-2 3h2m16 0h2M3 6h18M9 3h6"/></symbol>
+    <symbol id="i-pepper" viewBox="0 0 24 24"><path d="M18 7c-7-2-8 3-8 6s-3 5-6 6c5 3 14-2 15-7 1-2 0-4-1-5ZM16 7c-1-3 1-5 4-5M11 10l4 1 4-1"/></symbol>
+  </defs></svg>
+  <a class="skip-link" href="#recipe">跳到今日菜谱</a>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="吃啥呢，回到首页"><span class="brand-mark"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M7 23h34c-2 14-8 19-17 19S9 37 7 23" fill="currentColor"/><path d="m24 17 6-11m3 11 6-11" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span>吃啥呢<span class="brand-dot">.</span></span></a>
+    <nav aria-label="主导航"><button class="nav-link is-current" id="home-button">今日灵感</button><button class="nav-link" id="favorites-button"><svg class="icon"><use href="#i-heart"/></svg>我的收藏<span id="favorite-count" class="nav-count">0</span></button><button class="nav-link" id="history-button"><svg class="icon"><use href="#i-clock"/></svg><span>最近抽到</span></button></nav>
+    <span class="header-note"><span></span>好好吃饭，天天开心</span>
+  </header>
+  <main class="page-shell">
+    <section class="intro" aria-labelledby="page-title">
+      <div><p class="eyebrow" id="today-label">今天，也要好好吃饭</p><h1 id="page-title">今天吃啥？<br class="mobile-break"><span>让胃口碰个运气。</span></h1><p class="intro-copy">从八大菜系到街头小吃，一道菜，一点新鲜感。<br class="mobile-break">点一下，把纠结留给我们。</p></div>
+      <div class="intro-stamp" aria-hidden="true"><span>饭 点 到 了</span><svg class="icon"><use href="#i-pot"/></svg><small>开 饭 大 吉</small></div>
+    </section>
+    <section class="selection-panel" aria-label="选菜偏好">
+      <div class="filter-heading"><span class="small-label">今天想吃</span><span class="catalog-note"><strong id="total-count">168</strong> 道家常灵感 · 随心挑</span></div>
+      <div class="cuisine-options" id="cuisine-options" role="group" aria-label="选择菜系"></div>
+      <div class="all-cuisines-row"><button class="all-cuisines-toggle" id="all-cuisines" aria-pressed="false"><span class="switch-track" aria-hidden="true"></span><span>全菜系随机 <small>只抽正餐，不含小吃</small></span></button></div>
+      <div class="filter-bottom">
+        <div class="preferences" role="group" aria-label="口味和时间"><button class="filter-toggle" id="no-spicy" aria-pressed="false"><svg class="icon"><use href="#i-pepper"/></svg>不吃辣</button><button class="filter-toggle" id="vegetarian" aria-pressed="false"><svg class="icon"><use href="#i-leaf"/></svg>只看素菜</button><label class="time-filter"><svg class="icon"><use href="#i-clock"/></svg><select id="max-time" aria-label="做饭时间"><option value="0">不限时间</option><option value="15">15 分钟内</option><option value="30">30 分钟内</option><option value="60">60 分钟内</option></select></label></div>
+        <label class="search-field"><svg class="icon"><use href="#i-search"/></svg><input id="search-input" type="search" autocomplete="off" placeholder="搜菜名，或冰箱里的食材" aria-label="搜索菜名或食材"></label>
+      </div>
+      <div class="batch-picker"><div class="batch-heading"><span class="small-label">这顿几道菜</span><span>点选数量，直接出菜单</span></div><div id="batch-options" class="batch-options" role="group" aria-label="随机推荐菜品数量"></div></div>
+    </section>
+    <details class="fridge-panel" id="fridge-panel"><summary><span class="fridge-mark" aria-hidden="true">❄</span><span><strong>看看冰箱，今天能做什么？</strong><small>输入已有食材，找出能做的菜和缺少的配料</small></span><span class="fridge-expand" aria-hidden="true">＋</span></summary><div class="fridge-body"><label for="fridge-input" class="small-label">冰箱里有这些</label><textarea id="fridge-input" rows="2" maxlength="1000" placeholder="例如：鸡蛋、番茄、豆腐、猪肉、青菜"></textarea><div class="fridge-suggestions" id="fridge-suggestions" aria-label="快速添加常见食材"></div><div class="fridge-settings"><label><input type="checkbox" id="include-pantry" checked> 默认有常用调料和葱姜蒜</label><button class="button button-primary" id="find-fridge">找找能做的菜 <svg class="icon"><use href="#i-arrow"/></svg></button></div><p class="fridge-note">按现有食材匹配全部菜谱，不受上方抽签筛选影响。请再核对食材用量；特色酱料、肉汤和主食仍需备齐。</p><div id="fridge-results" class="fridge-results" aria-live="polite"></div></div></details>
+    <div class="recommendation-heading"><div><span class="status-dot"></span><span id="recommendation-label">这一顿，不妨试试</span></div><div class="recommendation-tools"><span id="pool-count" aria-live="polite"></span><button class="button button-primary quick-draw" id="quick-draw">随机来一道 <svg class="icon"><use href="#i-dice"/></svg></button></div></div>
+    <section id="menu-section" class="menu-section" aria-labelledby="menu-title" hidden><div class="menu-heading"><div><h2 id="menu-title">这一桌，有着落了</h2><p id="menu-description"></p></div><button class="text-button" id="save-menu">收藏这一桌 <svg class="icon"><use href="#i-heart"/></svg></button></div><div id="menu-grid" class="menu-grid"></div></section>
+    <section id="recipe" class="recipe-card" aria-labelledby="recipe-name"></section>
+    <section id="empty-state" class="empty-state" hidden><svg class="icon"><use href="#i-search"/></svg><h2>这次的条件，有点挑嘴</h2><p>没有找到符合条件的菜。试试换个食材，或放宽一点筛选。</p><button class="button button-primary" id="reset-filters">清除筛选，随便吃点</button></section>
+    <div class="shuffle-dock" id="shuffle-dock"><div class="shuffle-copy"><svg class="icon"><use href="#i-dice"/></svg><span><strong>不用想太多，吃点新花样</strong><small id="shuffle-hint">这一轮抽完前，不会重复推荐</small></span></div><button class="button button-primary shuffle-button" id="shuffle-button"><svg class="icon"><use href="#i-dice"/></svg><span>帮我选一道</span><svg class="icon arrow-icon"><use href="#i-arrow"/></svg></button></div>
+    <section class="recipe-detail" id="recipe-detail" aria-label="食材和做法"></section>
+    <footer class="site-footer"><span class="footer-brand">吃啥呢<span>每天的一点好胃口</span></span><p>每道菜为 2 人份家常参考做法，可按人数调整。<br>收藏只保存在当前浏览器 · 点击照片来源可查看摄影信息</p><button class="text-button" id="about-button">关于菜单与照片 <span>↗</span></button></footer>
+  </main>
+  <dialog id="collection-dialog" aria-labelledby="dialog-title"><div class="dialog-header"><div><p class="eyebrow" id="dialog-eyebrow">留住喜欢的味道</p><h2 id="dialog-title">我的收藏</h2></div><button class="icon-button" id="close-dialog" aria-label="关闭弹窗"><svg class="icon"><use href="#i-close"/></svg></button></div><div id="dialog-content" class="dialog-content"></div></dialog>
+  <div class="toast" id="toast" role="status"></div><div class="sr-only" id="announcement" aria-live="polite" aria-atomic="true"></div>
+  <noscript><div class="noscript">请开启浏览器 JavaScript，以使用随机推荐和查看菜谱。</div></noscript>
+  <script>/* RECIPE_DATA */</script>
+  <script>/* CORE_SCRIPT */</script>
+  <script>/* APP_SCRIPT */</script>
+</body>
+</html>

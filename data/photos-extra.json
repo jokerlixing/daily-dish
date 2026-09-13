@@ -1,0 +1,54 @@
+{
+  "es-yangzhou-fried-rice": {
+    "src": "assets/photos/extra-yangzhou-fried-rice.webp",
+    "alt": "虾仁、鸡蛋与肉丁扬州炒饭的实拍照片，具体配料与本页家常配方可能不同",
+    "credit": "Ceeseven",
+    "source": "https://github.com/farcrak/unitools-recipes/blob/main/unitools-recipes-v1.json",
+    "recordSource": "https://github.com/farcrak/unitools-recipes/blob/main/unitools-recipes-v1.json",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSource": "https://theunitools.com/recipes/yangzhou-fried-rice.jpg",
+    "exact": true,
+    "changes": "仅按原比例缩放至1100像素宽并压缩为WebP，未生成或改动菜品内容",
+    "verification": "已逐张查看本地照片；可见米饭、虾仁、鸡蛋和肉丁，无叠加水印。图片作者与许可取自上游逐图photo记录。"
+  },
+  "ex-cabbage-dumplings": {
+    "src": "assets/photos/extra-jiaozi.webp",
+    "alt": "煮熟的饺子实拍，馅料未核实，作为猪肉白菜水饺的同类做法参考",
+    "credit": "David Pursehouse from Kawasaki, Japan",
+    "source": "https://github.com/farcrak/unitools-recipes/blob/main/unitools-recipes-v1.json",
+    "recordSource": "https://github.com/farcrak/unitools-recipes/blob/main/unitools-recipes-v1.json",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "imageSource": "https://theunitools.com/recipes/jiaozi.jpg",
+    "exact": false,
+    "changes": "仅按原比例缩放至1100像素宽并压缩为WebP，未生成或改动菜品内容",
+    "verification": "已逐张查看本地照片；饺皮湿润、没有煎烤焦面，馅料不可见，因此不宣称为猪肉白菜馅成品；无叠加水印。"
+  },
+  "ex-egg-tarts": {
+    "src": "assets/photos/extra-pastel-de-nata.webp",
+    "alt": "葡式蛋挞成品实拍，作为本页家常烘烤蛋挞的同类做法参考",
+    "credit": "fw42 from Germany",
+    "source": "https://github.com/farcrak/unitools-recipes/blob/main/unitools-recipes-v1.json",
+    "recordSource": "https://github.com/farcrak/unitools-recipes/blob/main/unitools-recipes-v1.json",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "imageSource": "https://theunitools.com/recipes/pastel-de-nata.jpg",
+    "exact": false,
+    "changes": "仅按原比例缩放至1100像素宽并压缩为WebP，未生成或改动菜品内容",
+    "verification": "已逐张查看本地照片；可见层酥挞皮及烤至金黄带焦斑的蛋奶馅。背景文字为店内包装与价签，不是后加水印。"
+  },
+  "nw-mapo-tofu": {
+    "src": "assets/photos/extra-mapo-tofu.webp",
+    "alt": "红油麻婆豆腐的实拍照片，肉末和调味比例与本页家常配方可能不同",
+    "credit": "ZhengZhou",
+    "source": "https://github.com/farcrak/unitools-recipes/blob/main/unitools-recipes-v1.json",
+    "recordSource": "https://github.com/farcrak/unitools-recipes/blob/main/unitools-recipes-v1.json",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSource": "https://theunitools.com/recipes/mapo-tofu.jpg",
+    "exact": true,
+    "changes": "仅按原比例缩放至1100像素宽并压缩为WebP，未生成或改动菜品内容",
+    "verification": "已逐张查看本地照片；可见红油、肉末和豆腐，无叠加水印。可作为现有麻婆豆腐照片的备选，合并时保留现有图亦可。"
+  }
+}

@@ -1,0 +1,282 @@
+[
+  {
+    "id": "es-steamed-perch", "name": "清蒸鲈鱼", "cuisine": "粤菜", "type": "荤菜", "flavor": "清淡", "time": 25, "difficulty": "简单", "servings": 2,
+    "description": "葱姜清香衬出鱼肉的鲜甜，蒸一盘就有家的味道。",
+    "ingredients": [{"name":"鲈鱼（处理干净）","amount":"1条，约500克"},{"name":"姜","amount":"15克"},{"name":"小葱","amount":"2根"},{"name":"蒸鱼豉油","amount":"20毫升"},{"name":"食用油","amount":"15毫升"}],
+    "steps": ["鲈鱼擦干，两面厚肉处划两刀；姜切片与丝，小葱切段与丝。", "盘底垫姜片、葱段，放鱼，鱼肚塞少量姜丝；蒸锅加水烧至上汽。", "放入鱼盘，盖盖大火蒸12—15分钟，直到最厚处鱼肉完全不透明、可轻松分离，未熟继续蒸。", "取出倒去蒸汁，去掉旧葱姜，铺新葱姜丝并淋豉油。", "另锅将油烧热，关火后小心浇在葱姜丝上，即可上桌。"],
+    "tip": "鱼更大时延长蒸制时间，以厚肉处熟透为准。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-blackbean-ribs", "name": "豉汁蒸排骨", "cuisine": "粤菜", "type": "荤菜", "flavor": "咸鲜", "time": 55, "difficulty": "简单", "servings": 2,
+    "description": "小块排骨裹着蒜香豆豉汁，连汤汁都适合拌饭。",
+    "ingredients": [{"name":"猪肋排","amount":"350克，切2厘米段"},{"name":"豆豉","amount":"12克"},{"name":"蒜","amount":"3瓣"},{"name":"姜","amount":"5克"},{"name":"生抽","amount":"10毫升"},{"name":"料酒","amount":"10毫升"},{"name":"玉米淀粉","amount":"8克"},{"name":"糖","amount":"3克"},{"name":"食用油","amount":"8毫升"}],
+    "steps": ["排骨冲净沥干；豆豉略冲后切碎，蒜姜切末。", "排骨加入豆豉、蒜姜、生抽、料酒、糖、淀粉和油，抓匀腌15分钟。", "排骨铺成一层放入浅盘，蒸锅烧开后放盘，盖盖大火蒸30分钟。", "检查靠骨肉质已全熟、无粉红血水；仍偏生则续蒸5—10分钟，拌匀盘中汁水食用。"],
+    "tip": "排骨别堆得太厚，豆豉和生抽已带咸味，通常不用另加盐。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-blanched-choysum", "name": "白灼菜心", "cuisine": "粤菜", "type": "素菜", "flavor": "清淡", "time": 15, "difficulty": "简单", "servings": 2,
+    "description": "翠绿菜心脆嫩多汁，一勺热油酱汁就能提鲜。",
+    "ingredients": [{"name":"菜心","amount":"350克"},{"name":"蒜","amount":"2瓣"},{"name":"生抽","amount":"15毫升"},{"name":"糖","amount":"2克"},{"name":"盐","amount":"2克"},{"name":"食用油","amount":"12毫升"},{"name":"清水（调汁）","amount":"20毫升"}],
+    "steps": ["菜心洗净去老根，较粗的茎纵向划开，蒜切末。", "一锅水烧开，加盐和2毫升油，先将菜茎浸入30秒，再全部下锅煮约2分钟至熟。", "菜心捞出沥干摆盘，将生抽、糖与20毫升清水调匀。", "小锅放剩余油，炒香蒜末，倒入调汁煮开，均匀淋在菜心上。"],
+    "tip": "先下菜茎后下叶，茎叶更容易同时熟且保持口感。", "vegetarian": true, "spicy": false
+  },
+  {
+    "id": "es-beef-ho-fun", "name": "干炒牛河", "cuisine": "粤菜", "type": "主食", "flavor": "咸鲜", "time": 30, "difficulty": "适中", "servings": 2,
+    "description": "牛肉、河粉和豆芽一锅快炒，吃得到酱香和爽滑。",
+    "ingredients": [{"name":"鲜河粉","amount":"400克"},{"name":"牛里脊","amount":"180克"},{"name":"豆芽","amount":"100克"},{"name":"洋葱","amount":"半个，约80克"},{"name":"韭黄","amount":"40克"},{"name":"生抽","amount":"20毫升"},{"name":"老抽","amount":"5毫升"},{"name":"玉米淀粉","amount":"5克"},{"name":"料酒","amount":"5毫升"},{"name":"食用油","amount":"25毫升"}],
+    "steps": ["牛肉逆纹切薄片，用5毫升生抽、料酒、淀粉和5毫升油抓匀腌10分钟。", "河粉轻轻拨散，洋葱切丝、韭黄切段；豆芽洗净沥干。", "热锅放10毫升油，下牛肉摊开炒至完全变色熟透，盛出。", "再放剩余油，炒香洋葱，加入豆芽炒2分钟，放河粉沿锅边淋剩余生抽和老抽。", "用筷子轻翻2—3分钟至河粉热透，加入牛肉、韭黄，炒至韭黄变软即可。"],
+    "tip": "河粉太冷粘连时先隔水温热再拨散，不要用锅铲反复切碎。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-pineapple-pork", "name": "菠萝咕咾肉", "cuisine": "粤菜", "type": "荤菜", "flavor": "酸甜", "time": 40, "difficulty": "适中", "servings": 2,
+    "description": "外酥里嫩的肉块配上菠萝，酸甜明亮又下饭。",
+    "ingredients": [{"name":"猪里脊","amount":"250克"},{"name":"菠萝果肉","amount":"150克"},{"name":"青红甜椒","amount":"共100克"},{"name":"鸡蛋","amount":"1个"},{"name":"玉米淀粉","amount":"60克"},{"name":"番茄酱","amount":"35克"},{"name":"米醋","amount":"15毫升"},{"name":"糖","amount":"15克"},{"name":"盐","amount":"2克"},{"name":"料酒","amount":"5毫升"},{"name":"食用油","amount":"300毫升，炸制用"},{"name":"清水","amount":"50毫升"}],
+    "steps": ["猪肉切2厘米块，加盐、料酒和打散的鸡蛋拌匀腌10分钟；菠萝与甜椒切块。", "肉块逐个裹上淀粉，抖去浮粉；番茄酱、醋、糖和水调成酱汁。", "小深锅油烧至约170℃，肉块分批下锅炸5—6分钟至金黄，切开最厚块确认全熟后捞出。", "另锅取5毫升炸油，炒甜椒2分钟，倒入酱汁煮至冒细泡并稍浓。", "放入菠萝与炸肉，迅速翻匀裹汁，趁热装盘。"],
+    "tip": "裹汁后尽快吃更酥，炸油用量是锅中用量，并非全部吃下。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-chicken-claypot-rice", "name": "香菇滑鸡煲仔饭", "cuisine": "粤菜", "type": "主食", "flavor": "鲜香", "time": 60, "difficulty": "适中", "servings": 2,
+    "description": "米饭吸满香菇鸡汁，掀开锅盖就是一顿完整晚餐。",
+    "ingredients": [{"name":"大米","amount":"180克"},{"name":"去骨鸡腿肉","amount":"250克"},{"name":"鲜香菇","amount":"4朵"},{"name":"小青菜","amount":"100克"},{"name":"姜","amount":"8克"},{"name":"生抽","amount":"20毫升"},{"name":"蚝油","amount":"10克"},{"name":"玉米淀粉","amount":"5克"},{"name":"糖","amount":"2克"},{"name":"食用油","amount":"12毫升"},{"name":"清水","amount":"约230毫升"}],
+    "steps": ["大米淘净浸泡20分钟后沥干；鸡肉切1.5厘米块，香菇切片，姜切丝。", "鸡肉拌10毫升生抽、蚝油、淀粉、姜和5毫升油，腌15分钟；与泡米同时进行。", "厚底小锅刷剩余油，放米与230毫升水，煮开转小火约8分钟至米面出现孔洞。", "将鸡肉、香菇薄薄铺在米上，盖紧小火焖18—20分钟；鸡肉中心全熟、米饭无硬芯后关火焖5分钟。", "青菜另用沸水烫熟，铺入锅中；剩余生抽加糖和一勺热水拌匀，沿饭边淋入。"],
+    "tip": "厚底锅更不易糊底；鸡肉要小块薄铺，没熟就加少量热水续焖。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-ginger-scallion-shrimp", "name": "姜葱炒虾", "cuisine": "粤菜", "type": "荤菜", "flavor": "鲜香", "time": 20, "difficulty": "简单", "servings": 2,
+    "description": "鲜虾与姜葱同炒，壳香肉甜，简单却很有满足感。",
+    "ingredients": [{"name":"鲜虾","amount":"350克"},{"name":"姜","amount":"20克"},{"name":"小葱","amount":"3根"},{"name":"蒜","amount":"2瓣"},{"name":"生抽","amount":"15毫升"},{"name":"料酒","amount":"10毫升"},{"name":"糖","amount":"2克"},{"name":"食用油","amount":"20毫升"},{"name":"清水","amount":"30毫升"}],
+    "steps": ["鲜虾剪去虾须，开背去虾线，擦干；姜切片，葱分白绿切段，蒜拍碎。", "锅中热油，放姜、蒜和葱白炒香，放虾煎炒至两面变红。", "沿锅边加入料酒，再加生抽、糖和30毫升水，翻匀盖盖焖3分钟。", "揭盖炒至虾肉完全不透明、中心熟透，加入葱绿，收去多余汁水即可。"],
+    "tip": "下锅前擦干虾身能减少溅油，虾越大越要检查内部熟度。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-hakka-stuffed-tofu", "name": "客家酿豆腐", "cuisine": "粤菜", "type": "荤菜", "flavor": "咸鲜", "time": 40, "difficulty": "适中", "servings": 2,
+    "description": "豆腐包着鲜香肉馅，煎后小焖，软嫩又能下饭。",
+    "ingredients": [{"name":"老豆腐","amount":"400克"},{"name":"猪肉末","amount":"150克"},{"name":"鲜香菇","amount":"2朵"},{"name":"小葱","amount":"1根"},{"name":"生抽","amount":"20毫升"},{"name":"蚝油","amount":"10克"},{"name":"玉米淀粉","amount":"8克"},{"name":"白胡椒粉","amount":"少许"},{"name":"食用油","amount":"20毫升"},{"name":"清水","amount":"180毫升"}],
+    "steps": ["豆腐切成6块厚方块，用小勺挖出浅窝；香菇和葱切末。", "肉末加香菇、葱白、10毫升生抽、3克淀粉和胡椒粉，顺一个方向搅匀。", "豆腐窝中抹少量淀粉，填入肉馅并压紧；平底锅热油，将肉馅面朝下煎3分钟。", "翻面，加剩余生抽、蚝油和150毫升水，盖盖小火焖12—15分钟至肉馅中心全熟。", "剩余淀粉加30毫升水拌匀，沿锅边倒入，轻晃锅至汤汁稍稠，撒葱绿。"],
+    "tip": "豆腐底部留厚一些，挖出的豆腐可拌进肉馅避免浪费。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-wintermelon-scallop-soup", "name": "冬瓜瑶柱汤", "cuisine": "粤菜", "type": "汤羹", "flavor": "清淡", "time": 45, "difficulty": "简单", "servings": 2,
+    "description": "冬瓜清润、瑶柱鲜甜，配重口味主菜正合适。",
+    "ingredients": [{"name":"冬瓜","amount":"350克"},{"name":"干贝（瑶柱）","amount":"20克"},{"name":"姜","amount":"3片"},{"name":"小葱","amount":"1根"},{"name":"盐","amount":"2克"},{"name":"白胡椒粉","amount":"少许"},{"name":"清水","amount":"800毫升"}],
+    "steps": ["干贝冲净，用200毫升温水泡15分钟后撕成细丝，保留干净泡发水。", "冬瓜去皮去瓤切薄块，葱切末；锅中加入干贝、泡发水、姜和剩余清水。", "煮开后转小火煮10分钟，再下冬瓜煮12—15分钟至冬瓜透明软熟。", "加盐和胡椒粉，煮1分钟，盛出后撒葱末。"],
+    "tip": "干贝本身有咸味，先尝汤再决定盐量。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-garlic-steamed-luffa", "name": "蒜蓉蒸丝瓜", "cuisine": "粤菜", "type": "素菜", "flavor": "清淡", "time": 20, "difficulty": "简单", "servings": 2,
+    "description": "丝瓜蒸得柔软鲜甜，搭配熟蒜蓉，清爽不单调。",
+    "ingredients": [{"name":"丝瓜","amount":"400克"},{"name":"蒜","amount":"5瓣"},{"name":"生抽","amount":"10毫升"},{"name":"盐","amount":"1克"},{"name":"糖","amount":"1克"},{"name":"食用油","amount":"15毫升"},{"name":"小葱","amount":"1根"}],
+    "steps": ["丝瓜去皮，切成3厘米段摆入浅盘，蒜切末，葱切末。", "小锅放油，小火炒蒜末约1分钟至香，加盐、糖和生抽拌匀后关火。", "将蒜蓉汁分放在丝瓜上，蒸锅水烧开后放盘，大火蒸8—10分钟至软熟。", "撒上葱末，将盘内鲜汁舀起浇在丝瓜表面即可。"],
+    "tip": "蒜末炒至浅黄色就停火，焦黑会发苦。", "vegetarian": true, "spicy": false
+  },
+  {
+    "id": "es-boiled-tofu-strips", "name": "大煮干丝", "cuisine": "苏菜", "type": "汤羹", "flavor": "鲜香", "time": 35, "difficulty": "适中", "servings": 2,
+    "description": "细豆腐丝吸满鸡汤，搭配虾仁和菌菇，温柔又鲜美。",
+    "ingredients": [{"name":"白豆腐干","amount":"250克"},{"name":"虾仁","amount":"100克"},{"name":"熟鸡胸肉","amount":"80克"},{"name":"鲜香菇","amount":"3朵"},{"name":"小青菜","amount":"80克"},{"name":"无盐鸡汤","amount":"650毫升"},{"name":"姜","amount":"5克"},{"name":"盐","amount":"3克"},{"name":"白胡椒粉","amount":"少许"},{"name":"食用油","amount":"10毫升"}],
+    "steps": ["豆腐干先片薄片再切细丝，放沸水中烫2分钟沥干；香菇切丝，熟鸡肉撕丝。", "锅中放油，下姜丝炒香，倒入鸡汤煮开，放香菇煮3分钟。", "下干丝和鸡丝，小火煮8分钟，让干丝吸入汤味。", "加入虾仁和青菜，再煮4—5分钟至虾仁彻底熟、青菜变软，加盐与胡椒粉调味。"],
+    "tip": "可购买无调味的薄豆腐干，切丝粗一点也不影响家常好吃。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-lions-head-meatballs", "name": "清炖狮子头", "cuisine": "苏菜", "type": "荤菜", "flavor": "清淡", "time": 100, "difficulty": "适中", "servings": 2,
+    "description": "大肉丸慢慢炖得松软，白菜和清汤接住醇厚肉香。",
+    "ingredients": [{"name":"猪肉末（三分肥七分瘦）","amount":"350克"},{"name":"荸荠","amount":"60克"},{"name":"白菜","amount":"250克"},{"name":"鸡蛋","amount":"1个"},{"name":"玉米淀粉","amount":"10克"},{"name":"姜","amount":"10克"},{"name":"小葱","amount":"2根"},{"name":"盐","amount":"4克"},{"name":"料酒","amount":"10毫升"},{"name":"白胡椒粉","amount":"少许"},{"name":"清水","amount":"900毫升"}],
+    "steps": ["荸荠去皮切细末，姜一半切末一半切片，葱一根切末一根打结；白菜掰片。", "肉末加入荸荠、鸡蛋、姜葱末、淀粉、料酒、2克盐及胡椒粉，搅匀再拍打数次。", "砂锅底铺半量白菜，倒入水、姜片和葱结，烧到微微冒泡；湿手将肉馅团成4个球轻放入。", "小火保持微沸5分钟定型，撇去浮沫，盖上剩余白菜，再加盖慢炖70分钟。", "确认肉丸中心完全熟透，用剩余盐调汤味，轻轻盛出避免搅散。"],
+    "tip": "保持小火微沸，翻滚大火容易把松软肉丸煮散。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-yangzhou-fried-rice", "name": "扬州炒饭", "cuisine": "苏菜", "type": "主食", "flavor": "鲜香", "time": 25, "difficulty": "简单", "servings": 2,
+    "description": "鸡蛋、虾仁和缤纷配菜，把普通米饭炒得丰盛又鲜香。",
+    "ingredients": [{"name":"熟米饭","amount":"400克"},{"name":"鸡蛋","amount":"2个"},{"name":"虾仁","amount":"100克"},{"name":"熟火腿","amount":"50克"},{"name":"青豆","amount":"50克"},{"name":"胡萝卜","amount":"50克"},{"name":"小葱","amount":"1根"},{"name":"盐","amount":"3克"},{"name":"白胡椒粉","amount":"少许"},{"name":"食用油","amount":"20毫升"}],
+    "steps": ["熟米饭拨散，火腿和胡萝卜切小丁；虾仁去虾线，鸡蛋打散，葱切末。", "青豆、胡萝卜放沸水煮3分钟，捞出沥干。", "热锅放一半油，先炒鸡蛋至凝固盛出，再将虾仁炒至完全熟透。", "加入剩余油、米饭、青豆、胡萝卜和火腿，中火不断翻炒约4分钟至米饭均匀热透。", "回锅鸡蛋，加盐、胡椒粉与葱花，翻炒均匀即成。"],
+    "tip": "隔夜饭需及时冷藏保存，炒时彻底热透；新煮米饭稍放凉也可用。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-suzhou-sauteed-shrimp", "name": "清炒虾仁", "cuisine": "苏菜", "type": "荤菜", "flavor": "清淡", "time": 25, "difficulty": "简单", "servings": 2,
+    "description": "薄薄浆衣留住虾仁水分，突出江南清鲜口味。",
+    "ingredients": [{"name":"虾仁","amount":"300克"},{"name":"黄瓜","amount":"80克"},{"name":"鸡蛋清","amount":"半个"},{"name":"玉米淀粉","amount":"8克"},{"name":"姜","amount":"5克"},{"name":"盐","amount":"3克"},{"name":"料酒","amount":"5毫升"},{"name":"食用油","amount":"20毫升"},{"name":"清水","amount":"30毫升"}],
+    "steps": ["虾仁去虾线擦干，加1克盐、料酒、蛋清和5克淀粉抓匀，冷藏腌10分钟。", "黄瓜去瓤切丁，姜切末；剩余盐、淀粉与水调成薄芡。", "热锅放油，下虾仁中火滑炒3—4分钟，至全部变色且中心不透明。", "放入姜末和黄瓜丁炒1分钟，沿锅边淋芡汁，翻炒至微稠且虾仁熟透。"],
+    "tip": "擦干虾仁再上浆，浆衣才薄而均匀。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-nanjing-salted-duck", "name": "金陵盐水鸭腿", "cuisine": "苏菜", "type": "荤菜", "flavor": "咸鲜", "time": 150, "difficulty": "费时", "servings": 2,
+    "description": "用鸭腿做家庭份量，花椒盐与清卤煮出咸鲜鸭香。",
+    "ingredients": [{"name":"鸭腿","amount":"2只，约600克"},{"name":"盐","amount":"18克"},{"name":"花椒","amount":"2克"},{"name":"八角","amount":"1个"},{"name":"姜","amount":"15克"},{"name":"小葱","amount":"2根"},{"name":"料酒","amount":"20毫升"},{"name":"清水","amount":"1500毫升"}],
+    "steps": ["小锅放盐和花椒，小火炒1分钟至香，放凉后抹在鸭腿表面及厚肉处，盖好冷藏腌90分钟。", "冲去鸭腿表面浮盐与花椒；姜切片，葱打结。", "鸭腿放入锅中，加水、姜葱、八角和料酒，煮开撇沫，转小火微沸煮35—40分钟。", "检查最厚部位已全熟，推荐中心达到74℃；关火后在热汤中焖10分钟。", "取出稍放凉，用干净刀具切块；暂不食用时及时冷藏。"],
+    "tip": "这是鸭腿家常版，腌制时间已计入总耗时；不要只靠骨边颜色判断熟度。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-yangzhou-hot-tofu-strips", "name": "扬州烫干丝", "cuisine": "苏菜", "type": "素菜", "flavor": "鲜香", "time": 20, "difficulty": "简单", "servings": 2,
+    "description": "豆腐干细丝烫得柔软，姜丝与香油带出朴素鲜香。",
+    "ingredients": [{"name":"白豆腐干","amount":"250克"},{"name":"姜","amount":"10克"},{"name":"小葱","amount":"1根"},{"name":"生抽","amount":"20毫升"},{"name":"糖","amount":"3克"},{"name":"香油","amount":"8毫升"},{"name":"清水（调汁）","amount":"40毫升"}],
+    "steps": ["豆腐干片薄后切细丝，姜切尽量细的丝，葱切末。", "烧一锅开水，下干丝小火煮2分钟，捞入漏勺；再用一壶沸水冲烫一次。", "生抽、糖和40毫升清水放小锅煮开，关火后加入香油。", "干丝沥干堆入盘中，铺姜丝与葱末，淋热酱汁，拌匀食用。"],
+    "tip": "这里做不加虾米的素食版，豆腐干切得细更容易入味。", "vegetarian": true, "spicy": false
+  },
+  {
+    "id": "es-suzhou-braised-pork", "name": "苏式红烧肉", "cuisine": "苏菜", "type": "荤菜", "flavor": "咸鲜", "time": 105, "difficulty": "适中", "servings": 2,
+    "description": "五花肉慢炖到软糯，酱香中带一点江南甜味。",
+    "ingredients": [{"name":"带皮五花肉","amount":"450克"},{"name":"冰糖","amount":"20克"},{"name":"生抽","amount":"25毫升"},{"name":"老抽","amount":"8毫升"},{"name":"黄酒","amount":"40毫升"},{"name":"姜","amount":"15克"},{"name":"小葱","amount":"2根"},{"name":"八角","amount":"1个"},{"name":"食用油","amount":"5毫升"},{"name":"热水","amount":"600毫升"}],
+    "steps": ["五花肉切3厘米块，冷水下锅煮开后再煮3分钟，捞出用温水洗净；姜切片，葱打结。", "锅中放油，倒入肉块中小火煎出少量油脂，加入冰糖、姜和八角翻炒。", "淋黄酒、生抽、老抽，加热水没过肉，煮开后小火加盖炖75分钟。", "用筷子检查肉皮软糯，夹出葱姜八角，中火收汁5—8分钟至酱汁能挂在肉上。"],
+    "tip": "收汁时勤翻动防止糖分焦底，水不足时补热水。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-suzhou-red-soup-noodles", "name": "苏式红汤面", "cuisine": "苏菜", "type": "主食", "flavor": "咸鲜", "time": 20, "difficulty": "简单", "servings": 2,
+    "description": "细面卧在葱香红汤里，一碗暖胃的江南面食。",
+    "ingredients": [{"name":"细面条","amount":"200克"},{"name":"无盐鸡汤","amount":"700毫升"},{"name":"小葱","amount":"3根"},{"name":"生抽","amount":"25毫升"},{"name":"老抽","amount":"5毫升"},{"name":"糖","amount":"4克"},{"name":"食用油","amount":"15毫升"},{"name":"小青菜","amount":"100克"}],
+    "steps": ["小葱分葱白、葱绿切段；锅中放油，小火煎葱白约3分钟至浅金黄。", "倒入鸡汤，加入生抽、老抽和糖，煮开后小火保持热汤。", "另烧一锅水，放细面按包装时间煮熟，最后2分钟加入青菜煮熟。", "面条沥水分装两碗，浇热红汤，放上青菜和葱绿即可。"],
+    "tip": "这是家常汤底版本，可搭配剩余熟卤肉作为浇头并充分热透。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-duck-blood-vermicelli", "name": "鸭血粉丝汤", "cuisine": "苏菜", "type": "主食", "flavor": "鲜香", "time": 25, "difficulty": "简单", "servings": 2,
+    "description": "软嫩鸭血、吸汤油豆腐与粉丝，一碗鲜香热乎。",
+    "ingredients": [{"name":"正规包装鸭血","amount":"250克"},{"name":"干粉丝","amount":"100克"},{"name":"油豆腐","amount":"80克"},{"name":"无盐鸭汤或鸡汤","amount":"900毫升"},{"name":"姜","amount":"10克"},{"name":"香菜","amount":"1小把"},{"name":"生抽","amount":"15毫升"},{"name":"盐","amount":"2克"},{"name":"白胡椒粉","amount":"少许"},{"name":"香油","amount":"5毫升"}],
+    "steps": ["粉丝用温水泡软约10分钟；鸭血切块，油豆腐对半切，姜切片，香菜切段。", "另锅烧水，将鸭血下锅煮2分钟后捞出。", "汤锅加入高汤和姜片煮开，下油豆腐、鸭血，小火煮8分钟至鸭血热透熟透。", "加入泡软粉丝煮3—5分钟至无硬芯，放生抽、盐、胡椒粉，淋香油并撒香菜。"],
+    "tip": "选择有包装和冷藏条件的鸭血，按包装要求煮熟后食用。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-wuxi-sauced-ribs", "name": "无锡酱排骨", "cuisine": "苏菜", "type": "荤菜", "flavor": "咸鲜", "time": 110, "difficulty": "适中", "servings": 2,
+    "description": "排骨炖得酥软，甜润浓酱包裹骨边好肉。",
+    "ingredients": [{"name":"猪肋排","amount":"500克"},{"name":"姜","amount":"15克"},{"name":"小葱","amount":"2根"},{"name":"生抽","amount":"25毫升"},{"name":"老抽","amount":"8毫升"},{"name":"黄酒","amount":"30毫升"},{"name":"冰糖","amount":"25克"},{"name":"八角","amount":"1个"},{"name":"桂皮","amount":"1小段"},{"name":"热水","amount":"800毫升"}],
+    "steps": ["排骨冷水下锅，煮开撇沫后再煮3分钟，捞出用温水洗净。", "炖锅放排骨、姜片、葱结、八角、桂皮、生抽、老抽、黄酒和冰糖，倒入热水没过排骨。", "煮开后转小火加盖炖80分钟，中途看水量，缺水时补热水。", "排骨肉能轻松用筷子穿透后，夹出香料，开盖中火收汁8—10分钟。", "轻翻排骨让浓汁均匀包裹，汁水尚有流动性时关火装盘。"],
+    "tip": "家庭版本保留偏甜酱香，喜欢清爽可将糖减至15克。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-longjing-shrimp", "name": "龙井虾仁", "cuisine": "浙菜", "type": "荤菜", "flavor": "清淡", "time": 25, "difficulty": "适中", "servings": 2,
+    "description": "茶香轻轻托起虾仁的清甜，鲜嫩又雅致。",
+    "ingredients": [{"name":"虾仁","amount":"300克"},{"name":"龙井茶叶","amount":"2克"},{"name":"鸡蛋清","amount":"半个"},{"name":"玉米淀粉","amount":"6克"},{"name":"盐","amount":"3克"},{"name":"料酒","amount":"5毫升"},{"name":"食用油","amount":"20毫升"},{"name":"热水","amount":"80毫升"}],
+    "steps": ["虾仁去虾线擦干，加2克盐、料酒、蛋清与淀粉抓匀，冷藏腌10分钟。", "龙井用约80℃热水泡2分钟，取30毫升茶汤和少量舒展开的嫩茶叶备用。", "热锅倒油，中火放虾仁滑炒3—4分钟，至虾肉基本变白。", "淋入茶汤，加嫩茶叶和剩余盐，轻翻1—2分钟，确认虾仁中心全熟后装盘。"],
+    "tip": "茶汤别泡过浓，浓茶会盖过虾味并带苦涩。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-dongpo-pork", "name": "东坡肉", "cuisine": "浙菜", "type": "荤菜", "flavor": "咸鲜", "time": 155, "difficulty": "费时", "servings": 2,
+    "description": "大块五花肉慢焖至软糯，酱汁浓郁，适合慢慢享受。",
+    "ingredients": [{"name":"带皮五花肉","amount":"500克"},{"name":"小葱","amount":"4根"},{"name":"姜","amount":"25克"},{"name":"黄酒","amount":"100毫升"},{"name":"生抽","amount":"35毫升"},{"name":"老抽","amount":"8毫升"},{"name":"冰糖","amount":"25克"},{"name":"热水","amount":"500毫升"}],
+    "steps": ["五花肉整块冷水下锅，煮开后焯5分钟，冲净后切成4厘米大方块。", "厚底小锅铺姜片和葱段，将肉皮朝下排好，加黄酒、生抽、老抽、冰糖和热水。", "煮开后盖盖，最小火炖70分钟，确保锅内有汤且轻微冒泡。", "轻翻为皮朝上，继续小火焖60分钟至肉皮软糯、筷子能轻松穿入。", "取出葱姜，中火收汁5—8分钟，边收边舀汁浇肉，装盘即可。"],
+    "tip": "家常小锅版省去酒坛蒸制，慢炖时间不能用猛火缩短。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-preserved-vegetable-pork", "name": "干菜焖肉", "cuisine": "浙菜", "type": "荤菜", "flavor": "咸鲜", "time": 115, "difficulty": "适中", "servings": 2,
+    "description": "梅干菜吸满肉香，咸鲜醇厚，是米饭的好搭档。",
+    "ingredients": [{"name":"五花肉","amount":"350克"},{"name":"绍兴梅干菜","amount":"60克"},{"name":"姜","amount":"10克"},{"name":"生抽","amount":"20毫升"},{"name":"老抽","amount":"5毫升"},{"name":"黄酒","amount":"20毫升"},{"name":"糖","amount":"10克"},{"name":"热水","amount":"600毫升"}],
+    "steps": ["梅干菜浸泡20分钟，反复漂洗去沙，挤干；五花肉切3厘米块，姜切片。", "肉冷水下锅焯至煮开，继续2分钟，捞出洗净。", "锅中不加油，先煎肉块至出油，加姜和梅干菜炒香，淋黄酒、生抽、老抽并加糖。", "倒入热水，煮开转小火加盖焖75分钟，中途翻拌并检查水量。", "肉块软烂后开盖收汁5分钟，让梅干菜保持湿润即可。"],
+    "tip": "梅干菜咸度差异大，调味前先尝，不必额外加盐。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-pian-er-chuan", "name": "片儿川", "cuisine": "浙菜", "type": "主食", "flavor": "咸鲜", "time": 30, "difficulty": "简单", "servings": 2,
+    "description": "雪菜、笋片和肉片煮成鲜汤，配面条吃得舒坦。",
+    "ingredients": [{"name":"鲜面条","amount":"250克"},{"name":"猪里脊","amount":"120克"},{"name":"熟笋","amount":"120克"},{"name":"雪菜","amount":"80克"},{"name":"生抽","amount":"10毫升"},{"name":"玉米淀粉","amount":"5克"},{"name":"料酒","amount":"5毫升"},{"name":"糖","amount":"2克"},{"name":"食用油","amount":"15毫升"},{"name":"清水","amount":"800毫升"}],
+    "steps": ["雪菜洗净挤干切碎，熟笋切片；里脊切薄片，用淀粉、料酒和5毫升生抽抓匀。", "锅中热油，下肉片炒至完全变色，加入笋片和雪菜翻炒2分钟。", "加清水、剩余生抽和糖，煮开后中小火煮5分钟，确保肉片全熟。", "另锅将面条煮至刚熟，捞入两只碗中，浇上热汤与雪菜肉片浇头。"],
+    "tip": "使用熟笋更省事；生鲜笋需先单独焯煮熟透再切片入菜。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-west-lake-beef-soup", "name": "西湖牛肉羹", "cuisine": "浙菜", "type": "汤羹", "flavor": "鲜香", "time": 25, "difficulty": "简单", "servings": 2,
+    "description": "细碎牛肉、香菇与蛋花汇成柔滑热羹。",
+    "ingredients": [{"name":"牛肉末","amount":"150克"},{"name":"嫩豆腐","amount":"100克"},{"name":"鲜香菇","amount":"3朵"},{"name":"鸡蛋清","amount":"2个"},{"name":"香菜","amount":"1小把"},{"name":"姜","amount":"5克"},{"name":"玉米淀粉","amount":"15克"},{"name":"盐","amount":"3克"},{"name":"白胡椒粉","amount":"少许"},{"name":"香油","amount":"5毫升"},{"name":"清水","amount":"850毫升"}],
+    "steps": ["香菇、豆腐切小丁，姜切末，香菜切碎；淀粉加50毫升清水调匀。", "牛肉末加50毫升冷水搅散；锅中烧开剩余清水，放姜末、香菇煮3分钟。", "倒入牛肉末并立即搅散，煮4—5分钟至完全变色熟透，再加入豆腐煮2分钟。", "加盐、胡椒粉，边搅拌边倒淀粉水，煮至微稠后淋入蛋清，稍停再搅出蛋花。", "继续煮至蛋清完全凝固，关火加香油与香菜。"],
+    "tip": "淀粉水分次添加，汤羹能轻挂勺即可，避免过稠。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-oil-braised-bamboo", "name": "油焖春笋", "cuisine": "浙菜", "type": "素菜", "flavor": "咸鲜", "time": 35, "difficulty": "简单", "servings": 2,
+    "description": "春笋吸收甜咸酱汁，脆嫩中透着浓香。",
+    "ingredients": [{"name":"春笋净肉","amount":"400克"},{"name":"生抽","amount":"20毫升"},{"name":"老抽","amount":"5毫升"},{"name":"糖","amount":"10克"},{"name":"食用油","amount":"25毫升"},{"name":"小葱","amount":"1根"},{"name":"清水","amount":"150毫升"}],
+    "steps": ["春笋剥去外壳削去老根，洗净后拍松，切成小段。", "沸水下笋煮10分钟，捞出沥干，焯笋水弃去。", "锅中放油，下笋中火煸炒3分钟，加生抽、老抽和糖炒匀。", "加150毫升水，盖盖小火焖8—10分钟至笋熟透入味。", "开盖中火收汁，撒葱花，汁水裹住笋块时出锅。"],
+    "tip": "鲜笋先焯煮能减少涩味，使用熟笋可省去这一步。", "vegetarian": true, "spicy": false
+  },
+  {
+    "id": "es-pickled-greens-croaker", "name": "雪菜大汤黄鱼", "cuisine": "浙菜", "type": "汤羹", "flavor": "咸鲜", "time": 35, "difficulty": "简单", "servings": 2,
+    "description": "黄鱼鲜汤与雪菜相遇，咸鲜开胃，鱼肉细嫩。",
+    "ingredients": [{"name":"黄鱼（处理干净）","amount":"1条，约450克"},{"name":"雪菜","amount":"80克"},{"name":"熟笋","amount":"80克"},{"name":"姜","amount":"15克"},{"name":"小葱","amount":"1根"},{"name":"料酒","amount":"15毫升"},{"name":"盐","amount":"1克"},{"name":"食用油","amount":"15毫升"},{"name":"开水","amount":"800毫升"}],
+    "steps": ["黄鱼擦干，两侧厚肉划两刀；雪菜冲净挤干切碎，熟笋切片，姜切片。", "热锅放油，鱼两面各煎2分钟至表面定型，放姜和料酒。", "加入开水、雪菜和笋片，大火煮5分钟，再转中火煮12—15分钟。", "检查鱼肉已完全不透明且厚处熟透，尝汤后补盐，撒葱段再煮1分钟。"],
+    "tip": "雪菜够咸时可不加盐；吃鱼时留意细刺。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-hangzhou-vegetarian-goose", "name": "杭州素烧鹅", "cuisine": "浙菜", "type": "素菜", "flavor": "鲜香", "time": 45, "difficulty": "适中", "servings": 2,
+    "description": "豆腐皮卷进笋菇细丝，煎焖后层层鲜香。",
+    "ingredients": [{"name":"油豆皮","amount":"3张，约120克"},{"name":"鲜香菇","amount":"100克"},{"name":"熟笋","amount":"100克"},{"name":"胡萝卜","amount":"50克"},{"name":"生抽","amount":"20毫升"},{"name":"老抽","amount":"3毫升"},{"name":"糖","amount":"5克"},{"name":"香油","amount":"5毫升"},{"name":"食用油","amount":"20毫升"},{"name":"清水","amount":"150毫升"}],
+    "steps": ["香菇、熟笋和胡萝卜切细丝；豆皮较干时用湿布盖几分钟回软。", "锅中放5毫升油，将三丝炒4分钟，加入5毫升生抽炒匀后放凉。", "将剩余生抽、老抽、糖、香油和水拌成酱汁；豆皮表面刷少量汁，铺三丝后两边折入卷紧。", "平底锅放剩余油，卷口朝下放入豆皮卷，小火将两面煎至金黄。", "倒入剩余酱汁，加盖小火焖8分钟，开盖收去多余汁水，稍凉后切段。"],
+    "tip": "卷得紧一些、先煎收口，可减少切开后散落。", "vegetarian": true, "spicy": false
+  },
+  {
+    "id": "es-fried-tofu-skin-rolls", "name": "干炸响铃", "cuisine": "浙菜", "type": "荤菜", "flavor": "鲜香", "time": 40, "difficulty": "适中", "servings": 2,
+    "description": "薄豆皮裹细肉馅炸成金黄小卷，入口香酥。",
+    "ingredients": [{"name":"薄油豆皮","amount":"2张，约80克"},{"name":"猪肉末","amount":"150克"},{"name":"鸡蛋液","amount":"半个鸡蛋的量"},{"name":"小葱","amount":"1根"},{"name":"姜","amount":"5克"},{"name":"生抽","amount":"10毫升"},{"name":"盐","amount":"1克"},{"name":"玉米淀粉","amount":"10克"},{"name":"清水","amount":"15毫升"},{"name":"食用油","amount":"350毫升，炸制用"}],
+    "steps": ["肉末加葱姜末、半个打散的鸡蛋、生抽、盐和5克淀粉搅匀。", "豆皮用湿布略回软，切成约12厘米方片；剩余淀粉与清水调成封口糊。", "每片豆皮铺薄薄肉馅，左右折入卷成直径约2厘米的小卷，接口抹淀粉糊压紧。", "小深锅油温约160℃，分批下卷，保持中小火炸6—8分钟至金黄酥脆。", "切开一只最厚的卷，确认馅心完全熟透后捞出沥油；未熟则继续低温炸熟。"],
+    "tip": "肉馅薄铺且卷径别太粗，避免豆皮已焦而里面没熟。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-ningbo-sesame-tangyuan", "name": "宁波黑芝麻汤圆", "cuisine": "浙菜", "type": "小吃", "flavor": "香甜", "time": 45, "difficulty": "适中", "servings": 2,
+    "description": "软糯糯米皮裹着温热芝麻馅，甜香满足。",
+    "ingredients": [{"name":"糯米粉","amount":"150克"},{"name":"温水","amount":"约115毫升"},{"name":"熟黑芝麻粉","amount":"45克"},{"name":"糖粉","amount":"25克"},{"name":"无盐黄油","amount":"25克"}],
+    "steps": ["黄油软化后与芝麻粉、糖粉拌匀，分成10份搓球，冷藏10分钟便于包制。", "糯米粉逐渐加入温水，揉成柔软不粘手面团，分10份，盖湿布防干。", "每份面团捏成小碗状，包一颗馅，收紧口后轻轻搓圆。", "锅中烧足量水，轻下汤圆并推锅底防粘，保持中小火煮。", "汤圆全部浮起后再煮3—5分钟，表皮均匀软糯、馅心热透后连汤盛出。"],
+    "tip": "用黄油替代传统猪油的家常版；糯米吸水不同，请少量加水调整。", "vegetarian": true, "spicy": false
+  },
+  {
+    "id": "es-fuzhou-lychee-pork", "name": "福州荔枝肉", "cuisine": "闽菜", "type": "荤菜", "flavor": "酸甜", "time": 45, "difficulty": "适中", "servings": 2,
+    "description": "肉块炸后裹酸甜汁，形似荔枝，配土豆格外开胃。",
+    "ingredients": [{"name":"猪里脊","amount":"250克"},{"name":"土豆","amount":"150克"},{"name":"蒜","amount":"3瓣"},{"name":"番茄酱","amount":"25克"},{"name":"米醋","amount":"20毫升"},{"name":"糖","amount":"15克"},{"name":"生抽","amount":"10毫升"},{"name":"盐","amount":"1克"},{"name":"红薯淀粉","amount":"50克"},{"name":"清水","amount":"80毫升"},{"name":"食用油","amount":"350毫升，炸制用"}],
+    "steps": ["里脊切成1.5厘米厚片，浅划十字花刀后切3厘米块，加盐和20毫升水抓匀，再裹40克淀粉。", "土豆去皮切1.5厘米块，冲去表面淀粉并擦干；蒜切末。", "小深锅油温约165℃，先炸土豆6—8分钟至熟，再分批炸肉块5—6分钟至金黄且内部全熟，分别沥油。", "番茄酱、醋、糖、生抽、剩余水与淀粉调匀；另锅取5毫升炸油炒香蒜末，倒汁煮至略稠。", "加入炸肉和土豆，快速翻裹均匀即出锅。"],
+    "tip": "荔枝肉通常不放荔枝，名称来自肉块形态；花刀别切断肉片。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-red-rice-wine-chicken", "name": "红糟鸡", "cuisine": "闽菜", "type": "荤菜", "flavor": "鲜香", "time": 55, "difficulty": "简单", "servings": 2,
+    "description": "红糟包裹鸡肉慢焖，酒香醇厚，色泽温润。",
+    "ingredients": [{"name":"鸡腿肉","amount":"400克"},{"name":"福建红糟","amount":"40克"},{"name":"姜","amount":"20克"},{"name":"蒜","amount":"3瓣"},{"name":"生抽","amount":"15毫升"},{"name":"黄酒","amount":"15毫升"},{"name":"糖","amount":"4克"},{"name":"食用油","amount":"15毫升"},{"name":"清水","amount":"250毫升"}],
+    "steps": ["鸡腿剁成小块擦干，拌生抽、黄酒和一半红糟腌15分钟；姜切片、蒜拍碎。", "锅中放油，炒香姜蒜，下鸡块翻炒至表面完全变色。", "加剩余红糟炒1分钟，倒水并加糖，煮开后小火加盖焖25分钟。", "检查最厚鸡块及靠骨处全熟，揭盖再收汁5分钟至汤汁略浓。"],
+    "tip": "选正规食用红糟，咸味差异较大，先尝再决定是否补盐。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-fujian-fried-vermicelli", "name": "福建炒面线", "cuisine": "闽菜", "type": "主食", "flavor": "咸鲜", "time": 30, "difficulty": "适中", "servings": 2,
+    "description": "细面线搭配虾仁、香菇与蔬菜，鲜香又有锅气。",
+    "ingredients": [{"name":"干面线","amount":"180克"},{"name":"虾仁","amount":"100克"},{"name":"鸡蛋","amount":"2个"},{"name":"包菜","amount":"120克"},{"name":"鲜香菇","amount":"3朵"},{"name":"胡萝卜","amount":"50克"},{"name":"蒜","amount":"2瓣"},{"name":"生抽","amount":"10毫升"},{"name":"白胡椒粉","amount":"少许"},{"name":"食用油","amount":"25毫升"}],
+    "steps": ["包菜、香菇、胡萝卜切丝，蒜切末，鸡蛋打散；面线按包装煮至八成熟，冲水沥干拌5毫升油。", "热锅放10毫升油，炒熟鸡蛋盛出；再下虾仁炒至全熟盛出。", "加入剩余油炒香蒜末，下香菇、胡萝卜、包菜炒3—4分钟至软熟。", "放面线，用筷子与锅铲轻翻，加生抽与胡椒粉。", "加入鸡蛋和虾仁，翻炒2分钟至面线全熟热透即可。"],
+    "tip": "面线本身常有盐，先少放生抽，炒前沥干才不易成团。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-quanzhou-radish-rice", "name": "泉州萝卜饭", "cuisine": "闽菜", "type": "主食", "flavor": "鲜香", "time": 55, "difficulty": "简单", "servings": 2,
+    "description": "萝卜清甜、肉丁鲜香，电饭煲一锅焖出闽南家常味。",
+    "ingredients": [{"name":"大米","amount":"180克"},{"name":"白萝卜","amount":"250克"},{"name":"五花肉","amount":"120克"},{"name":"干虾米","amount":"10克"},{"name":"鲜香菇","amount":"3朵"},{"name":"红葱头","amount":"30克"},{"name":"生抽","amount":"20毫升"},{"name":"老抽","amount":"3毫升"},{"name":"食用油","amount":"8毫升"},{"name":"清水","amount":"约190毫升"}],
+    "steps": ["大米淘净沥干，萝卜去皮切1厘米丁；肉、香菇切丁，红葱头切片，虾米冲净温水泡5分钟。", "炒锅放油，煸炒五花肉至熟并略出油，下红葱头、虾米和香菇炒香。", "放萝卜炒3分钟，加生抽、老抽，再倒大米翻匀。", "全部转入电饭煲，加入约190毫升水，按标准煮饭程序煮约35分钟。", "程序结束焖5分钟，翻匀检查米饭无硬芯且肉丁全熟后盛出。"],
+    "tip": "萝卜会出水，水量比普通白饭略少；以自家电饭煲和米的吸水性调整。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-xiamen-satay-noodles", "name": "厦门沙茶面", "cuisine": "闽菜", "type": "主食", "flavor": "香辣", "time": 25, "difficulty": "简单", "servings": 2,
+    "description": "浓香沙茶汤配面条、虾仁和油豆腐，一碗内容丰富。",
+    "ingredients": [{"name":"鲜面条","amount":"250克"},{"name":"沙茶酱（微辣）","amount":"40克"},{"name":"无糖花生酱","amount":"15克"},{"name":"虾仁","amount":"120克"},{"name":"油豆腐","amount":"100克"},{"name":"豆芽","amount":"100克"},{"name":"小青菜","amount":"80克"},{"name":"生抽","amount":"10毫升"},{"name":"食用油","amount":"10毫升"},{"name":"清水","amount":"800毫升"}],
+    "steps": ["油豆腐切半，虾仁去虾线；花生酱用100毫升温水调开。", "锅中放油，小火炒沙茶酱30秒，加入花生酱水和剩余清水，搅匀煮开。", "放油豆腐煮5分钟，再下虾仁煮4分钟至全熟，用生抽调味。", "另锅将面条按包装时间煮熟，末段加入豆芽、青菜煮熟，捞入两只碗中。", "浇入沙茶汤，放上虾仁、油豆腐即可。"],
+    "tip": "沙茶酱常含花生、海鲜成分，选购时查看配料和辣度。", "vegetarian": false, "spicy": true
+  },
+  {
+    "id": "es-fujian-oyster-omelette", "name": "闽南海蛎煎", "cuisine": "闽菜", "type": "小吃", "flavor": "鲜香", "time": 25, "difficulty": "适中", "servings": 2,
+    "description": "海蛎与蛋香、蒜苗香交织，外层微脆，里层软糯。",
+    "ingredients": [{"name":"去壳海蛎肉","amount":"200克"},{"name":"鸡蛋","amount":"2个"},{"name":"红薯淀粉","amount":"60克"},{"name":"蒜苗","amount":"50克"},{"name":"盐","amount":"2克"},{"name":"白胡椒粉","amount":"少许"},{"name":"食用油","amount":"25毫升"},{"name":"清水","amount":"70毫升"}],
+    "steps": ["海蛎用清水轻洗，挑净残壳并沥干；蒜苗切碎，鸡蛋打散。", "红薯淀粉与水、盐、胡椒粉拌匀，加入海蛎和蒜苗轻拌。", "平底锅放一半油，倒一半面糊摊薄，中火煎3—4分钟定型。", "淋一半蛋液，借助平盘翻面，再煎3—4分钟至蛋液凝固，海蛎全熟且中心热透。", "盛出第一张，用剩余材料以同样方法煎第二张。"],
+    "tip": "分两张薄煎更容易熟透；海蛎应彻底加热，不能保留生芯。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-fuzhou-fishball-soup", "name": "福州鱼丸汤", "cuisine": "闽菜", "type": "汤羹", "flavor": "清淡", "time": 20, "difficulty": "简单", "servings": 2,
+    "description": "弹嫩包心鱼丸配紫菜清汤，十足鲜香又省事。",
+    "ingredients": [{"name":"冷冻福州包心鱼丸","amount":"300克"},{"name":"干紫菜","amount":"3克"},{"name":"小葱","amount":"1根"},{"name":"生抽","amount":"10毫升"},{"name":"白胡椒粉","amount":"少许"},{"name":"香油","amount":"5毫升"},{"name":"清水","amount":"800毫升"}],
+    "steps": ["小葱切末，紫菜检查并清理杂质，按包装要求处理。", "锅中水烧开，鱼丸无需解冻直接下锅，水再次沸腾后转中火。", "按鱼丸包装时间煮，通常约10—15分钟；浮起后继续煮，切开一颗确认肉馅中心熟透。", "放紫菜、生抽、胡椒粉，煮1分钟，关火后淋香油并撒葱花。"],
+    "tip": "这是成品鱼丸快手汤，鱼丸浮起不等于包心肉馅已熟。", "vegetarian": false, "spicy": false
+  },
+  {
+    "id": "es-fuzhou-taro-paste", "name": "福州芋泥", "cuisine": "闽菜", "type": "小吃", "flavor": "香甜", "time": 45, "difficulty": "简单", "servings": 2,
+    "description": "芋头蒸软再慢炒，成一碗细腻绵密的暖甜点。",
+    "ingredients": [{"name":"槟榔芋净肉","amount":"350克"},{"name":"白糖","amount":"35克"},{"name":"无明显气味的食用油","amount":"25毫升"},{"name":"清水","amount":"50毫升"},{"name":"熟白芝麻","amount":"3克"}],
+    "steps": ["戴手套处理芋头，去皮后切1厘米厚片，放蒸盘。", "水开后上锅蒸25分钟，直到筷子能轻松穿透，趁热压成细泥。", "不粘锅放油与芋泥，小火慢炒，分次加入糖和清水，不断推拌8—10分钟。", "芋泥细腻且能缓慢堆起时盛碗，撒熟芝麻，稍降温后食用。"],
+    "tip": "用植物油替代传统猪油的家常版；芋头必须蒸透，芋泥热时很烫。", "vegetarian": true, "spicy": false
+  },
+  {
+    "id": "es-shaxian-mixed-noodles", "name": "沙县花生拌面", "cuisine": "闽菜", "type": "主食", "flavor": "咸鲜", "time": 15, "difficulty": "简单", "servings": 2,
+    "description": "细面裹上花生香酱汁，简单一拌就能吃得心满意足。",
+    "ingredients": [{"name":"鲜细面","amount":"250克"},{"name":"无糖花生酱","amount":"35克"},{"name":"生抽","amount":"20毫升"},{"name":"香油","amount":"8毫升"},{"name":"糖","amount":"3克"},{"name":"小葱","amount":"2根"},{"name":"热水","amount":"80毫升"}],
+    "steps": ["小葱洗净切末，花生酱分次加入热水，搅成能流动的酱。", "在两只面碗中分放花生酱、生抽、香油、糖和一半葱末，搅匀。", "锅中水烧开，下鲜细面，按包装煮到全熟，捞起稍沥水。", "面条趁热入碗迅速拌匀；偏干时补一两勺煮面水，撒剩余葱末。"],
+    "tip": "家常花生酱版本，以植物香油替代猪油；拌面要趁热。", "vegetarian": true, "spicy": false
+  },
+  {
+    "id": "es-xiamen-peanut-soup", "name": "厦门花生汤", "cuisine": "闽菜", "type": "小吃", "flavor": "香甜", "time": 80, "difficulty": "费时", "servings": 2,
+    "description": "花生炖到一抿就散，汤色乳白，甜润绵香。",
+    "ingredients": [{"name":"去皮生花生仁","amount":"120克"},{"name":"清水","amount":"750毫升"},{"name":"冰糖","amount":"25克"}],
+    "steps": ["花生仁挑去变色或异味颗粒，冲洗干净；使用已经去红衣的生花生省去剥皮。", "花生与清水放入电压力锅，确保水量及装量符合锅具说明，选择豆类或高压炖煮40分钟。", "程序结束按说明自然泄压，约20分钟后确认压力完全释放再开盖。", "检查花生能轻松压碎；若仍硬，继续按锅具要求补煮至软。", "加冰糖搅匀，开盖煮5分钟使糖融化，盛入两碗。"],
+    "tip": "本版时间按电压力锅计算；普通锅需提前浸泡并延长炖煮时间。", "vegetarian": true, "spicy": false
+  }
+]

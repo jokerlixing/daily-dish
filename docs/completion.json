@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "recordType": "archived initial delivery",
+  "started": "2026-09-13 23:28:26 +08:00",
+  "finished": "2026-09-13 23:42:49 +08:00",
+  "elapsed": "00:14:22",
+  "bytes": 172848,
+  "github": "No remote configured; not pushed",
+  "coreTests": 7,
+  "browserScenarios": 11
+}
