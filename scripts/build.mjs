@@ -1,10 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import {readRecipes,expectedRecipeCount} from './catalog.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8').replace(/^\uFEFF/, '');
-const files = ['data/cuisines-north-west.json','data/cuisines-east-south.json','data/snacks.json','data/expanded.json','data/catalog-expanded.json'];
-const recipes = files.flatMap(file => JSON.parse(read(file)));
+const recipes = readRecipes();
+if(recipes.length!==expectedRecipeCount)throw new Error(`Expected ${expectedRecipeCount} recipes, got ${recipes.length}`);
 const photos = JSON.parse(read('data/photos.json'));
 let html = read('src/template.html');
 html = html.replace('/* APP_STYLES */', () => read('src/styles.css'))

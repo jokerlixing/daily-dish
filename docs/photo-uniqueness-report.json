@@ -1,0 +1,27 @@
+{
+  "total": 1000,
+  "uniqueFiles": 1000,
+  "exactDuplicates": {
+    "src": [],
+    "sha256": [],
+    "pixelSha256": []
+  },
+  "similarityCandidates": [
+    {
+      "ids": [
+        "cat-1faa6e7b4e3a",
+        "cat-7ec672607f66"
+      ],
+      "sha256": [
+        "2804bc6dfb001c61ee91fba8408472fd6c2a3614a610268a7cdc9afe94c50b40",
+        "90292fd255b2cd604791617d9102836fb3a27d76be8f3840bf89fa5bfa62f02e"
+      ],
+      "phashDistance": 8,
+      "dhashDistance": 15
+    }
+  ],
+  "method": "SHA256, normalized RGB pixels, 64-bit DCT perceptual hash and difference hash. Similarity is a screening signal, not a duplicate verdict.",
+  "generatedAt": "2026-09-14T05:05:24.333300+00:00",
+  "status": "passed",
+  "similarityReview": "docs/photo-similarity-review.json"
+}

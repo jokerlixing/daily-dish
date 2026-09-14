@@ -1,0 +1,106 @@
+{
+  "checkedAt": "2026-09-14T05:05:24.334301+00:00",
+  "version": "2.2.0",
+  "recipes": 1000,
+  "photos": 1000,
+  "unitTestsPassed": 34,
+  "browser": {
+    "checkedAt": "2026-09-14T05:02:56.905Z",
+    "url": "http://localhost:4173",
+    "checks": [
+      "main-page search is absent while dedicated fridge input remains available",
+      "1000 recipes load with ingredients and steps; 13 single recommendations do not repeat",
+      "all eight cuisines, everyday dishes, and snacks have the expected coverage",
+      "all batch sizes produce distinct main dishes; menu selection, checklists, and batch favorite work",
+      "small pools never repeat to fill a menu; empty and combined-filter states recover",
+      "favorites survive reload, open and remove correctly; history is bounded and dialogs dismiss",
+      "fridge aliases, missing ingredients, pantry switch, recipe navigation, clearing, and persistence work",
+      "favorites and random draws in a second tab cannot overwrite saved fridge ingredients",
+      "clearing favorites and history is independent, persists and syncs across tabs without changing the menu or fridge; reload adds only its new draw",
+      "dialogs preserve the selected recipe; catalog-only search recovers from no results and opens a dish",
+      "local dish photograph loads with source attribution, replacing the old illustration",
+      "filter changes and catalog navigation cancel random animations without exposing stale recipes",
+      "320, 390, 768, and 1440px menus and fridge layouts have no overflow; mobile redraw remains in document flow",
+      "HTML plus its photo folder works offline without runtime network requests",
+      "blocked or corrupted storage does not break recommendations or session favorites",
+      "no browser runtime errors"
+    ],
+    "errors": [],
+    "viewports": [
+      {
+        "width": 320,
+        "height": 740
+      },
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 768,
+        "height": 1024
+      },
+      {
+        "width": 1440,
+        "height": 1050
+      }
+    ]
+  },
+  "layout": {
+    "url": "http://localhost:4173/",
+    "checkedAt": "2026-09-14T05:02:40.079Z",
+    "checks": [
+      "320px: visible filter controls receive real taps; nine unique dishes; no horizontal overflow",
+      "360px: visible filter controls receive real taps; nine unique dishes; no horizontal overflow",
+      "375px: visible filter controls receive real taps; nine unique dishes; no horizontal overflow",
+      "390px: visible filter controls receive real taps; nine unique dishes; no horizontal overflow",
+      "430px: visible filter controls receive real taps; nine unique dishes; no horizontal overflow",
+      "600px: visible filter controls receive real taps; nine unique dishes; no horizontal overflow",
+      "700px: visible filter controls receive real taps; nine unique dishes; no horizontal overflow",
+      "701px: visible filter controls receive real taps; nine unique dishes; no horizontal overflow",
+      "720px: visible filter controls receive real taps; nine unique dishes; no horizontal overflow",
+      "768px: visible filter controls receive real taps; nine unique dishes; no horizontal overflow",
+      "1024px: visible filter controls receive real taps; nine unique dishes; no horizontal overflow",
+      "1440px: visible filter controls receive real taps; nine unique dishes; no horizontal overflow"
+    ],
+    "errors": []
+  },
+  "catalog": {
+    "pages": 42,
+    "recipesChecked": 1000,
+    "lastPageRecipes": 16,
+    "viewports": [
+      {
+        "width": 320,
+        "cards": 24,
+        "columns": 2,
+        "pageJump": true,
+        "invalidPageRecovery": true,
+        "passed": true
+      },
+      {
+        "width": 390,
+        "cards": 24,
+        "columns": 2,
+        "pageJump": true,
+        "invalidPageRecovery": true,
+        "passed": true
+      },
+      {
+        "width": 768,
+        "cards": 24,
+        "columns": 3,
+        "pageJump": true,
+        "invalidPageRecovery": true,
+        "passed": true
+      },
+      {
+        "width": 1440,
+        "cards": 24,
+        "columns": 4,
+        "pageJump": true,
+        "invalidPageRecovery": true,
+        "passed": true
+      }
+    ]
+  }
+}

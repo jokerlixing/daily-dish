@@ -2,6 +2,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {createHash} from 'node:crypto';
+import {readRecipes} from './catalog.mjs';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 export const authorizationRef='docs/photo-authorization.md';
@@ -61,7 +63,7 @@ export function photoIssues(photo,{rootDir=root,requireMeishichina=false,checkFi
   return issues;
 }
 export function createPhotoReleaseReport(recipes,photos,{rootDir=root}={}){
-  const report={total:recipes.length,ready:[],missing:[],needsReplacement:[],unknownIds:[]};
+  const report={total:recipes.length,ready:[],missing:[],needsReplacement:[],unknownIds:[],duplicateImages:[]};
   const ids=new Set(recipes.map(recipe=>recipe.id));
   report.unknownIds=Object.keys(photos).filter(id=>!ids.has(id));
   for(const recipe of recipes){
@@ -71,14 +73,26 @@ export function createPhotoReleaseReport(recipes,photos,{rootDir=root}={}){
     if(photo.exact===false&&(!photo.sourceTitle?.trim()||!photo.referenceNote?.trim()))issues.push('reference photos require the actual dish title and differences');
     if(issues.length)report.needsReplacement.push({...item,issues});else report.ready.push(item);
   }
+  const groups={file:new Map(),content:new Map(),original:new Map()};
+  const remember=(type,key,id)=>{if(!key)return;const map=groups[type];map.set(key,[...(map.get(key)||[]),id]);};
+  for(const recipe of recipes){
+    const photo=photos[recipe.id];if(!photo)continue;
+    if(typeof photo.src==='string'&&/^assets\/photos\/[\w-]+\.webp$/.test(photo.src)){
+      remember('file',photo.src,recipe.id);
+      try{remember('content',createHash('sha256').update(fs.readFileSync(path.join(rootDir,photo.src))).digest('hex'),recipe.id);}catch{}
+    }
+    const original=parseUrl(photo.imageSource);
+    if(original){original.search='';original.hash='';remember('original',original.href,recipe.id);}
+  }
+  for(const [type,map] of Object.entries(groups))for(const [value,ids] of map)if(ids.length>1)report.duplicateImages.push({type,value,ids});
   return report;
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   const read=file=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8').replace(/^\uFEFF/,''));
-  const recipes=fs.readdirSync(path.join(root,'data')).filter(file=>file.endsWith('.json')&&!/^photos(?:[.-]|$)/i.test(file)).map(file=>read(`data/${file}`)).filter(Array.isArray).flat();
+  const recipes=readRecipes();
   const report=createPhotoReleaseReport(recipes,read('data/photos.json'));
-  fs.mkdirSync(path.join(root,'artifacts/888'),{recursive:true});
-  fs.writeFileSync(path.join(root,'artifacts/888/photo-release-report.json'),JSON.stringify(report,null,2)+'\n');
-  console.log(JSON.stringify({total:report.total,ready:report.ready.length,missing:report.missing.length,needsReplacement:report.needsReplacement.length,unknownIds:report.unknownIds.length}));
-  if(report.missing.length||report.needsReplacement.length||report.unknownIds.length)process.exitCode=1;
+  fs.mkdirSync(path.join(root,'artifacts/1000'),{recursive:true});
+  fs.writeFileSync(path.join(root,'artifacts/1000/photo-release-report.json'),JSON.stringify(report,null,2)+'\n');
+  console.log(JSON.stringify({total:report.total,ready:report.ready.length,missing:report.missing.length,needsReplacement:report.needsReplacement.length,unknownIds:report.unknownIds.length,duplicateImages:report.duplicateImages.length}));
+  if(report.missing.length||report.needsReplacement.length||report.unknownIds.length||report.duplicateImages.length)process.exitCode=1;
 }

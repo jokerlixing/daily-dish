@@ -42,7 +42,6 @@
       <div class="all-cuisines-row"><button class="all-cuisines-toggle" id="all-cuisines" aria-pressed="false"><span class="switch-track" aria-hidden="true"></span><span>全菜系随机 <small>只抽正餐，不含小吃</small></span></button></div>
       <div class="filter-bottom">
         <div class="preferences" role="group" aria-label="口味和时间"><button class="filter-toggle" id="no-spicy" aria-pressed="false"><svg class="icon"><use href="#i-pepper"/></svg>不吃辣</button><button class="filter-toggle" id="vegetarian" aria-pressed="false"><svg class="icon"><use href="#i-leaf"/></svg>只看素菜</button><label class="time-filter"><svg class="icon"><use href="#i-clock"/></svg><select id="max-time" aria-label="做饭时间"><option value="0">不限时间</option><option value="15">15 分钟内</option><option value="30">30 分钟内</option><option value="60">60 分钟内</option></select></label></div>
-        <label class="search-field"><svg class="icon"><use href="#i-search"/></svg><input id="search-input" type="search" autocomplete="off" placeholder="搜菜名，或冰箱里的食材" aria-label="搜索菜名或食材"></label>
       </div>
       <div class="batch-picker"><div class="batch-heading"><span class="small-label">这顿几道菜</span><span>点选数量，直接出菜单</span></div><div id="batch-options" class="batch-options" role="group" aria-label="随机推荐菜品数量"></div></div>
     </section>
@@ -50,7 +49,7 @@
     <div class="recommendation-heading"><div><span class="status-dot"></span><span id="recommendation-label">这一顿，不妨试试</span></div><div class="recommendation-tools"><span id="pool-count" aria-live="polite"></span><button class="button button-primary quick-draw" id="quick-draw">随机来一道 <svg class="icon"><use href="#i-dice"/></svg></button></div></div>
     <section id="menu-section" class="menu-section" aria-labelledby="menu-title" hidden><div class="menu-heading"><div><h2 id="menu-title">这一桌，有着落了</h2><p id="menu-description"></p></div><button class="text-button" id="save-menu">收藏这一桌 <svg class="icon"><use href="#i-heart"/></svg></button></div><div id="menu-grid" class="menu-grid"></div></section>
     <section id="recipe" class="recipe-card" aria-labelledby="recipe-name"></section>
-    <section id="empty-state" class="empty-state" hidden><svg class="icon"><use href="#i-search"/></svg><h2>这次的条件，有点挑嘴</h2><p>没有找到符合条件的菜。试试换个食材，或放宽一点筛选。</p><button class="button button-primary" id="reset-filters">清除筛选，随便吃点</button></section>
+    <section id="empty-state" class="empty-state" hidden><svg class="icon"><use href="#i-search"/></svg><h2>这次的条件，有点挑嘴</h2><p>没有找到符合条件的菜。试试换个菜系，或放宽一点筛选。</p><button class="button button-primary" id="reset-filters">清除筛选，随便吃点</button></section>
     <div class="shuffle-dock" id="shuffle-dock"><div class="shuffle-copy"><svg class="icon"><use href="#i-dice"/></svg><span><strong>不用想太多，吃点新花样</strong><small id="shuffle-hint">这一轮抽完前，不会重复推荐</small></span></div><button class="button button-primary shuffle-button" id="shuffle-button"><svg class="icon"><use href="#i-dice"/></svg><span>帮我选一道</span><svg class="icon arrow-icon"><use href="#i-arrow"/></svg></button></div>
     <section class="recipe-detail" id="recipe-detail" aria-label="食材和做法"></section>
     </div>

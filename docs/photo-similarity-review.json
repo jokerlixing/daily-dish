@@ -1,0 +1,12 @@
+{
+  "standard": "Perceptual hash candidates are visually inspected as pairs; different plates, ingredients and composition establish distinct photographs.",
+  "pairs": [
+    {
+      "ids": ["cat-1faa6e7b4e3a", "cat-7ec672607f66"],
+      "sha256": ["2804bc6dfb001c61ee91fba8408472fd6c2a3614a610268a7cdc9afe94c50b40", "90292fd255b2cd604791617d9102836fb3a27d76be8f3840bf89fa5bfa62f02e"],
+      "status": "distinct-photographs",
+      "visualReviewed": true,
+      "note": "分别为深色砂锅中的鳝段和白盘中的冬瓜虾皮，容器、食材和构图不同；已查看两张原尺寸本地照片。"
+    }
+  ]
+}

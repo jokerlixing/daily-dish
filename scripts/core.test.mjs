@@ -5,17 +5,18 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import {isVegetarian,inferFlavor} from './recipe-metadata.mjs';
+import {readRecipes,expectedRecipeCount,canonicalRecipeName} from './catalog.mjs';
 const require=createRequire(import.meta.url);
 const {filterRecipes,ShuffleBag,cuisines,categories,parseIngredients,matchFridge}=require('../src/core.js');
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const read=file=>fs.readFileSync(path.join(root,file),'utf8').replace(/^\uFEFF/,'');
-const recipeFiles=fs.readdirSync(path.join(root,'data')).filter(name=>name.endsWith('.json')&&!/^photos(?:[.-]|$)/i.test(name)).sort();
-const recipes=recipeFiles.map(name=>JSON.parse(read(`data/${name}`))).filter(Array.isArray).flat();
+const recipes=readRecipes();
 
-test('888 recipes cover eight cuisines, everyday dishes and snacks without duplicate identities',()=>{
-  assert.equal(recipes.length,888);
+test('1000 recipes cover eight cuisines, everyday dishes and snacks without duplicate identities',()=>{
+  assert.equal(recipes.length,expectedRecipeCount);
   assert.equal(new Set(recipes.map(r=>r.id)).size,recipes.length);
   assert.equal(new Set(recipes.map(r=>r.name)).size,recipes.length);
+  assert.equal(new Set(recipes.map(r=>canonicalRecipeName(r.name))).size,recipes.length);
   for(const cuisine of cuisines) assert.ok(recipes.filter(r=>r.cuisine===cuisine).length>=15,cuisine);
   for(const category of categories) assert.ok(recipes.some(r=>r.category===category),category);
   for(const recipe of recipes) assert.ok(cuisines.includes(recipe.cuisine)&&categories.includes(recipe.category),recipe.name);

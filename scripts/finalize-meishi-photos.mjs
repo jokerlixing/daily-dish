@@ -2,19 +2,25 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {createPhotoReleaseReport} from './photo-release-check.mjs';
+import {readRecipes,expectedRecipeCount} from './catalog.mjs';
 const read=file=>JSON.parse(fs.readFileSync(file,'utf8').replace(/^\uFEFF/,''));
-const files=['cuisines-north-west','cuisines-east-south','snacks','expanded','catalog-expanded'];
-const recipes=files.flatMap(name=>read(`data/${name}.json`));
+const recipes=readRecipes();
 const photos=read('data/photos.json');
-for(const file of fs.readdirSync('artifacts/meishi/downloaded').filter(file=>file.endsWith('.json'))){
-  const {id,name,sha256,...photo}=read(path.join('artifacts/meishi/downloaded',file));
-  if(!recipes.some(recipe=>recipe.id===id))throw new Error(`Unknown recipe ${id}`);
-  photos[id]=photo;
+// Import only an explicitly selected acquisition batch. Historical downloads
+// must not overwrite newer, reviewed replacements when refreshing credits.
+for(let i=2;i<process.argv.length;i++){
+  if(process.argv[i]!=='--input-dir')continue;
+  const folder=process.argv[++i];if(!folder)throw new Error('--input-dir needs a folder');
+  for(const file of fs.readdirSync(folder).filter(file=>file.endsWith('.json'))){
+    const {id,name,sha256,...photo}=read(path.join(folder,file));
+    if(!recipes.some(recipe=>recipe.id===id))throw new Error(`Unknown recipe ${id}`);
+    photos[id]=photo;
+  }
 }
 const ordered=Object.fromEntries(recipes.filter(recipe=>photos[recipe.id]).map(recipe=>[recipe.id,photos[recipe.id]]));
 const report=createPhotoReleaseReport(recipes,ordered);
-if(process.argv.includes('--complete')&&(report.ready.length!==888||report.unknownIds.length)){
-  throw new Error(`Photo release is incomplete: ${report.ready.length}/888`);
+if(process.argv.includes('--complete')&&(report.ready.length!==expectedRecipeCount||report.unknownIds.length||report.duplicateImages.length)){
+  throw new Error(`Photo release is incomplete or contains repeated images: ${report.ready.length}/${expectedRecipeCount}`);
 }
 fs.writeFileSync('data/photos.json',JSON.stringify(ordered,null,2)+'\n');
 const official=Object.values(ordered).filter(photo=>photo.authorizationRef==='docs/photo-authorization.md');

@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import {createHash} from 'node:crypto';
 import {isVegetarian,inferFlavor} from './recipe-metadata.mjs';
+import {readRecipes,expectedRecipeCount,canonicalRecipeName} from './catalog.mjs';
 const read=file=>JSON.parse(fs.readFileSync(file,'utf8').replace(/^\uFEFF/,''));
 const existing=['cuisines-north-west','cuisines-east-south','snacks','expanded'].flatMap(file=>read(`data/${file}.json`));
 const batches=['regional-and-hot','vegetable-cold-soup','staple-snack-dessert','home-meat'].flatMap(file=>read(`data/seeds/${file}-seeds.json`));
@@ -25,9 +26,11 @@ const recipes=batches.map(seed=>{
     description:seed.description||`${seed.name}的两人份家常做法，主要准备${first}。`,ingredients,
     steps:steps.map(s=>/[。！]$/.test(s)?s:s+'。'),tip:seed.tip||steps.at(-1),vegetarian,spicy:seed.spicy};
 });
-if(existing.length+recipes.length!==888)errors.push(`expected 888 recipes, got ${existing.length}+${recipes.length}`);
+// One alias of the same sauerkraut-and-pork stew was merged in v2.2.0.
+if(existing.length+recipes.length!==887)errors.push(`expected 887 retained recipes, got ${existing.length}+${recipes.length}`);
 if(errors.length){console.error(errors.join('\n'));process.exit(1);}
 fs.writeFileSync('data/catalog-expanded.json',JSON.stringify(recipes,null,2)+'\n');
-const all=[...existing,...recipes],count=field=>Object.fromEntries([...new Set(all.map(r=>r[field]))].map(value=>[value,all.filter(r=>r[field]===value).length]));
-fs.writeFileSync('docs/catalog-888-counts.json',JSON.stringify({total:all.length,cuisines:count('cuisine'),categories:count('category')},null,2)+'\n');
+const all=readRecipes(),count=field=>Object.fromEntries([...new Set(all.map(r=>r[field]))].map(value=>[value,all.filter(r=>r[field]===value).length]));
+if(all.length!==expectedRecipeCount||new Set(all.map(r=>canonicalRecipeName(r.name))).size!==all.length)throw new Error('Full catalog is incomplete or contains duplicate dish names');
+fs.writeFileSync('docs/catalog-1000-counts.json',JSON.stringify({total:all.length,cuisines:count('cuisine'),categories:count('category')},null,2)+'\n');
 console.log(JSON.stringify({total:all.length,new:recipes.length,cuisines:count('cuisine'),categories:count('category')},null,2));

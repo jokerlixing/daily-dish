@@ -3,12 +3,40 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {createHash} from 'node:crypto';
+import os from 'node:os';
+import {readRecipes} from './catalog.mjs';
 import {photoIssues,createPhotoReleaseReport,authorizationRef,authorizedLicense} from './photo-release-check.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const read=file=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8').replace(/^\uFEFF/,''));
-const recipeFiles=fs.readdirSync(path.join(root,'data')).filter(file=>file.endsWith('.json')&&!/^photos(?:[.-]|$)/i.test(file));
-const recipes=recipeFiles.map(file=>read(`data/${file}`)).filter(Array.isArray).flat();
+const recipes=readRecipes();
 const photos=read('data/photos.json');
+
+test('each dish has a different image file, original image URL, and SHA256 content',()=>{
+  const files=new Map(),hashes=new Map(),originals=new Map();
+  for(const recipe of recipes){
+    const photo=photos[recipe.id];assert.ok(photo,recipe.name);
+    const hash=createHash('sha256').update(fs.readFileSync(path.join(root,photo.src))).digest('hex');
+    const url=new URL(photo.imageSource);url.search='';url.hash='';
+    for(const [map,key] of [[files,photo.src],[hashes,hash],[originals,url.href]]){
+      assert.ok(!map.has(key),`${recipe.name} repeats the photograph for ${map.get(key)}`);map.set(key,recipe.name);
+    }
+  }
+});
+
+test('visual review covers the actual current file of every dish',()=>{
+  const report=read('docs/photo-review-report.json');
+  assert.equal(report.status,'passed');
+  assert.equal(report.photos.length,recipes.length);
+  const reviewed=new Map(report.photos.map(row=>[row.id,row]));
+  assert.equal(reviewed.size,recipes.length);
+  for(const recipe of recipes){
+    const row=reviewed.get(recipe.id),photo=photos[recipe.id];
+    assert.ok(row?.visualReviewed&&row.status.startsWith('pass'),recipe.name);
+    assert.equal(row.src,photo.src,recipe.name);
+    assert.equal(row.sha256,createHash('sha256').update(fs.readFileSync(path.join(root,photo.src))).digest('hex'),`${recipe.name}: review is stale`);
+  }
+});
 test('every recipe has a locally shipped, attributed real photograph',()=>{
   assert.equal(Object.keys(photos).length,recipes.length);
   for(const recipe of recipes){
@@ -65,6 +93,28 @@ test('release validation requires original pages, disclosed references and exist
   const reference={...authorizedPhoto,src:localFile,exact:false,sourceTitle:'清炒冬瓜',referenceNote:'清炒冬瓜成品参考，具体调味以本页白油冬瓜菜谱为准。'};
   assert.deepEqual(photoIssues(reference,{requireMeishichina:true}),[]);
   assert.equal(createPhotoReleaseReport([{id:'reference',name:'白油冬瓜'}],{reference}).ready.length,1);
+});
+
+test('renaming an identical photo cannot bypass release duplicate detection',()=>{
+  const temp=fs.mkdtempSync(path.join(os.tmpdir(),'daily-dish-duplicate-'));
+  const pictureDir=path.join(temp,'assets/photos'),docDir=path.join(temp,'docs');
+  fs.mkdirSync(pictureDir,{recursive:true});fs.mkdirSync(docDir);
+  const first=path.join(pictureDir,'first.webp'),second=path.join(pictureDir,'renamed.webp'),authorization=path.join(docDir,'photo-authorization.md');
+  try{
+    const source=path.join(root,Object.values(photos)[0].src);
+    fs.copyFileSync(source,first);fs.copyFileSync(source,second);
+    fs.copyFileSync(path.join(root,authorizationRef),authorization);
+    const report=createPhotoReleaseReport([{id:'first',name:'第一道'},{id:'second',name:'第二道'}],{
+      first:{...authorizedPhoto,src:'assets/photos/first.webp'},
+      second:{...authorizedPhoto,src:'assets/photos/renamed.webp',imageSource:'https://i8.meishichina.com/attachment/recipe/another.jpg'}
+    },{rootDir:temp});
+    assert.equal(report.ready.length,2);
+    assert.ok(report.duplicateImages.some(row=>row.type==='content'&&row.ids.join(',')==='first,second'));
+    assert.ok(!report.duplicateImages.some(row=>row.type==='file'));
+  }finally{
+    for(const file of [first,second,authorization])if(fs.existsSync(file))fs.unlinkSync(file);
+    for(const directory of [pictureDir,path.join(temp,'assets'),docDir,temp])fs.rmdirSync(directory);
+  }
 });
 test('the shipped page contains the current photo manifest and sources',()=>{
   const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
