@@ -240,6 +240,7 @@
   $('.brand').addEventListener('click',()=>switchView('random'));
   $('#random-view-button').addEventListener('click',()=>switchView('random'));$('#catalog-view-button').addEventListener('click',()=>switchView('catalog'));
   $('#today-view-button').addEventListener('click',()=>switchView('today'));
+  $('#quick-today').addEventListener('click',()=>{switchView('today');focusSection('#today-title');});
   document.addEventListener('click',event=>{
     const button=event.target.closest('[data-add-today]');if(!button||button.disabled)return;
     let existed=false;changeTodayPlan(plan=>{existed=plan.some(item=>item.id===button.dataset.addToday);return addToPlan(plan,button.dataset.addToday,validRecipeIds,legacyIds);});plannerToast(existed?'这道菜已经在今日菜谱里':'已加入今日菜谱大厅，可以安排到三餐');

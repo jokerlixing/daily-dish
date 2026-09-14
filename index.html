@@ -145,6 +145,24 @@ dialog{width:min(640px,calc(100% - 32px));max-height:86dvh;border:1px solid #dbe
 }
 @media(max-width:400px){.view-switch button .icon{display:none}.view-switch button{gap:3px;font-size:11px}.view-switch button>span{font-size:9px}.catalog-card>.add-today,.menu-card>.add-today{margin-right:8px;margin-left:8px;width:calc(100% - 16px);gap:4px;font-size:10px;padding:8px 5px}.catalog-card>.add-today .icon,.menu-card>.add-today .icon{width:13px;height:13px}}
 @media print{.today-view{display:none!important}}
+
+/* Keep the return and random actions centered above the recommended recipe. */
+@media screen {
+  .recommendation-heading{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}
+  .recommendation-heading>.recommendation-status{flex-wrap:wrap;min-width:0;column-gap:8px;row-gap:4px}
+  .recommendation-status #pool-count{flex-basis:100%;padding-left:14px}
+  .recommendation-heading>.recommendation-tools{grid-column:2;width:auto;margin-top:0;justify-content:center;gap:10px}
+  .recommendation-tools>.button{min-height:44px;white-space:nowrap;font-size:12px;padding:10px 13px;gap:8px}
+  .quick-today .icon{width:16px;height:16px}
+}
+@media screen and (max-width:900px) {
+  .recommendation-heading{grid-template-columns:minmax(0,1fr);gap:10px}
+  .recommendation-heading>.recommendation-tools{grid-column:1;justify-self:center;max-width:100%}
+}
+@media screen and (max-width:360px) {
+  .recommendation-heading>.recommendation-tools{gap:8px}
+  .recommendation-tools>.button{font-size:11px;padding:10px;gap:6px}
+}
 </style>
 </head>
 <body>
@@ -185,7 +203,7 @@ dialog{width:min(640px,calc(100% - 32px));max-height:86dvh;border:1px solid #dbe
       <div class="batch-picker"><div class="batch-heading"><span class="small-label">这顿几道菜</span><span>点选数量，直接出菜单</span></div><div id="batch-options" class="batch-options" role="group" aria-label="随机推荐菜品数量"></div></div>
     </section>
     <details class="fridge-panel" id="fridge-panel"><summary><span class="fridge-mark" aria-hidden="true">❄</span><span><strong>看看冰箱，今天能做什么？</strong><small>输入已有食材，找出能做的菜和缺少的配料</small></span><span class="fridge-expand" aria-hidden="true">＋</span></summary><div class="fridge-body"><label for="fridge-input" class="small-label">冰箱里有这些</label><textarea id="fridge-input" rows="2" maxlength="1000" placeholder="例如：鸡蛋、番茄、豆腐、猪肉、青菜"></textarea><div class="fridge-suggestions" id="fridge-suggestions" aria-label="快速添加常见食材"></div><div class="fridge-settings"><label><input type="checkbox" id="include-pantry" checked> 默认有常用调料和葱姜蒜</label><button class="button button-primary" id="find-fridge">找找能做的菜 <svg class="icon"><use href="#i-arrow"/></svg></button></div><p class="fridge-note">按现有食材匹配全部菜谱，不受上方抽签筛选影响。请再核对食材用量；特色酱料、肉汤和主食仍需备齐。</p><div id="fridge-results" class="fridge-results" aria-live="polite"></div></div></details>
-    <div class="recommendation-heading"><div><span class="status-dot"></span><span id="recommendation-label">这一顿，不妨试试</span></div><div class="recommendation-tools"><span id="pool-count" aria-live="polite"></span><button class="button button-primary quick-draw" id="quick-draw">随机来一道 <svg class="icon"><use href="#i-dice"/></svg></button></div></div>
+    <div class="recommendation-heading"><div class="recommendation-status"><span class="status-dot"></span><span id="recommendation-label">这一顿，不妨试试</span><span id="pool-count" aria-live="polite"></span></div><div class="recommendation-tools"><button type="button" class="button button-light quick-today" id="quick-today" aria-controls="today-view"><svg class="icon" aria-hidden="true"><use href="#i-pot"/></svg>回到今日菜谱</button><button class="button button-primary quick-draw" id="quick-draw">随机来一道 <svg class="icon"><use href="#i-dice"/></svg></button></div></div>
     <section id="menu-section" class="menu-section" aria-labelledby="menu-title" hidden><div class="menu-heading"><div><h2 id="menu-title">这一桌，有着落了</h2><p id="menu-description"></p></div><button class="text-button" id="save-menu">收藏这一桌 <svg class="icon"><use href="#i-heart"/></svg></button></div><div id="menu-grid" class="menu-grid"></div></section>
     <section id="recipe" class="recipe-card" aria-labelledby="recipe-name"></section>
     <section id="empty-state" class="empty-state" hidden><svg class="icon"><use href="#i-search"/></svg><h2>这次的条件，有点挑嘴</h2><p>没有找到符合条件的菜。试试换个菜系，或放宽一点筛选。</p><button class="button button-primary" id="reset-filters">清除筛选，随便吃点</button></section>
@@ -680,6 +698,7 @@ window.PHOTOS = {"nw-mapo-tofu":{"src":"assets/photos/meishi-517906.webp","alt":
   $('.brand').addEventListener('click',()=>switchView('random'));
   $('#random-view-button').addEventListener('click',()=>switchView('random'));$('#catalog-view-button').addEventListener('click',()=>switchView('catalog'));
   $('#today-view-button').addEventListener('click',()=>switchView('today'));
+  $('#quick-today').addEventListener('click',()=>{switchView('today');focusSection('#today-title');});
   document.addEventListener('click',event=>{
     const button=event.target.closest('[data-add-today]');if(!button||button.disabled)return;
     let existed=false;changeTodayPlan(plan=>{existed=plan.some(item=>item.id===button.dataset.addToday);return addToPlan(plan,button.dataset.addToday,validRecipeIds,legacyIds);});plannerToast(existed?'这道菜已经在今日菜谱里':'已加入今日菜谱大厅，可以安排到三餐');
