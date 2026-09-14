@@ -17,7 +17,7 @@ const storageKey='chishane.v1',limit=1000;
     if(await page.locator('#collection-dialog').evaluate(el=>el.open))await page.locator('#close-dialog').click();
     const name=await page.evaluate(id=>window.RECIPES.find(r=>r.id===id).name,id);
     await page.locator('#catalog-view-button').click();await page.locator('#catalog-reset').click();await page.locator('#catalog-search').fill(name);
-    await page.locator(`[data-catalog-recipe="${id}"]`).click();
+    await page.locator(`[data-catalog-recipe="${id}"] .catalog-open`).click();
   };
   const track=page=>page.on('pageerror',error=>errors.push(error.message));
   const marker={fridgeText:'鸡蛋、番茄',includePantry:false,retainedNote:'unrelated saved data'};

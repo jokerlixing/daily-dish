@@ -4,11 +4,15 @@ A responsive, dependency-free Chinese recipe picker for desktop and mobile.
 
 [在线使用 / Live demo](https://jokerlixing.github.io/daily-dish/) · [GitHub 仓库](https://github.com/jokerlixing/daily-dish)
 
-**v2.2.2 · 1000 道菜谱，每道使用独立的真实照片。** 支持分类浏览、分页跳转和手机使用；相近成品照片会显示实际菜名与差异说明。功能、分类数量与发布校验说明见 [本版更新记录](docs/catalog-1000-status.md)，[888 道版本记录](docs/catalog-888-status.md) 保留为历史。
+**v2.3.0 · 1000 道菜谱，每道使用独立的真实照片。** 支持分类浏览、分页跳转和手机使用；相近成品照片会显示实际菜名与差异说明。功能、分类数量与发布校验说明见 [本版更新记录](docs/catalog-1000-status.md)，[888 道版本记录](docs/catalog-888-status.md) 保留为历史。
 
 适配电脑和手机的随机菜单网页。收录 **1000 道菜谱**，覆盖八大菜系、家常菜与地方小吃；每道包含两人份食材用量、分步做法和烹饪提示。菜系与菜式独立分类，分类数量见 [菜库统计](docs/catalog-1000-counts.json)。
 
 ## 使用
+
+- **今日菜谱**位于“逛菜谱”右侧。随机推荐、批量菜单、逛菜谱、收藏、最近抽到和冰箱推荐均可“加入今日菜谱”；加入时保留当前浏览位置。
+- 新加入的菜先放进**今日菜谱大厅**，通过“安排到”选择早餐、中餐或晚餐，也能移回大厅、查看做法或移出。同一道菜不会重复加入；可清空整个计划。
+- 今日菜谱保存在当前浏览器，刷新后继续安排，不会跨日期自动清空。
 
 - 一次随机 **1、2、3、4、5、6、7、8、9、10 道菜**；点击菜单中的菜名查看完整做法，可收藏整桌菜单。
 - **全菜系随机**覆盖八大菜系和家常菜，排除小吃、甜品、烘焙和饮品；“随便都行”包含全部菜式。
@@ -49,6 +53,8 @@ npm start
 ```
 
 - `src/template.html`、`src/styles.css`、`src/app.js`：页面结构、样式、交互。
+- `src/today-plan.js`：今日菜谱模型与三餐分组，使用独立保存字段。
+- `scripts/today-plan.test.mjs`、`scripts/today-plan-browser-check.cjs`：计划模型、各入口加入、三餐移动、刷新与跨标签同步、手机操作验证。
 - `src/core.js`：筛选、随机菜单、食材规范化与冰箱匹配。
 - `data/cuisines-*.json`、`data/snacks.json`、`data/expanded.json`、`data/catalog-expanded.json`、`data/additions-hot.json`、`data/additions-snack.json`：菜谱。
 - `data/seeds/`：新增原创配方的编辑源；运行 `node scripts/assemble-catalog.mjs` 重新校验并生成扩展菜库。

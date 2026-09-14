@@ -53,3 +53,86 @@ dialog{width:min(640px,calc(100% - 32px));max-height:86dvh;border:1px solid #dbe
 
 .random-category-picker{border-top:1px dashed var(--line);padding:17px 0 19px}.random-category-options{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}.random-category-option{display:flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:9px 15px;font-size:12px;background:#f5f7f2;border:1px solid transparent;border-radius:8px}.random-category-option small{font-size:10px;opacity:.7}.random-category-option:hover{background:var(--light)}.random-category-option[aria-pressed=true]{background:var(--forest);color:#fff}.all-cuisines-toggle{min-height:52px;text-align:left;white-space:normal}.all-cuisines-toggle>span:last-child{min-width:0}.all-cuisines-toggle small{display:block;margin:3px 0 0;font-size:11px;line-height:1.7}.all-cuisines-toggle .switch-track{flex:none}
 @media(max-width:700px){.random-category-picker{padding:14px 0 16px}.random-category-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.random-category-option{gap:4px;padding:8px 3px;font-size:12px}.random-category-option small{font-size:9px}.all-cuisines-toggle{font-size:12px}.all-cuisines-toggle small{font-size:11px}}
+
+/* Keep every recipe's open action separate from adding it to today's plan. */
+.recipe-actions{flex-wrap:wrap;gap:10px 12px}
+.add-today{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;max-width:100%;padding:9px 13px;border:1px solid #cddbc1;border-radius:8px;background:#eef4e7;color:var(--forest);font-size:12px;font-weight:600;line-height:1.6;text-align:center}
+.add-today:hover:not(:disabled){background:#e3edd9;border-color:#a2b792}
+.add-today .icon{width:16px;height:16px}
+.today-add-label{min-width:0;overflow-wrap:anywhere}
+.add-today:disabled{cursor:default;opacity:.7;background:#f4f6f0;color:#63755b;transform:none}
+.catalog-open,.menu-card-open{display:flex;flex:1;flex-direction:column;width:100%;min-width:0;padding:0;background:transparent;text-align:left;color:inherit}
+.catalog-open:focus-visible,.menu-card-open:focus-visible{outline-offset:-4px}
+.catalog-card>.add-today,.menu-card>.add-today{flex:none;margin:0 10px 10px;width:calc(100% - 20px);font-size:11px;padding:8px}
+.menu-card:has(.menu-card-open[aria-pressed=true]){border-color:var(--leaf);box-shadow:0 0 0 2px #75965e33}
+.collection-row{flex-wrap:wrap}
+.collection-info{flex:1 1 110px}
+.collection-actions{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:6px;max-width:100%;margin-left:auto}
+.collection-actions .button,.collection-actions .add-today,.collection-actions .remove-favorite{min-height:44px}
+.collection-actions .remove-favorite{min-width:44px}
+.collection-actions .add-today{font-size:11px;padding:8px 10px}
+.fridge-card-body>.add-today{margin-top:8px;width:100%;font-size:11px;padding:8px}
+.fridge-card-body>.text-button{min-height:44px}
+
+/* The waiting hall spans the board; the three meals sit alongside each other. */
+.today-heading{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:18px;margin:28px 0 24px}
+.today-heading h2{font:32px/1.5 var(--display);color:var(--forest)}
+.today-heading p:last-child{margin-top:7px;font-size:12px;line-height:1.9;color:var(--muted)}
+.today-heading>.button{flex:none;margin-top:12px}
+.today-plan-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;align-items:start}
+.today-slot{min-width:0;border:1px solid var(--line);border-radius:15px;background:#fff;overflow:hidden}
+.today-lobby{grid-column:1/-1;background:#f1f5eb}
+.today-slot-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 18px;border-bottom:1px solid var(--line);background:#f6f8f2}
+.today-lobby .today-slot-heading{background:#e8efdf;border-bottom-color:#d7e2cc}
+.today-slot-heading h3{font:600 23px/1.4 var(--display);color:var(--forest)}
+.today-slot-heading>span{flex:none;min-width:28px;padding:2px 8px;border:1px solid #d5dfcb;border-radius:20px;font:12px/1.7 var(--body);color:var(--leaf);text-align:center;background:#fff}
+.today-slot-list{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;padding:14px}
+.today-lobby .today-slot-list{grid-template-columns:repeat(3,minmax(0,1fr))}
+.today-recipe{display:grid;grid-template-columns:74px minmax(0,1fr);align-items:start;gap:12px 10px;min-width:0;padding:12px;border:1px solid #e1e7da;border-radius:11px;background:#fff}
+.today-recipe-photo{display:block;position:relative;width:74px;height:74px;min-width:0;margin:0;border-radius:8px;overflow:hidden;background:var(--light)}
+.today-recipe-photo img{display:block;width:100%;height:100%;object-fit:cover}
+.today-recipe-photo .photo-unavailable{padding:5px;gap:4px;font-size:9px}
+.today-recipe-photo .photo-unavailable .icon{width:21px;height:21px}
+.today-recipe-photo .photo-ref-tag{display:none}
+.today-recipe-info{min-width:0;padding:2px 0}
+.today-recipe-info h4{margin:0;font-size:14px;line-height:1.65;overflow-wrap:anywhere}
+.today-recipe-info p{margin-top:6px;font-size:10px;line-height:1.8;color:var(--muted);overflow-wrap:anywhere}
+.today-recipe-actions{grid-column:1/-1;display:flex;align-items:center;flex-wrap:wrap;gap:8px;min-width:0}
+.today-recipe-actions>button{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:44px;max-width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:7px;background:#f3f6ee;color:var(--forest);font-size:11px;line-height:1.6}
+.today-recipe-actions>button:hover{background:#e8efdf}
+.today-recipe-actions>button[data-today-remove]{margin-left:auto;background:transparent;color:var(--muted)}
+.today-recipe-actions>button[data-today-remove]:hover{background:#fff1e9;color:#985631}
+.today-assignment{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-width:0;padding-top:8px;border-top:1px dashed var(--line);font-size:11px;color:#63755b}
+.today-assignment select{flex:1;min-width:0;max-width:100%;min-height:44px;padding:8px 10px;border:1px solid #cad9bf;border-radius:7px;background:#fff;color:var(--forest);font-size:16px;cursor:pointer}
+.today-slot-empty{grid-column:1/-1;padding:21px 8px;color:var(--muted);font-size:12px;line-height:1.9;text-align:center}
+.today-lobby .today-slot-empty{padding:24px 8px}
+@media(max-width:1000px){.today-plan-board{gap:14px}.today-slot-heading{padding:15px}.today-slot-list{padding:10px;gap:10px}.today-recipe{grid-template-columns:58px minmax(0,1fr);padding:10px;gap:10px 8px}.today-recipe-photo{width:58px;height:64px}.today-recipe-info h4{font-size:13px}.today-lobby .today-slot-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){
+  .view-switch{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;padding:4px}
+  .view-switch button{min-width:0;min-height:48px;padding:9px 4px;gap:5px;font-size:11px;line-height:1.6;flex-wrap:wrap;align-content:center}
+  .view-switch button .icon{width:14px;height:14px}
+  .view-switch button>span{font-size:10px}
+  .recipe-actions .button,.recipe-actions .add-today{min-height:44px}
+  .recipe-actions .add-today{font-size:11px}
+  .collection-actions{width:100%;justify-content:flex-start;gap:7px}
+  .collection-actions .add-today{flex:1}
+  .collection-actions .remove-favorite{margin-left:auto}
+  .today-heading{margin:22px 0 18px;gap:12px}
+  .today-heading h2{font-size:27px}
+  .today-heading p:last-child{font-size:11px}
+  .today-heading>.button{margin-top:0;font-size:11px}
+  .today-plan-board{grid-template-columns:minmax(0,1fr);gap:16px}
+  .today-lobby .today-slot-list{grid-template-columns:minmax(0,1fr)}
+  .today-slot-heading{padding:14px 16px}
+  .today-slot-heading h3{font-size:22px}
+  .today-slot-list{padding:12px;gap:12px}
+  .today-recipe{grid-template-columns:74px minmax(0,1fr);padding:12px;gap:12px}
+  .today-recipe-photo{width:74px;height:74px}
+  .today-recipe-info h4{font-size:14px}
+  .today-recipe-info p{font-size:11px}
+  .today-recipe-actions>button{font-size:12px;padding:9px 14px}
+  .today-assignment{font-size:12px}
+  .today-slot-empty{font-size:11px;padding:18px 5px}
+}
+@media(max-width:400px){.view-switch button .icon{display:none}.view-switch button{gap:3px;font-size:11px}.view-switch button>span{font-size:9px}.catalog-card>.add-today,.menu-card>.add-today{margin-right:8px;margin-left:8px;width:calc(100% - 16px);gap:4px;font-size:10px;padding:8px 5px}.catalog-card>.add-today .icon,.menu-card>.add-today .icon{width:13px;height:13px}}
+@media print{.today-view{display:none!important}}

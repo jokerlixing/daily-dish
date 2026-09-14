@@ -71,10 +71,10 @@ fs.mkdirSync(output,{recursive:true});
       assert.equal(ids.length,count);assert.equal(new Set(ids).size,count);
       assert.ok(await page.evaluate(ids=>ids.every(id=>{const recipe=window.RECIPES.find(r=>r.id===id);return recipe.cuisine!=='小吃'&&recipe.type!=='小吃'&&!['小吃','甜品','烘焙','饮品'].includes(recipe.category);}),ids));
     }
-    await page.locator('#menu-grid button').nth(1).click();
+    await page.locator('#menu-grid .menu-card-open').nth(1).click();
     const selected=await page.locator('#recipe-name').textContent();
     await page.locator('.ingredient-row input').first().check();await page.locator('.step-checkbox').first().check();
-    await page.locator('#menu-grid button').nth(2).click();await page.locator('#menu-grid button').nth(1).click();
+    await page.locator('#menu-grid .menu-card-open').nth(2).click();await page.locator('#menu-grid .menu-card-open').nth(1).click();
     assert.equal(await page.locator('#recipe-name').textContent(),selected);
     assert.equal(await page.evaluate(()=>document.activeElement.id),'recipe-name');
     assert.ok(await page.locator('.ingredient-row input').first().isChecked());assert.ok(await page.locator('.step-checkbox').first().isChecked());

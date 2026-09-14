@@ -34,7 +34,7 @@
       <div><p class="eyebrow" id="today-label">今天，也要好好吃饭</p><h1 id="page-title">今天吃啥？<br class="mobile-break"><span>让胃口碰个运气。</span></h1><p class="intro-copy">从八大菜系到街头小吃，一道菜，一点新鲜感。<br class="mobile-break">点一下，把纠结留给我们。</p></div>
       <div class="intro-stamp" aria-hidden="true"><span>饭 点 到 了</span><svg class="icon"><use href="#i-pot"/></svg><small>开 饭 大 吉</small></div>
     </section>
-    <div class="view-switch" role="group" aria-label="选菜方式"><button id="random-view-button" aria-pressed="true"><svg class="icon"><use href="#i-dice"/></svg>帮我随机选</button><button id="catalog-view-button" aria-pressed="false"><svg class="icon"><use href="#i-book"/></svg>逛菜谱 <span id="catalog-total"></span></button></div>
+    <div class="view-switch" role="group" aria-label="选菜方式"><button id="random-view-button" aria-pressed="true"><svg class="icon"><use href="#i-dice"/></svg>帮我随机选</button><button id="catalog-view-button" aria-pressed="false"><svg class="icon"><use href="#i-book"/></svg>逛菜谱 <span id="catalog-total"></span></button><button id="today-view-button" aria-pressed="false"><svg class="icon"><use href="#i-pot"/></svg>今日菜谱 <span id="today-total">0</span></button></div>
     <div id="random-view">
     <section class="selection-panel" aria-label="选菜偏好">
       <div class="filter-heading"><span class="small-label">今天想吃</span><span class="catalog-note"><strong id="total-count">—</strong> 道家常灵感 · 随心挑</span></div>
@@ -75,13 +75,18 @@
         <button id="catalog-next" class="button button-light">下一页</button>
       </nav>
     </section>
-    <footer class="site-footer"><span class="footer-brand">吃啥呢<span>每天的一点好胃口</span></span><p>每道菜为 2 人份家常参考做法，可按人数调整。<br>收藏只保存在当前浏览器 · 点击照片来源可查看摄影信息</p><button class="text-button" id="about-button">关于菜单与照片 <span>↗</span></button></footer>
+    <section id="today-view" class="today-view" aria-labelledby="today-title" hidden>
+      <div class="today-heading"><div><p class="eyebrow">从想吃，到开饭</p><h2 id="today-title">今日菜谱</h2><p>先加入大厅，再按需要安排三餐。计划保存在当前浏览器。</p></div><button id="clear-today-plan" class="button collection-clear" disabled>清空今日菜谱</button></div>
+      <div id="today-plan-board" class="today-plan-board"></div>
+    </section>
+    <footer class="site-footer"><span class="footer-brand">吃啥呢<span>每天的一点好胃口</span></span><p>每道菜为 2 人份家常参考做法，可按人数调整。<br>收藏与今日菜谱只保存在当前浏览器 · 点击照片来源可查看摄影信息</p><button class="text-button" id="about-button">关于菜单与照片 <span>↗</span></button></footer>
   </main>
   <dialog id="collection-dialog" aria-labelledby="dialog-title"><div class="dialog-header"><div><p class="eyebrow" id="dialog-eyebrow">留住喜欢的味道</p><h2 id="dialog-title">我的收藏</h2></div><button class="icon-button" id="close-dialog" aria-label="关闭弹窗"><svg class="icon"><use href="#i-close"/></svg></button></div><div id="dialog-content" class="dialog-content"></div></dialog>
   <div class="toast" id="toast" role="status"></div><div class="sr-only" id="announcement" aria-live="polite" aria-atomic="true"></div>
   <noscript><div class="noscript">请开启浏览器 JavaScript，以使用随机推荐和查看菜谱。</div></noscript>
   <script>/* RECIPE_DATA */</script>
   <script>/* CORE_SCRIPT */</script>
+  <script>/* TODAY_PLAN_SCRIPT */</script>
   <script>/* APP_SCRIPT */</script>
 </body>
 </html>

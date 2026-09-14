@@ -11,6 +11,7 @@ let html = read('src/template.html');
 html = html.replace('/* APP_STYLES */', () => read('src/styles.css'))
   .replace('/* RECIPE_DATA */', () => `window.RECIPES = ${JSON.stringify(recipes).replace(/</g, '\\u003c')};\nwindow.PHOTOS = ${JSON.stringify(photos).replace(/</g, '\\u003c')};`)
   .replace('/* CORE_SCRIPT */', () => read('src/core.js'))
+  .replace('/* TODAY_PLAN_SCRIPT */', () => read('src/today-plan.js'))
   .replace('/* APP_SCRIPT */', () => read('src/app.js'));
 html = html.replace(/\r\n/g, '\n');
 fs.writeFileSync(path.join(root, 'index.html'), html);

@@ -3,6 +3,8 @@
   const recipes = window.RECIPES;
   const photos = window.PHOTOS || {};
   const { cuisines, categories, filterRecipes, ShuffleBag, parseIngredients, matchFridge } = window.RecipeCore;
+  const { slots:mealSlots, cleanPlan, addToPlan, moveInPlan, removeFromPlan } = window.TodayPlanCore;
+  const mealNames={lobby:'今日菜谱大厅',breakfast:'早餐',lunch:'中餐',dinner:'晚餐'};
   const $ = selector => document.querySelector(selector);
   const icon = name => `<svg class="icon" aria-hidden="true"><use href="#i-${name}"/></svg>`;
   const escape = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -13,27 +15,59 @@
   try { const value = JSON.parse(localStorage.getItem(storageKey) || '{}'); if (value && typeof value === 'object' && !Array.isArray(value)) stored = value; } catch (_) { storageAvailable = false; }
   const byId = new Map(recipes.map(recipe => [recipe.id, recipe]));
   const legacyIds = { 'sn-sesame-tangyuan':'es-ningbo-sesame-tangyuan', 'cat-641602e74693':'cat-1dbfa13b129d' };
+  const validRecipeIds=new Set(byId.keys());
+  const normalizePlan=value=>cleanPlan(value,validRecipeIds,legacyIds);
   const cleanIds = value => Array.isArray(value) ? [...new Set(value.map(id=>legacyIds[id]||id).filter(id => typeof id === 'string' && byId.has(id)))].slice(0,collectionLimit) : [];
   const initialFilters = () => ({ cuisine:'', category:'', allCuisines:false, noSpicy:false, vegetarian:false, maxTime:0, query:'' });
-  const state = { favorites:cleanIds(stored.favorites), history:cleanIds(stored.history), filters:initialFilters(), current:null, menu:[], batchSize:1, busy:false, pool:recipes.slice(), dialogMode:'favorites', fridgeHasRun:false, checks:new Map() };
+  const state = { view:'random', todayPlan:normalizePlan(stored.todayPlan), favorites:cleanIds(stored.favorites), history:cleanIds(stored.history), filters:initialFilters(), current:null, menu:[], batchSize:1, busy:false, pool:recipes.slice(), dialogMode:'favorites', fridgeHasRun:false, checks:new Map() };
   const bag = new ShuffleBag();
   const catalog = { page:1, pageSize:24, filters:{...initialFilters(),category:''} };
   const counts = [1,2,3,4,5,6,7,8,9,10];
   const countWords = {1:'一',2:'两',3:'三',4:'四',5:'五',6:'六',7:'七',8:'八',9:'九',10:'十'};
-  let toastTimer, rollTimer;
+  let toastTimer, rollTimer, todayPlanDirty=false;
 
   function persist(field) {
     try {
       let latest={};
       try{const value=JSON.parse(localStorage.getItem(storageKey)||'{}');if(value&&typeof value==='object'&&!Array.isArray(value))latest=value;}catch(_){}
       for(const key of ['favorites','history'])if(Array.isArray(latest[key]))latest[key]=cleanIds(latest[key]);
-      const values={favorites:state.favorites,history:state.history,fridgeText:$('#fridge-input').value,includePantry:$('#include-pantry').checked};
-      localStorage.setItem(storageKey,JSON.stringify({...latest,[field]:values[field]}));storageAvailable=true;
+      const values={todayPlan:state.todayPlan,favorites:state.favorites,history:state.history,fridgeText:$('#fridge-input').value,includePantry:$('#include-pantry').checked};
+      localStorage.setItem(storageKey,JSON.stringify({...latest,[field]:values[field]}));storageAvailable=true;if(field==='todayPlan')todayPlanDirty=false;
     } catch (_) { storageAvailable=false; }
   }
   function toast(message) { clearTimeout(toastTimer);$('#toast').textContent=message;$('#toast').classList.add('visible');toastTimer=setTimeout(()=>$('#toast').classList.remove('visible'),2700); }
   function updateFavoriteCount() { $('#favorite-count').textContent=state.favorites.length; }
   function rememberMany(list) { state.history=cleanIds([...list.map(recipe=>recipe.id),...state.history]);persist('history'); }
+  function addTodayButton(recipe) {
+    const added=state.todayPlan.some(item=>item.id===recipe.id);
+    return `<button class="button button-light add-today" data-add-today="${escape(recipe.id)}" aria-label="${escape(recipe.name)}${added?'已加入今日菜谱':'加入今日菜谱'}" ${added?'disabled':''}><span aria-hidden="true">${added?'✓':'＋'}</span><span class="today-add-label">${added?'已加入今日菜谱':'加入今日菜谱'}</span></button>`;
+  }
+  function syncTodayPlan() {
+    const ids=new Set(state.todayPlan.map(item=>item.id));$('#today-total').textContent=ids.size;
+    $('#clear-today-plan').disabled=!ids.size;
+    document.querySelectorAll('[data-add-today]').forEach(button=>{
+      const added=ids.has(button.dataset.addToday),recipe=byId.get(button.dataset.addToday);button.disabled=added;
+      button.querySelector('.today-add-label').textContent=added?'已加入今日菜谱':'加入今日菜谱';
+      button.querySelector('[aria-hidden]').textContent=added?'✓':'＋';
+      button.setAttribute('aria-label',`${recipe?.name||''}${added?'已加入今日菜谱':'加入今日菜谱'}`);
+    });
+    if(state.view==='today')renderTodayPlan();
+  }
+  function changeTodayPlan(action) {
+    let latest=state.todayPlan;
+    if(storageAvailable&&!todayPlanDirty)try{const value=JSON.parse(localStorage.getItem(storageKey)||'{}');latest=normalizePlan(value?.todayPlan);}catch(_){}
+    state.todayPlan=normalizePlan(action(latest));todayPlanDirty=true;persist('todayPlan');syncTodayPlan();
+  }
+  function renderTodayPlan() {
+    $('#today-plan-board').innerHTML=mealSlots.map(slot=>{
+      const items=state.todayPlan.filter(item=>item.slot===slot);
+      return `<section class="today-slot ${slot==='lobby'?'today-lobby':''}" data-today-slot="${slot}" aria-labelledby="today-${slot}-title"><header class="today-slot-heading"><h3 id="today-${slot}-title">${mealNames[slot]}</h3><span>${items.length} 道</span></header><div class="today-slot-list">${items.length?items.map(item=>{
+        const recipe=byId.get(item.id);
+        return `<article class="today-recipe" data-today-item="${escape(recipe.id)}"><div class="today-recipe-photo">${imageMarkup(recipe,true)}</div><div class="today-recipe-info"><h4>${escape(recipe.name)}</h4><p>${escape(recipe.category)} · ${recipe.time} 分钟</p></div><label class="today-assignment"><span>安排到</span><select data-today-move="${escape(recipe.id)}" aria-label="安排${escape(recipe.name)}到">${mealSlots.map(value=>`<option value="${value}" ${value===slot?'selected':''}>${value==='lobby'?'大厅（暂不安排）':mealNames[value]}</option>`).join('')}</select></label><div class="today-recipe-actions"><button class="button button-light" data-today-view="${escape(recipe.id)}" aria-label="查看${escape(recipe.name)}做法">看做法</button><button class="text-button" data-today-remove="${escape(recipe.id)}" aria-label="将${escape(recipe.name)}移出今日菜谱">移出 ${icon('close')}</button></div></article>`;
+      }).join(''):`<p class="today-slot-empty">${slot==='lobby'?'还没有待安排的菜。浏览菜谱时点击“加入今日菜谱”，菜就会先放在这里。':`还没安排${mealNames[slot]}，可从大厅选择菜品并设置餐次。`}</p>`}</div></section>`;
+    }).join('');
+  }
+  function plannerToast(message){toast(storageAvailable?message:'浏览器未允许保存，今日菜谱仅在本次打开时有效');}
   function safeSource(url) { return /^https?:\/\//i.test(url || '') ? url : ''; }
   function imageMarkup(recipe, thumbnail=false) {
     const photo=photos[recipe.id];
@@ -58,7 +92,7 @@
     if(!recipe)return;state.current=recipe;if(addHistory)rememberMany([recipe]);
     $('#recipe').hidden=false;$('#empty-state').hidden=true;$('#recipe-detail').hidden=false;
     const saved=state.favorites.includes(recipe.id),checks=recipeChecks(recipe);
-    $('#recipe').innerHTML=`<div class="recipe-summary"><div class="recipe-kicker"><span class="cuisine-badge">${escape(recipe.cuisine)}</span><span>${escape(recipe.region||recipe.flavor)} · ${escape(recipe.type)}</span></div><h2 id="recipe-name">${escape(recipe.name)}</h2><p class="recipe-description">${escape(recipe.description)}</p><div class="recipe-meta"><span>${icon('clock')}${recipe.time} 分钟</span><span>${icon('pot')}${escape(recipe.difficulty)}</span><span>${icon('book')}${recipe.servings} 人份</span></div><div class="recipe-actions"><button class="button button-light favorite-action" id="favorite-recipe" aria-pressed="${saved}">${icon('heart')}<span>${saved?'已收藏':'收藏这道菜'}</span></button><button class="text-button" id="start-cooking">看做法 ${icon('arrow')}</button></div></div><figure class="recipe-photo"><div class="dish-image-frame">${imageMarkup(recipe)}</div>${photoCaption(recipe)}</figure>`;
+    $('#recipe').innerHTML=`<div class="recipe-summary"><div class="recipe-kicker"><span class="cuisine-badge">${escape(recipe.cuisine)}</span><span>${escape(recipe.region||recipe.flavor)} · ${escape(recipe.type)}</span></div><h2 id="recipe-name">${escape(recipe.name)}</h2><p class="recipe-description">${escape(recipe.description)}</p><div class="recipe-meta"><span>${icon('clock')}${recipe.time} 分钟</span><span>${icon('pot')}${escape(recipe.difficulty)}</span><span>${icon('book')}${recipe.servings} 人份</span></div><div class="recipe-actions"><button class="button button-light favorite-action" id="favorite-recipe" aria-pressed="${saved}">${icon('heart')}<span>${saved?'已收藏':'收藏这道菜'}</span></button>${addTodayButton(recipe)}<button class="text-button" id="start-cooking">看做法 ${icon('arrow')}</button></div></div><figure class="recipe-photo"><div class="dish-image-frame">${imageMarkup(recipe)}</div>${photoCaption(recipe)}</figure>`;
     $('#recipe-detail').innerHTML=`<section class="ingredients-section"><div class="detail-heading"><h3>${icon('leaf')}准备食材</h3><small>这道菜 ${recipe.servings} 人份 · 可勾选</small></div><ul class="ingredients-list">${recipe.ingredients.map((ingredient,i)=>`<li><label class="ingredient-row"><input type="checkbox" data-ingredient="${i}" ${checks.ingredients.has(i)?'checked':''} aria-label="已备好${escape(ingredient.name)}"><span class="ingredient-name">${escape(ingredient.name)}</span><span class="ingredient-amount">${escape(ingredient.amount)}</span></label></li>`).join('')}</ul><p class="ingredients-footnote">多道菜组合时，可按实际人数适当减少每道菜份量。</p></section><section class="steps-section" id="cooking-steps"><div class="detail-heading"><h3>${icon('pot')}跟着做就好</h3><small id="steps-progress">${checks.steps.size?`已完成 ${checks.steps.size} / ${recipe.steps.length} 步`:`${recipe.steps.length} 个步骤 · 家常做法`}</small></div><ol class="steps-list">${recipe.steps.map((step,i)=>`<li><label class="step-row"><span class="step-number" aria-hidden="true">${i+1}</span><span class="step-text">${escape(step)}</span><input type="checkbox" class="step-checkbox" data-step="${i}" ${checks.steps.has(i)?'checked':''} aria-label="完成第 ${i+1} 步"></label></li>`).join('')}</ol><div class="cooking-tip"><span class="tip-icon" aria-hidden="true">✳</span><div><strong>让这道菜更好吃的小诀窍</strong><p>${escape(recipe.tip)}</p></div></div></section>`;
     $('#recipe').classList.remove('is-rolling');$('#recipe').classList.add('revealed');
     $('#menu-grid').querySelectorAll('[data-menu-recipe]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.menuRecipe===recipe.id)));
@@ -70,7 +104,7 @@
     if(state.menu.length<=1){$('#menu-grid').innerHTML='';return;}
     $('#menu-title').textContent=`这一桌，${state.menu.length} 道菜刚刚好`;
     $('#menu-description').textContent=`${state.menu.length<state.batchSize?`符合条件只有 ${state.menu.length} 道，已全部列出。`:''}点一道菜，查看它的食材和完整做法。`;
-    $('#menu-grid').innerHTML=state.menu.map((recipe,index)=>`<button class="menu-card" data-menu-recipe="${escape(recipe.id)}" aria-pressed="${recipe.id===state.current?.id}" aria-label="查看${escape(recipe.name)}做法"><span class="menu-photo">${imageMarkup(recipe,true)}<span class="menu-number">${index+1}</span></span><span class="menu-card-content"><strong>${escape(recipe.name)}</strong><span>${escape(recipe.cuisine)} · ${recipe.time} 分钟</span><span class="menu-link">查看做法 ${icon('arrow')}</span></span></button>`).join('');
+    $('#menu-grid').innerHTML=state.menu.map((recipe,index)=>`<article class="menu-card"><button class="menu-card-open" data-menu-recipe="${escape(recipe.id)}" aria-pressed="${recipe.id===state.current?.id}" aria-label="查看${escape(recipe.name)}做法"><span class="menu-photo">${imageMarkup(recipe,true)}<span class="menu-number">${index+1}</span></span><span class="menu-card-content"><strong>${escape(recipe.name)}</strong><span>${escape(recipe.cuisine)} · ${recipe.time} 分钟</span><span class="menu-link">查看做法 ${icon('arrow')}</span></span></button>${addTodayButton(recipe)}</article>`).join('');
   }
   function setRandomLabels() {
     const label=state.batchSize===1?'再帮我选一道':`再换一桌 ${state.batchSize} 道`;
@@ -122,19 +156,21 @@
     focusSection('#recipe-name');
   }
   function switchView(view) {
-    const browsing=view==='catalog';
-    if(browsing)finishRoll();
-    $('#random-view').hidden=browsing;$('#catalog-view').hidden=!browsing;
-    $('.skip-link').href=browsing?'#catalog-title':'#recipe';$('.skip-link').textContent=browsing?'跳到菜谱库':'跳到今日菜谱';
-    $('#random-view-button').setAttribute('aria-pressed',String(!browsing));$('#catalog-view-button').setAttribute('aria-pressed',String(browsing));
-    if(browsing)renderCatalog();
+    if(!['random','catalog','today'].includes(view))return;
+    if(view!=='random')finishRoll();state.view=view;
+    for(const name of ['random','catalog','today']){
+      $(`#${name}-view`).hidden=name!==view;$(`#${name}-view-button`).setAttribute('aria-pressed',String(name===view));
+    }
+    $('.skip-link').href=view==='catalog'?'#catalog-title':view==='today'?'#today-title':'#recipe';
+    $('.skip-link').textContent=view==='catalog'?'跳到菜谱库':view==='today'?'跳到今日菜谱':'跳到推荐菜谱';
+    if(view==='catalog')renderCatalog();if(view==='today')renderTodayPlan();
   }
   function renderCatalog() {
     const list=filterRecipes(recipes,catalog.filters),pages=Math.max(1,Math.ceil(list.length/catalog.pageSize));
     catalog.page=Math.min(pages,Math.max(1,catalog.page));
     const start=(catalog.page-1)*catalog.pageSize,visible=list.slice(start,start+catalog.pageSize);
     $('#catalog-result-count').textContent=`找到 ${list.length} 道${list.length?` · 当前 ${start+1}–${start+visible.length} 道`:''}`;
-    $('#catalog-grid').innerHTML=visible.map(recipe=>`<button class="catalog-card" data-catalog-recipe="${escape(recipe.id)}" aria-label="查看${escape(recipe.name)}做法"><span class="catalog-photo">${imageMarkup(recipe,true)}</span><span class="catalog-card-body"><span class="catalog-card-tags">${escape(recipe.category||recipe.type)} · ${escape(recipe.cuisine)}</span><strong>${escape(recipe.name)}</strong><span class="catalog-card-meta">${recipe.time} 分钟 <span>${escape(recipe.difficulty)} ${icon('arrow')}</span></span></span></button>`).join('');
+    $('#catalog-grid').innerHTML=visible.map(recipe=>`<article class="catalog-card" data-catalog-recipe="${escape(recipe.id)}"><button class="catalog-open" aria-label="查看${escape(recipe.name)}做法"><span class="catalog-photo">${imageMarkup(recipe,true)}</span><span class="catalog-card-body"><span class="catalog-card-tags">${escape(recipe.category||recipe.type)} · ${escape(recipe.cuisine)}</span><strong>${escape(recipe.name)}</strong><span class="catalog-card-meta">${recipe.time} 分钟 <span>${escape(recipe.difficulty)} ${icon('arrow')}</span></span></span></button>${addTodayButton(recipe)}</article>`).join('');
     $('#catalog-empty').hidden=!!list.length;$('#catalog-page').textContent=`${catalog.page} / ${pages}`;
     $('#catalog-page-input').value=catalog.page;$('#catalog-page-input').max=pages;$('#catalog-page-input').disabled=!list.length;
     $('#catalog-page-total').textContent=`/ ${pages}`;$('#catalog-go').disabled=!list.length;
@@ -152,7 +188,7 @@
     const favorites=state.dialogMode==='favorites';const list=(favorites?state.favorites:state.history).map(id=>byId.get(id)).filter(Boolean);
     $('#dialog-title').textContent=favorites?'我的收藏':'最近抽到';$('#dialog-eyebrow').textContent=favorites?`最多收藏 ${collectionLimit} 道喜欢的味道`:`最近 ${collectionLimit} 道灵感，随时翻回来`;
     const toolbar=`<div class="collection-toolbar"><span>共 ${list.length} 道${favorites?'收藏':'记录'}</span><button class="button collection-clear" data-clear-collection="${favorites?'favorites':'history'}" ${list.length?'':'disabled'}>${favorites?'清空收藏':'清空记录'}</button></div>`;
-    $('#dialog-content').innerHTML=toolbar+(list.length?list.map(recipe=>`<article class="collection-row"><span class="collection-photo">${imageMarkup(recipe,true)}</span><div class="collection-info"><h3>${escape(recipe.name)}</h3><p>${escape(recipe.cuisine)} · ${recipe.time} 分钟 · ${escape(recipe.flavor)}</p></div><button class="button button-light" data-view="${escape(recipe.id)}" aria-label="查看${escape(recipe.name)}做法">看做法</button>${favorites?`<button class="remove-favorite" data-remove="${escape(recipe.id)}" aria-label="取消收藏${escape(recipe.name)}">${icon('close')}</button>`:''}</article>`).join(''):`<div class="collection-empty">${icon(favorites?'heart':'clock')}<h3>${favorites?'还没有收藏的味道':'还没有抽签记录'}</h3><p>${favorites?'遇到想吃的菜，点“收藏这道菜”，下次就能在这里找到。':'点一下随机按钮，开始今天的美味冒险。'}</p></div>`);
+    $('#dialog-content').innerHTML=toolbar+(list.length?list.map(recipe=>`<article class="collection-row"><span class="collection-photo">${imageMarkup(recipe,true)}</span><div class="collection-info"><h3>${escape(recipe.name)}</h3><p>${escape(recipe.cuisine)} · ${recipe.time} 分钟 · ${escape(recipe.flavor)}</p></div><div class="collection-actions"><button class="button button-light" data-view="${escape(recipe.id)}" aria-label="查看${escape(recipe.name)}做法">看做法</button>${addTodayButton(recipe)}${favorites?`<button class="remove-favorite" data-remove="${escape(recipe.id)}" aria-label="取消收藏${escape(recipe.name)}">${icon('close')}</button>`:''}</div></article>`).join(''):`<div class="collection-empty">${icon(favorites?'heart':'clock')}<h3>${favorites?'还没有收藏的味道':'还没有抽签记录'}</h3><p>${favorites?'遇到想吃的菜，点“收藏这道菜”，下次就能在这里找到。':'点一下随机按钮，开始今天的美味冒险。'}</p></div>`);
   }
   function clearCollection(mode) {
     if(mode!==state.dialogMode||!['favorites','history'].includes(mode)||!state[mode].length)return;
@@ -168,7 +204,7 @@
 
   function fridgeCard(match) {
     const {recipe,matched,missing,canCook}=match;
-    return `<article class="fridge-card"><div class="fridge-card-photo">${imageMarkup(recipe,true)}</div><div class="fridge-card-body"><span class="match-badge ${canCook?'is-ready':''}">${canCook?'主料已齐':`还差 ${missing.length} 样`}</span><h3>${escape(recipe.name)}</h3><p class="fridge-match">已有：${escape(matched.join('、'))}</p>${missing.length?`<p class="fridge-missing">还缺：${escape(missing.join('、'))}</p>`:'<p class="fridge-missing ready-note">核对用量，就能准备开火</p>'}<button class="text-button" data-fridge-view="${escape(recipe.id)}">看做法 · ${recipe.time} 分钟 ${icon('arrow')}</button></div></article>`;
+    return `<article class="fridge-card"><div class="fridge-card-photo">${imageMarkup(recipe,true)}</div><div class="fridge-card-body"><span class="match-badge ${canCook?'is-ready':''}">${canCook?'主料已齐':`还差 ${missing.length} 样`}</span><h3>${escape(recipe.name)}</h3><p class="fridge-match">已有：${escape(matched.join('、'))}</p>${missing.length?`<p class="fridge-missing">还缺：${escape(missing.join('、'))}</p>`:'<p class="fridge-missing ready-note">核对用量，就能准备开火</p>'}<button class="text-button" data-fridge-view="${escape(recipe.id)}">看做法 · ${recipe.time} 分钟 ${icon('arrow')}</button>${addTodayButton(recipe)}</div></article>`;
   }
   function renderFridge() {
     const ingredients=parseIngredients($('#fridge-input').value);state.fridgeHasRun=true;
@@ -203,6 +239,24 @@
   $('#home-button').addEventListener('click',()=>{switchView('random');window.scrollTo({top:0,behavior:scrollBehavior()});});$('#close-dialog').addEventListener('click',()=>$('#collection-dialog').close());
   $('.brand').addEventListener('click',()=>switchView('random'));
   $('#random-view-button').addEventListener('click',()=>switchView('random'));$('#catalog-view-button').addEventListener('click',()=>switchView('catalog'));
+  $('#today-view-button').addEventListener('click',()=>switchView('today'));
+  document.addEventListener('click',event=>{
+    const button=event.target.closest('[data-add-today]');if(!button||button.disabled)return;
+    let existed=false;changeTodayPlan(plan=>{existed=plan.some(item=>item.id===button.dataset.addToday);return addToPlan(plan,button.dataset.addToday,validRecipeIds,legacyIds);});plannerToast(existed?'这道菜已经在今日菜谱里':'已加入今日菜谱大厅，可以安排到三餐');
+  });
+  $('#today-plan-board').addEventListener('change',event=>{
+    const select=event.target.closest('[data-today-move]');if(!select)return;const id=select.dataset.todayMove,slot=select.value;
+    changeTodayPlan(plan=>moveInPlan(plan,id,slot,validRecipeIds,legacyIds));
+    const moved=[...$('#today-plan-board').querySelectorAll('[data-today-move]')].find(node=>node.dataset.todayMove===id);
+    if(moved){moved.focus({preventScroll:true});moved.closest('.today-recipe').scrollIntoView({block:'nearest',behavior:scrollBehavior()});}
+    plannerToast(slot==='lobby'?'已移回今日菜谱大厅':`已安排到${mealNames[slot]}`);
+  });
+  $('#today-plan-board').addEventListener('click',event=>{
+    const view=event.target.closest('[data-today-view]'),remove=event.target.closest('[data-today-remove]');
+    if(view)showStandalone(byId.get(view.dataset.todayView),'今天想吃这道菜，看看怎么做');
+    if(remove){changeTodayPlan(plan=>removeFromPlan(plan,remove.dataset.todayRemove,validRecipeIds,legacyIds));$('#today-title').tabIndex=-1;$('#today-title').focus({preventScroll:true});plannerToast('已移出今日菜谱');}
+  });
+  $('#clear-today-plan').addEventListener('click',()=>{changeTodayPlan(()=>[]);$('#today-title').tabIndex=-1;$('#today-title').focus({preventScroll:true});plannerToast('已清空今日菜谱');});
   $('#catalog-total').textContent=recipes.length;
   $('#catalog-cuisine').innerHTML='<option value="">全部菜系</option>'+cuisines.map(cuisine=>`<option>${cuisine}</option>`).join('');
   $('#category-options').innerHTML=[['','全部菜式'],...categories.map(category=>[category,category])].map(([value,label])=>`<button data-category="${value}" aria-pressed="${!value}">${label}<small>${recipes.filter(recipe=>!value||recipe.category===value).length}</small></button>`).join('');
@@ -218,7 +272,7 @@
     if(!Number.isInteger(page)||page<1||page>pages){toast(`请输入 1–${pages} 之间的整数页码`);input.value=catalog.page;input.focus();input.select();return;}
     goToCatalogPage(page);
   });
-  $('#catalog-grid').addEventListener('click',event=>{const button=event.target.closest('[data-catalog-recipe]');if(button)showStandalone(byId.get(button.dataset.catalogRecipe),'从菜谱库里，选一道喜欢的菜');});
+  $('#catalog-grid').addEventListener('click',event=>{if(event.target.closest('[data-add-today]'))return;const button=event.target.closest('[data-catalog-recipe]');if(button)showStandalone(byId.get(button.dataset.catalogRecipe),'从菜谱库里，选一道喜欢的菜');});
   $('#collection-dialog').addEventListener('click',event=>{if(event.target===$('#collection-dialog')){const rect=event.target.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)event.target.close();}});
   $('#dialog-content').addEventListener('click',event=>{const clear=event.target.closest('[data-clear-collection]');if(clear){clearCollection(clear.dataset.clearCollection);return;}const view=event.target.closest('[data-view]'),remove=event.target.closest('[data-remove]');if(view){$('#collection-dialog').close();showStandalone(byId.get(view.dataset.view),state.dialogMode==='favorites'?'从收藏里，找回喜欢的味道':'再看看这道菜');}if(remove){toggleFavorite(remove.dataset.remove);renderCollection();$('#dialog-content').querySelector('button:not(:disabled)')?.focus();}});
   $('#fridge-input').value=typeof stored.fridgeText==='string'?stored.fridgeText.slice(0,1000):'';
@@ -235,14 +289,15 @@
     finishRoll();state.dialogMode='about';$('#dialog-title').textContent='好好吃饭，从这一桌开始';$('#dialog-eyebrow').textContent='给每个纠结吃什么的你';
     const grouped=cuisines.map(cuisine=>`${cuisine} ${recipes.filter(recipe=>recipe.cuisine===cuisine).length} 道`);
     const photographed=recipes.filter(recipe=>photos[recipe.id]?.src).length;
-    $('#dialog-content').innerHTML=`<div class="about-copy"><p>收录 <strong>${recipes.length} 道家常做法</strong>。支持一次随机 1、2、3、4、5、6、7、8、9、10 道菜；“全菜系随机”排除小吃、甜品、烘焙和饮品，普通“随便都行”包含全部菜式。</p><div class="about-tags">${grouped.map(label=>`<span>${escape(label)}</span>`).join('')}</div><p>“逛菜谱”可以按热菜、凉菜、汤羹、主食、小吃、甜品、烘焙和饮品浏览，再搭配菜系、时间和食材搜索；每页显示 24 道。</p><p>冰箱匹配会核对配方中的主食材。勾选默认调料时，认为有常用油盐、酱醋、糖淀粉、葱姜蒜；特色酱料、肉汤和主食不会被自动忽略。缺少的食材会明确列出，数量和新鲜程度仍请实际检查。</p><p>每道菜以 2 人份为参考，多菜组合可适当减少每道份量。“素菜”不含肉鱼，可能含蛋奶。做法为家常参考版本，实际时间随食材和设备变化。</p><p>当前 ${photographed} 道有照片${photographed<recipes.length?`，${recipes.length-photographed} 道实拍待补充`:''}。摄影内容可能与家常配方的摆盘不同；同类菜参考会单独标注。点击照片来源可查看原作和授权信息。</p><p>收藏、历史、冰箱食材保存在当前浏览器，不上传，不会自动跨设备同步。文字菜单与筛选不依赖 AI 接口。</p><p class="about-small">菜谱参考和逐图来源见项目 <a href="https://github.com/jokerlixing/daily-dish" target="_blank" rel="noopener noreferrer">GitHub 仓库</a>中的 data 目录。</p></div>`;$('#collection-dialog').showModal();
+    $('#dialog-content').innerHTML=`<div class="about-copy"><p>收录 <strong>${recipes.length} 道家常做法</strong>。支持一次随机 1、2、3、4、5、6、7、8、9、10 道菜；“全菜系随机”排除小吃、甜品、烘焙和饮品，普通“随便都行”包含全部菜式。</p><div class="about-tags">${grouped.map(label=>`<span>${escape(label)}</span>`).join('')}</div><p>“逛菜谱”可以按热菜、凉菜、汤羹、主食、小吃、甜品、烘焙和饮品浏览，再搭配菜系、时间和食材搜索；每页显示 24 道。</p><p>冰箱匹配会核对配方中的主食材。勾选默认调料时，认为有常用油盐、酱醋、糖淀粉、葱姜蒜；特色酱料、肉汤和主食不会被自动忽略。缺少的食材会明确列出，数量和新鲜程度仍请实际检查。</p><p>每道菜以 2 人份为参考，多菜组合可适当减少每道份量。“素菜”不含肉鱼，可能含蛋奶。做法为家常参考版本，实际时间随食材和设备变化。</p><p>当前 ${photographed} 道有照片${photographed<recipes.length?`，${recipes.length-photographed} 道实拍待补充`:''}。摄影内容可能与家常配方的摆盘不同；同类菜参考会单独标注。点击照片来源可查看原作和授权信息。</p><p>今日菜谱可先放大厅，再手动安排早餐、中餐和晚餐，也能移回大厅。收藏、历史、今日菜谱和冰箱食材保存在当前浏览器，不上传，不会自动跨设备同步。文字菜单与筛选不依赖 AI 接口。</p><p class="about-small">菜谱参考和逐图来源见项目 <a href="https://github.com/jokerlixing/daily-dish" target="_blank" rel="noopener noreferrer">GitHub 仓库</a>中的 data 目录。</p></div>`;$('#collection-dialog').showModal();
   });
   const now=new Date();$('#today-label').textContent=`${now.getMonth()+1} 月 ${now.getDate()} 日 · ${['星期日','星期一','星期二','星期三','星期四','星期五','星期六'][now.getDay()]} · 好好吃饭，今天也一样`;
-  $('#total-count').textContent=recipes.length;syncFilterControls();draw(false);$('#shuffle-button').querySelector('span').textContent='帮我选一道';updateFavoriteCount();
+  $('#total-count').textContent=recipes.length;syncFilterControls();draw(false);$('#shuffle-button').querySelector('span').textContent='帮我选一道';updateFavoriteCount();syncTodayPlan();
   window.addEventListener('storage',event=>{
     if(event.key!==storageKey)return;
     try{
       const next=JSON.parse(event.newValue||'{}');if(!next||typeof next!=='object'||Array.isArray(next))return;
+      const plan=normalizePlan(next.todayPlan);if(!todayPlanDirty&&JSON.stringify(plan)!==JSON.stringify(state.todayPlan)){state.todayPlan=plan;syncTodayPlan();}
       state.favorites=cleanIds(next.favorites);state.history=cleanIds(next.history);updateFavoriteCount();
       const fridgeText=typeof next.fridgeText==='string'?next.fridgeText.slice(0,1000):'',includePantry=next.includePantry!==false;
       if($('#fridge-input').value!==fridgeText||$('#include-pantry').checked!==includePantry){
