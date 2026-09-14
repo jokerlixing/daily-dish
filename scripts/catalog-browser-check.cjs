@@ -52,7 +52,7 @@ const url=process.env.TEST_URL||'http://localhost:4173/';
       assert.equal(await pageInput.getAttribute('max'),'1');assert.ok(await pageInput.isEnabled());
       await page.locator('.catalog-open').click();
       assert.equal(await page.locator('#recipe-name').textContent(),'番茄炒蛋');
-      assert.equal(await page.evaluate(()=>document.activeElement.id),'recipe-name');
+      assert.equal(await page.evaluate(()=>document.activeElement.id),'cooking-steps');
       await page.locator('#catalog-view-button').click();
       assert.equal(await page.locator('#catalog-search').inputValue(),'番茄炒蛋');
       await page.locator('#catalog-reset').click();

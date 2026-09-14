@@ -65,7 +65,13 @@ dialog{width:min(640px,calc(100% - 32px));max-height:86dvh;border:1px solid #dbe
 .add-today:disabled{cursor:default;opacity:.7;background:#f4f6f0;color:#63755b;transform:none}
 .catalog-open,.menu-card-open{display:flex;flex:1;flex-direction:column;width:100%;min-width:0;padding:0;background:transparent;text-align:left;color:inherit}
 .catalog-open:focus-visible,.menu-card-open:focus-visible{outline-offset:-4px}
-.catalog-card>.add-today,.menu-card>.add-today{flex:none;margin:0 10px 10px;width:calc(100% - 20px);font-size:11px;padding:8px}
+.recipe-card-actions{display:flex;flex-wrap:wrap;gap:7px;flex:none;margin:0 10px 10px;min-width:0}
+.recipe-card-actions>button{flex:1 1 110px;min-width:0;min-height:44px;max-width:100%;padding:8px;font-size:11px;gap:6px}
+.recipe-method-button{min-height:44px;max-width:100%;gap:7px;white-space:nowrap}
+.recipe-method-button .icon{display:block;width:16px;height:16px;flex:none}
+.detail-heading h3{min-width:0;line-height:1.6}
+.detail-heading h3>span{min-width:0;overflow-wrap:anywhere}
+.detail-heading small{flex:none}
 .menu-card:has(.menu-card-open[aria-pressed=true]){border-color:var(--leaf);box-shadow:0 0 0 2px #75965e33}
 .collection-row{flex-wrap:wrap}
 .collection-info{flex:1 1 110px}
@@ -73,8 +79,9 @@ dialog{width:min(640px,calc(100% - 32px));max-height:86dvh;border:1px solid #dbe
 .collection-actions .button,.collection-actions .add-today,.collection-actions .remove-favorite{min-height:44px}
 .collection-actions .remove-favorite{min-width:44px}
 .collection-actions .add-today{font-size:11px;padding:8px 10px}
-.fridge-card-body>.add-today{margin-top:8px;width:100%;font-size:11px;padding:8px}
-.fridge-card-body>.text-button{min-height:44px}
+.fridge-cooking-time{margin-top:8px;font-size:10px;color:var(--muted)}
+.fridge-card-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;min-width:0}
+.fridge-card-actions>button{flex:1 1 110px;min-width:0;min-height:44px;max-width:100%;font-size:11px;padding:8px;gap:6px}
 
 /* The waiting hall spans the board; the three meals sit alongside each other. */
 .today-heading{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:18px;margin:28px 0 24px}
@@ -116,6 +123,8 @@ dialog{width:min(640px,calc(100% - 32px));max-height:86dvh;border:1px solid #dbe
   .view-switch button>span{font-size:10px}
   .recipe-actions .button,.recipe-actions .add-today{min-height:44px}
   .recipe-actions .add-today{font-size:11px}
+  .recipe-card-actions,.fridge-card-actions{flex-direction:column}
+  .recipe-card-actions>button,.fridge-card-actions>button{flex:none;width:100%;padding:8px 6px;gap:5px}
   .collection-actions{width:100%;justify-content:flex-start;gap:7px}
   .collection-actions .add-today{flex:1}
   .collection-actions .remove-favorite{margin-left:auto}
@@ -136,7 +145,7 @@ dialog{width:min(640px,calc(100% - 32px));max-height:86dvh;border:1px solid #dbe
   .today-assignment{font-size:12px}
   .today-slot-empty{font-size:11px;padding:18px 5px}
 }
-@media(max-width:400px){.view-switch button .icon{display:none}.view-switch button{gap:3px;font-size:11px}.view-switch button>span{font-size:9px}.catalog-card>.add-today,.menu-card>.add-today{margin-right:8px;margin-left:8px;width:calc(100% - 16px);gap:4px;font-size:10px;padding:8px 5px}.catalog-card>.add-today .icon,.menu-card>.add-today .icon{width:13px;height:13px}}
+@media(max-width:400px){.view-switch button .icon{display:none}.view-switch button{gap:3px;font-size:11px}.view-switch button>span{font-size:9px}.recipe-card-actions{margin-right:8px;margin-left:8px}.recipe-card-actions>button,.fridge-card-actions>button{gap:4px;font-size:10px;padding:8px 5px}}
 @media print{.today-view{display:none!important}}
 
 /* Keep the return and random actions centered above the recommended recipe. */

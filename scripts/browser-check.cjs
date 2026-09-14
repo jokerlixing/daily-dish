@@ -17,6 +17,8 @@ fs.mkdirSync(output,{recursive:true});
       await target.locator('#catalog-view-button').click();await target.locator('#catalog-reset').click();
       await target.locator('#catalog-search').fill(name);
       await target.locator('#catalog-grid').getByRole('button',{name:`查看${name}做法`,exact:true}).click();
+      assert.equal(await target.evaluate(()=>document.activeElement.id),'cooking-steps');
+      assert.ok((await target.locator('#cooking-title').textContent()).includes(name));
     };
     const applyRandomFilters=async({cuisine='',noSpicy=false,vegetarian=false,maxTime=0}={})=>{
       await page.locator('#random-view-button').click();await page.locator(`[data-cuisine="${cuisine}"]`).click();
@@ -104,7 +106,7 @@ fs.mkdirSync(output,{recursive:true});
     assert.equal(await page.locator('[data-menu-recipe]').count(),10);
     await chooseRecipe(page,'番茄炒蛋');assert.ok(!await page.locator('#menu-section').isVisible());
     assert.equal(await page.locator('#recipe-name').textContent(),'番茄炒蛋');
-    assert.equal(await page.evaluate(()=>document.activeElement.id),'recipe-name');
+    assert.equal(await page.evaluate(()=>document.activeElement.id),'cooking-steps');
     await applyRandomFilters(smallPool);
     const smallIds=await page.locator('[data-menu-recipe]').evaluateAll(nodes=>nodes.map(n=>n.dataset.menuRecipe));
     if(smallPool.ids.length>1)assert.deepEqual([...smallIds].sort(),[...smallPool.ids].sort());
