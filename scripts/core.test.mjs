@@ -7,7 +7,7 @@ import { createRequire } from 'node:module';
 import {isVegetarian,inferFlavor} from './recipe-metadata.mjs';
 import {readRecipes,expectedRecipeCount,canonicalRecipeName} from './catalog.mjs';
 const require=createRequire(import.meta.url);
-const {filterRecipes,ShuffleBag,cuisines,categories,parseIngredients,matchFridge}=require('../src/core.js');
+const {filterRecipes,filterRandomRecipes,ShuffleBag,cuisines,categories,parseIngredients,matchFridge}=require('../src/core.js');
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const read=file=>fs.readFileSync(path.join(root,file),'utf8').replace(/^\uFEFF/,'');
 const recipes=readRecipes();
@@ -68,6 +68,54 @@ test('all-cuisines includes everyday dishes, overrides one cuisine and still res
   assert.ok(filterRecipes(recipes,{allCuisines:true}).length>123);
   assert.ok(filterRecipes(recipes,{allCuisines:true}).every(r=>!['小吃','甜品','烘焙','饮品'].includes(r.category)));
   assert.deepEqual(filterRecipes(sample,{cuisine:'小吃'}).map(r=>r.id),['snack']);
+});
+const excludedMealKinds=['小吃','甜品','烘焙','饮品'];
+const isMeal=recipe=>recipe.cuisine!=='小吃'&&!excludedMealKinds.includes(recipe.category)&&!excludedMealKinds.includes(recipe.type);
+test('all nine meal cuisines exclude treats through every candidate, full shuffle cycle and ten-dish batch',()=>{
+  for(const cuisine of cuisines.filter(cuisine=>cuisine!=='小吃')){
+    const expected=recipes.filter(recipe=>recipe.cuisine===cuisine&&isMeal(recipe));
+    const pool=filterRandomRecipes(recipes,{cuisine});
+    assert.deepEqual(pool,expected,cuisine);assert.ok(pool.length>=10,cuisine);
+    const bag=new ShuffleBag(()=>0.37),round=[];
+    for(let i=0;i<pool.length;i++)round.push(bag.next(pool));
+    assert.equal(new Set(round.map(recipe=>recipe.id)).size,pool.length,cuisine);
+    assert.ok(round.every(isMeal),cuisine);
+    const batch=bag.nextBatch(pool,10,round.slice(-10).map(recipe=>recipe.id));
+    assert.equal(batch.length,10);assert.equal(new Set(batch.map(recipe=>recipe.id)).size,10);
+    assert.ok(batch.every(recipe=>isMeal(recipe)&&recipe.cuisine===cuisine),cuisine);
+    for(const noSpicy of [false,true])for(const vegetarian of [false,true])for(const maxTime of [15,30,60]){
+      const narrowed=filterRandomRecipes(recipes,{cuisine,noSpicy,vegetarian,maxTime});
+      assert.deepEqual(narrowed,expected.filter(recipe=>(!noSpicy||!recipe.spicy)&&(!vegetarian||recipe.vegetarian)&&recipe.time<=maxTime),`${cuisine}: ${noSpicy}/${vegetarian}/${maxTime}`);
+    }
+  }
+});
+test('random meal exclusions inspect category and legacy type while browsing and dedicated categories stay complete',()=>{
+  const base={name:'测试',ingredients:[],spicy:false,vegetarian:true,time:10};
+  const sample=[{...base,id:'meal',cuisine:'家常菜',category:'热菜',type:'热菜'},
+    ...excludedMealKinds.flatMap((kind,index)=>[
+      {...base,id:`category-${index}`,cuisine:'家常菜',category:kind,type:'热菜'},
+      {...base,id:`type-${index}`,cuisine:'家常菜',category:'热菜',type:kind}
+    ]),{...base,id:'snack-cuisine',cuisine:'小吃',category:'主食',type:'主食'}];
+  assert.deepEqual(filterRandomRecipes(sample,{cuisine:'家常菜'}).map(recipe=>recipe.id),['meal']);
+  for(const filter of [filterRecipes,filterRandomRecipes])assert.deepEqual(filter(sample,{allCuisines:true,cuisine:'川菜'}).map(recipe=>recipe.id),['meal']);
+  assert.equal(filterRecipes(sample,{cuisine:'家常菜'}).length,9);
+  assert.deepEqual(filterRandomRecipes(recipes),recipes);
+  for(const cuisine of cuisines)assert.deepEqual(filterRecipes(recipes,{cuisine}),recipes.filter(recipe=>recipe.cuisine===cuisine));
+  for(const category of excludedMealKinds){
+    const expected=recipes.filter(recipe=>recipe.category===category);assert.ok(expected.length>0,category);
+    assert.deepEqual(filterRecipes(recipes,{category}),expected,category);
+    assert.deepEqual(filterRandomRecipes(recipes,{category}),expected,category);
+    assert.ok(new ShuffleBag(()=>0.6).nextBatch(expected,10).every(recipe=>recipe.category===category),category);
+  }
+});
+test('sweet eight-treasure rice and milk corn fritters remain desserts outside everyday meal draws',()=>{
+  const homeIds=new Set(filterRandomRecipes(recipes,{cuisine:'家常菜'}).map(recipe=>recipe.id));
+  for(const id of ['cat-ec1742a9d1fb','cat-93cc18e9d1c2']){
+    const recipe=recipes.find(recipe=>recipe.id===id);assert.ok(recipe,id);
+    assert.equal(recipe.category,'甜品',recipe.name);assert.equal(recipe.type,'小吃',recipe.name);
+    assert.equal(homeIds.has(id),false,recipe.name);
+    assert.ok(filterRecipes(recipes,{category:'甜品'}).includes(recipe),recipe.name);
+  }
 });
 test('a full random cycle has no repetitions and the next cycle does not repeat its boundary',()=>{
   const pool=[{id:'a'},{id:'b'},{id:'c'},{id:'d'}];

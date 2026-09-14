@@ -2,14 +2,21 @@
   'use strict';
   const cuisines = ['川菜', '湘菜', '粤菜', '鲁菜', '苏菜', '浙菜', '闽菜', '徽菜', '家常菜', '小吃'];
   const categories = ['热菜', '凉菜', '汤羹', '主食', '小吃', '甜品', '烘焙', '饮品'];
+  const nonMealCategories = new Set(['小吃', '甜品', '烘焙', '饮品']);
+  const isMainDish = recipe => recipe.cuisine !== '小吃' && !nonMealCategories.has(recipe.category) && !nonMealCategories.has(recipe.type);
   function filterRecipes(recipes, filters = {}) {
     const query = (filters.query || '').trim().toLowerCase();
-    return recipes.filter(recipe => (filters.allCuisines ? recipe.cuisine !== '小吃' && recipe.type !== '小吃' && !['小吃','甜品','烘焙','饮品'].includes(recipe.category) : (!filters.cuisine || recipe.cuisine === filters.cuisine))
+    return recipes.filter(recipe => (filters.allCuisines ? isMainDish(recipe) : (!filters.cuisine || recipe.cuisine === filters.cuisine))
       && (!filters.noSpicy || !recipe.spicy)
       && (!filters.vegetarian || recipe.vegetarian)
       && (!filters.maxTime || recipe.time <= filters.maxTime)
       && (!filters.category || recipe.category === filters.category)
       && (!query || [recipe.name, recipe.cuisine, recipe.category || '', recipe.region || '', ...recipe.ingredients.map(i => i.name)].join(' ').toLowerCase().includes(query)));
+  }
+  // Cuisine-based random meals exclude treats; catalog browsing stays complete.
+  function filterRandomRecipes(recipes, filters = {}) {
+    const pool = filterRecipes(recipes, filters);
+    return filters.cuisine && filters.cuisine !== '小吃' ? pool.filter(isMainDish) : pool;
   }
   class ShuffleBag {
     constructor(random = Math.random) { this.random = random; this.key = ''; this.bag = []; }
@@ -151,7 +158,7 @@
       || b.matched.length - a.matched.length || a.missing.length - b.missing.length || a.recipe.time - b.recipe.time);
   }
   function hash(value) { return [...value].reduce((total, char) => ((total * 31) + char.charCodeAt(0)) >>> 0, 7); }
-  const api = { cuisines, categories, filterRecipes, ShuffleBag, hash, parseIngredients, matchFridge };
+  const api = { cuisines, categories, filterRecipes, filterRandomRecipes, ShuffleBag, hash, parseIngredients, matchFridge };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.RecipeCore = api;
 })(typeof window !== 'undefined' ? window : globalThis);

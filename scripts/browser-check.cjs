@@ -38,9 +38,11 @@ fs.mkdirSync(output,{recursive:true});
     assert.equal(await page.getByPlaceholder('搜菜名，或冰箱里的食材').count(),0);
     assert.equal(await page.locator('#fridge-input').count(),1);
     const catalog=await page.evaluate(()=>window.RECIPES.map(r=>({id:r.id,cuisine:r.cuisine,type:r.type,category:r.category,spicy:r.spicy,vegetarian:r.vegetarian,time:r.time})));
+    const excludedMealKinds=['小吃','甜品','烘焙','饮品'];
+    const isMeal=recipe=>recipe.cuisine!=='小吃'&&!excludedMealKinds.includes(recipe.category)&&!excludedMealKinds.includes(recipe.type);
     const filterCases=[];
     for(const cuisine of [...new Set(catalog.map(r=>r.cuisine))].filter(cuisine=>cuisine!=='小吃'))for(const noSpicy of [false,true])for(const vegetarian of [false,true])for(const maxTime of [15,30,60]){
-      const ids=catalog.filter(r=>r.cuisine===cuisine&&(!noSpicy||!r.spicy)&&(!vegetarian||r.vegetarian)&&r.time<=maxTime).map(r=>r.id);
+      const ids=catalog.filter(r=>r.cuisine===cuisine&&isMeal(r)&&(!noSpicy||!r.spicy)&&(!vegetarian||r.vegetarian)&&r.time<=maxTime).map(r=>r.id);
       filterCases.push({cuisine,noSpicy,vegetarian,maxTime,ids});
     }
     const smallPool=filterCases.find(f=>f.ids.length>0&&f.ids.length<10),emptyPool=filterCases.find(f=>!f.ids.length);
@@ -54,22 +56,39 @@ fs.mkdirSync(output,{recursive:true});
     for(const cuisine of ['川菜','湘菜','粤菜','鲁菜','苏菜','浙菜','闽菜','徽菜','家常菜']){
       await page.locator(`[data-cuisine="${cuisine}"]`).click();
       assert.equal(await page.locator('.cuisine-badge').textContent(),cuisine);
-      assert.equal(await page.locator('#pool-count').textContent(),`${catalog.filter(r=>r.cuisine===cuisine).length} 道可选`);
+      const expected=catalog.filter(r=>r.cuisine===cuisine&&isMeal(r));
+      assert.equal(await page.locator('#pool-count').textContent(),`${expected.length} 道可选`);
+      const single=await page.evaluate(()=>window.RECIPES.find(r=>r.name===document.querySelector('#recipe-name').textContent));
+      assert.ok(isMeal(single),`${cuisine}: single draw excludes treats`);
+      const candidateIds=await page.evaluate(cuisine=>window.RecipeCore.filterRandomRecipes(window.RECIPES,{cuisine}).map(recipe=>recipe.id),cuisine);
+      assert.deepEqual(candidateIds,expected.map(recipe=>recipe.id),`${cuisine}: complete candidates`);
+      await page.locator('[data-count="10"]').click();await ready();
+      const drawn=await page.locator('[data-menu-recipe]').evaluateAll(nodes=>nodes.map(n=>n.dataset.menuRecipe));
+      assert.equal(drawn.length,10);assert.equal(new Set(drawn).size,10);
+      assert.ok(drawn.every(id=>expected.some(recipe=>recipe.id===id)),`${cuisine}: ten-dish batch excludes treats`);
+      await page.locator('[data-count="1"]').click();await ready();
     }
     for(const category of ['热菜','凉菜','汤羹','主食','小吃','甜品','烘焙','饮品']){
       await page.locator(`[data-random-category="${category}"]`).click();
       assert.equal(await page.evaluate(()=>window.RECIPES.find(r=>r.name===document.querySelector('#recipe-name').textContent).category),category);
       assert.equal(await page.locator('#pool-count').textContent(),`${category} · ${catalog.filter(r=>r.category===category).length} 道可选`);
     }
-    ok('all eight cuisines, everyday dishes, and all eight exact food categories have the expected coverage');
+    for(const category of excludedMealKinds){
+      await page.locator('#catalog-view-button').click();await page.locator('#catalog-reset').click();
+      await page.locator(`[data-category="${category}"]`).click();
+      const ids=await page.locator('.catalog-card').evaluateAll(nodes=>nodes.map(node=>node.dataset.catalogRecipe));
+      assert.ok(ids.length>0);assert.ok(ids.every(id=>catalog.find(recipe=>recipe.id===id).category===category));
+    }
+    await page.locator('#random-view-button').click();
+    ok('nine meal cuisines exclude snacks, sweets, baking and drinks in singles and ten-dish batches; dedicated categories and browsing preserve them');
     await page.locator('#all-cuisines').click();
     assert.equal(await page.locator('#all-cuisines').getAttribute('aria-pressed'),'true');
-    assert.ok((await page.locator('#pool-count').textContent()).endsWith(`${catalog.filter(r=>r.cuisine!=='小吃'&&r.type!=='小吃'&&!['小吃','甜品','烘焙','饮品'].includes(r.category)).length} 道可选`));
+    assert.ok((await page.locator('#pool-count').textContent()).endsWith(`${catalog.filter(isMeal).length} 道可选`));
     for(const count of [2,3,4,5,6,7,8,9,10]){
       await page.locator(`[data-count="${count}"]`).click();await ready();
       const ids=await page.locator('[data-menu-recipe]').evaluateAll(nodes=>nodes.map(n=>n.dataset.menuRecipe));
       assert.equal(ids.length,count);assert.equal(new Set(ids).size,count);
-      assert.ok(await page.evaluate(ids=>ids.every(id=>{const recipe=window.RECIPES.find(r=>r.id===id);return recipe.cuisine!=='小吃'&&recipe.type!=='小吃'&&!['小吃','甜品','烘焙','饮品'].includes(recipe.category);}),ids));
+      assert.ok(ids.every(id=>isMeal(catalog.find(recipe=>recipe.id===id))));
     }
     await page.locator('#menu-grid .menu-card-open').nth(1).click();
     const selected=await page.locator('#recipe-name').textContent();

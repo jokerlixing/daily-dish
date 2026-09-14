@@ -54,6 +54,8 @@ dialog{width:min(640px,calc(100% - 32px));max-height:86dvh;border:1px solid #dbe
 .random-category-picker{border-top:1px dashed var(--line);padding:17px 0 19px}.random-category-options{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}.random-category-option{display:flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:9px 15px;font-size:12px;background:#f5f7f2;border:1px solid transparent;border-radius:8px}.random-category-option small{font-size:10px;opacity:.7}.random-category-option:hover{background:var(--light)}.random-category-option[aria-pressed=true]{background:var(--forest);color:#fff}.all-cuisines-toggle{min-height:52px;text-align:left;white-space:normal}.all-cuisines-toggle>span:last-child{min-width:0}.all-cuisines-toggle small{display:block;margin:3px 0 0;font-size:11px;line-height:1.7}.all-cuisines-toggle .switch-track{flex:none}
 @media(max-width:700px){.random-category-picker{padding:14px 0 16px}.random-category-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.random-category-option{gap:4px;padding:8px 3px;font-size:12px}.random-category-option small{font-size:9px}.all-cuisines-toggle{font-size:12px}.all-cuisines-toggle small{font-size:11px}}
 
+.cuisine-random-note{margin:-8px 0 16px;font-size:11px;line-height:1.7;color:var(--muted)}
+
 /* Keep every recipe's open action separate from adding it to today's plan. */
 .recipe-actions{flex-wrap:wrap;gap:10px 12px}
 .add-today{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;max-width:100%;padding:9px 13px;border:1px solid #cddbc1;border-radius:8px;background:#eef4e7;color:var(--forest);font-size:12px;font-weight:600;line-height:1.6;text-align:center}

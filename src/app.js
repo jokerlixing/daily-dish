@@ -2,7 +2,7 @@
   'use strict';
   const recipes = window.RECIPES;
   const photos = window.PHOTOS || {};
-  const { cuisines, categories, filterRecipes, ShuffleBag, parseIngredients, matchFridge } = window.RecipeCore;
+  const { cuisines, categories, filterRecipes, filterRandomRecipes, ShuffleBag, parseIngredients, matchFridge } = window.RecipeCore;
   const { slots:mealSlots, cleanPlan, addToPlan, moveInPlan, removeFromPlan } = window.TodayPlanCore;
   const mealNames={lobby:'今日菜谱大厅',breakfast:'早餐',lunch:'中餐',dinner:'晚餐'};
   const $ = selector => document.querySelector(selector);
@@ -113,7 +113,7 @@
     $('#batch-options').querySelectorAll('[data-count]').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.count)===state.batchSize)));
   }
   function updatePool() {
-    state.pool=filterRecipes(recipes,state.filters);
+    state.pool=filterRandomRecipes(recipes,state.filters);
     $('#pool-count').textContent=`${state.filters.allCuisines?'正餐 · ':state.filters.category?state.filters.category+' · ':''}${state.pool.length} 道可选`;
     $('#shuffle-hint').textContent=state.pool.length<state.batchSize?`只有 ${state.pool.length} 道符合条件，不会重复凑数`:'同一桌不重复，点菜名就能看做法';
     $('#shuffle-dock').hidden=!state.pool.length;$('#quick-draw').hidden=!state.pool.length;
