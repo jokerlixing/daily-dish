@@ -100,7 +100,7 @@ fs.mkdirSync(output,{recursive:true});
     await page.locator('[data-view]').first().click();assert.equal(await page.locator('#recipe-name').textContent(),favoriteName);
     await page.locator('#favorites-button').click();await page.locator('[data-remove]').first().click();assert.equal(await page.locator('.collection-row').count(),9);
     await page.keyboard.press('Escape');assert.equal(await page.locator('#collection-dialog').evaluate(el=>el.open),false);
-    await page.locator('#history-button').click();assert.ok(await page.locator('.collection-row').count()<=20);await page.locator('#close-dialog').click();
+    await page.locator('#history-button').click();assert.ok(await page.locator('.collection-row').count()<=1000);await page.locator('#close-dialog').click();
     ok('favorites survive reload, open and remove correctly; history is bounded and dialogs dismiss');
     await openFridge();
     await page.locator('#find-fridge').click();assert.match(await page.locator('#fridge-results').textContent(),/先填入/);

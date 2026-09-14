@@ -301,13 +301,14 @@ window.PHOTOS = {"nw-mapo-tofu":{"src":"assets/photos/meishi-517906.webp","alt":
   const escape = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   const scrollBehavior = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
   const storageKey = 'chishane.v1';
+  const collectionLimit = 1000;
   let storageAvailable = true, stored = {};
   try { const value = JSON.parse(localStorage.getItem(storageKey) || '{}'); if (value && typeof value === 'object' && !Array.isArray(value)) stored = value; } catch (_) { storageAvailable = false; }
   const byId = new Map(recipes.map(recipe => [recipe.id, recipe]));
   const legacyIds = { 'sn-sesame-tangyuan':'es-ningbo-sesame-tangyuan', 'cat-641602e74693':'cat-1dbfa13b129d' };
-  const cleanIds = value => Array.isArray(value) ? [...new Set(value.map(id=>legacyIds[id]||id).filter(id => typeof id === 'string' && byId.has(id)))] : [];
+  const cleanIds = value => Array.isArray(value) ? [...new Set(value.map(id=>legacyIds[id]||id).filter(id => typeof id === 'string' && byId.has(id)))].slice(0,collectionLimit) : [];
   const initialFilters = () => ({ cuisine:'', allCuisines:false, noSpicy:false, vegetarian:false, maxTime:0, query:'' });
-  const state = { favorites:cleanIds(stored.favorites), history:cleanIds(stored.history).slice(0,20), filters:initialFilters(), current:null, menu:[], batchSize:1, busy:false, pool:recipes.slice(), dialogMode:'favorites', fridgeHasRun:false, checks:new Map() };
+  const state = { favorites:cleanIds(stored.favorites), history:cleanIds(stored.history), filters:initialFilters(), current:null, menu:[], batchSize:1, busy:false, pool:recipes.slice(), dialogMode:'favorites', fridgeHasRun:false, checks:new Map() };
   const bag = new ShuffleBag();
   const catalog = { page:1, pageSize:24, filters:{...initialFilters(),category:''} };
   const counts = [1,2,3,4,5,6,7,8,9,10];
@@ -318,13 +319,14 @@ window.PHOTOS = {"nw-mapo-tofu":{"src":"assets/photos/meishi-517906.webp","alt":
     try {
       let latest={};
       try{const value=JSON.parse(localStorage.getItem(storageKey)||'{}');if(value&&typeof value==='object'&&!Array.isArray(value))latest=value;}catch(_){}
+      for(const key of ['favorites','history'])if(Array.isArray(latest[key]))latest[key]=cleanIds(latest[key]);
       const values={favorites:state.favorites,history:state.history,fridgeText:$('#fridge-input').value,includePantry:$('#include-pantry').checked};
       localStorage.setItem(storageKey,JSON.stringify({...latest,[field]:values[field]}));storageAvailable=true;
     } catch (_) { storageAvailable=false; }
   }
   function toast(message) { clearTimeout(toastTimer);$('#toast').textContent=message;$('#toast').classList.add('visible');toastTimer=setTimeout(()=>$('#toast').classList.remove('visible'),2700); }
   function updateFavoriteCount() { $('#favorite-count').textContent=state.favorites.length; }
-  function rememberMany(list) { state.history=[...new Set([...list.map(recipe=>recipe.id),...state.history])].slice(0,20);persist('history'); }
+  function rememberMany(list) { state.history=cleanIds([...list.map(recipe=>recipe.id),...state.history]);persist('history'); }
   function safeSource(url) { return /^https?:\/\//i.test(url || '') ? url : ''; }
   function imageMarkup(recipe, thumbnail=false) {
     const photo=photos[recipe.id];
@@ -402,7 +404,7 @@ window.PHOTOS = {"nw-mapo-tofu":{"src":"assets/photos/meishi-517906.webp","alt":
   function applyFilters(){finishRoll();syncFilterControls();draw(false);}
   function resetFilters(){state.filters=initialFilters();$('#max-time').value='0';applyFilters();}
   function toggleFavorite(id) {
-    if(!byId.has(id))return;const existed=state.favorites.includes(id);state.favorites=existed?state.favorites.filter(value=>value!==id):[id,...state.favorites];persist('favorites');updateFavoriteCount();
+    if(!byId.has(id))return;const existed=state.favorites.includes(id);state.favorites=existed?state.favorites.filter(value=>value!==id):cleanIds([id,...state.favorites]);persist('favorites');updateFavoriteCount();
     if(state.current?.id===id){const button=$('#favorite-recipe');if(button){button.setAttribute('aria-pressed',String(!existed));button.querySelector('span').textContent=existed?'收藏这道菜':'已收藏';}}
     toast(storageAvailable?(existed?'已从收藏移除':'已收藏，喜欢的味道留住了'):'浏览器未允许保存，收藏仅在本次打开时有效');
   }
@@ -440,7 +442,7 @@ window.PHOTOS = {"nw-mapo-tofu":{"src":"assets/photos/meishi-517906.webp","alt":
   }
   function renderCollection() {
     const favorites=state.dialogMode==='favorites';const list=(favorites?state.favorites:state.history).map(id=>byId.get(id)).filter(Boolean);
-    $('#dialog-title').textContent=favorites?'我的收藏':'最近抽到';$('#dialog-eyebrow').textContent=favorites?'留住喜欢的味道':'最近 20 道灵感，随时翻回来';
+    $('#dialog-title').textContent=favorites?'我的收藏':'最近抽到';$('#dialog-eyebrow').textContent=favorites?`最多收藏 ${collectionLimit} 道喜欢的味道`:`最近 ${collectionLimit} 道灵感，随时翻回来`;
     const toolbar=`<div class="collection-toolbar"><span>共 ${list.length} 道${favorites?'收藏':'记录'}</span><button class="button collection-clear" data-clear-collection="${favorites?'favorites':'history'}" ${list.length?'':'disabled'}>${favorites?'清空收藏':'清空记录'}</button></div>`;
     $('#dialog-content').innerHTML=toolbar+(list.length?list.map(recipe=>`<article class="collection-row"><span class="collection-photo">${imageMarkup(recipe,true)}</span><div class="collection-info"><h3>${escape(recipe.name)}</h3><p>${escape(recipe.cuisine)} · ${recipe.time} 分钟 · ${escape(recipe.flavor)}</p></div><button class="button button-light" data-view="${escape(recipe.id)}" aria-label="查看${escape(recipe.name)}做法">看做法</button>${favorites?`<button class="remove-favorite" data-remove="${escape(recipe.id)}" aria-label="取消收藏${escape(recipe.name)}">${icon('close')}</button>`:''}</article>`).join(''):`<div class="collection-empty">${icon(favorites?'heart':'clock')}<h3>${favorites?'还没有收藏的味道':'还没有抽签记录'}</h3><p>${favorites?'遇到想吃的菜，点“收藏这道菜”，下次就能在这里找到。':'点一下随机按钮，开始今天的美味冒险。'}</p></div>`);
   }
@@ -476,7 +478,7 @@ window.PHOTOS = {"nw-mapo-tofu":{"src":"assets/photos/meishi-517906.webp","alt":
   $('#all-cuisines').addEventListener('click',()=>{state.filters.allCuisines=!state.filters.allCuisines;state.filters.cuisine='';applyFilters();});
   $('#batch-options').addEventListener('click',event=>{const button=event.target.closest('[data-count]');if(button){finishRoll();state.batchSize=Number(button.dataset.count);setRandomLabels();draw();}});
   $('#menu-grid').addEventListener('click',event=>{const button=event.target.closest('[data-menu-recipe]');if(button){showRecipe(byId.get(button.dataset.menuRecipe),false);focusSection('#recipe-name');}});
-  $('#save-menu').addEventListener('click',()=>{state.favorites=[...new Set([...state.menu.map(recipe=>recipe.id),...state.favorites])];persist('favorites');updateFavoriteCount();if(state.current){$('#favorite-recipe').setAttribute('aria-pressed','true');$('#favorite-recipe span').textContent='已收藏';}toast(storageAvailable?`已收藏这一桌 ${state.menu.length} 道菜`:'浏览器未允许保存，收藏仅在本次打开时有效');});
+  $('#save-menu').addEventListener('click',()=>{state.favorites=cleanIds([...state.menu.map(recipe=>recipe.id),...state.favorites]);persist('favorites');updateFavoriteCount();if(state.current){$('#favorite-recipe').setAttribute('aria-pressed','true');$('#favorite-recipe span').textContent='已收藏';}toast(storageAvailable?`已收藏这一桌 ${state.menu.length} 道菜`:'浏览器未允许保存，收藏仅在本次打开时有效');});
   $('#no-spicy').addEventListener('click',()=>{state.filters.noSpicy=!state.filters.noSpicy;applyFilters();});
   $('#vegetarian').addEventListener('click',()=>{state.filters.vegetarian=!state.filters.vegetarian;applyFilters();});
   $('#max-time').addEventListener('change',event=>{state.filters.maxTime=Number(event.target.value);applyFilters();});
@@ -531,7 +533,7 @@ window.PHOTOS = {"nw-mapo-tofu":{"src":"assets/photos/meishi-517906.webp","alt":
     if(event.key!==storageKey)return;
     try{
       const next=JSON.parse(event.newValue||'{}');if(!next||typeof next!=='object'||Array.isArray(next))return;
-      state.favorites=cleanIds(next.favorites);state.history=cleanIds(next.history).slice(0,20);updateFavoriteCount();
+      state.favorites=cleanIds(next.favorites);state.history=cleanIds(next.history);updateFavoriteCount();
       const fridgeText=typeof next.fridgeText==='string'?next.fridgeText.slice(0,1000):'',includePantry=next.includePantry!==false;
       if($('#fridge-input').value!==fridgeText||$('#include-pantry').checked!==includePantry){
         $('#fridge-input').value=fridgeText;$('#include-pantry').checked=includePantry;if(state.fridgeHasRun)renderFridge();
