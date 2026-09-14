@@ -39,7 +39,8 @@
     <section class="selection-panel" aria-label="选菜偏好">
       <div class="filter-heading"><span class="small-label">今天想吃</span><span class="catalog-note"><strong id="total-count">—</strong> 道家常灵感 · 随心挑</span></div>
       <div class="cuisine-options" id="cuisine-options" role="group" aria-label="选择菜系"></div>
-      <div class="all-cuisines-row"><button class="all-cuisines-toggle" id="all-cuisines" aria-pressed="false"><span class="switch-track" aria-hidden="true"></span><span>全菜系随机 <small>只抽正餐，不含小吃</small></span></button></div>
+      <div class="random-category-picker"><span class="small-label">按菜式挑选</span><div class="random-category-options" id="random-category-options" role="group" aria-label="选择随机菜式"></div></div>
+      <div class="all-cuisines-row"><button class="all-cuisines-toggle" id="all-cuisines" aria-pressed="false"><span class="switch-track" aria-hidden="true"></span><span>全菜系随机 <small id="all-cuisines-note">不含小吃、甜品、烘焙、饮品</small></span></button></div>
       <div class="filter-bottom">
         <div class="preferences" role="group" aria-label="口味和时间"><button class="filter-toggle" id="no-spicy" aria-pressed="false"><svg class="icon"><use href="#i-pepper"/></svg>不吃辣</button><button class="filter-toggle" id="vegetarian" aria-pressed="false"><svg class="icon"><use href="#i-leaf"/></svg>只看素菜</button><label class="time-filter"><svg class="icon"><use href="#i-clock"/></svg><select id="max-time" aria-label="做饭时间"><option value="0">不限时间</option><option value="15">15 分钟内</option><option value="30">30 分钟内</option><option value="60">60 分钟内</option></select></label></div>
       </div>

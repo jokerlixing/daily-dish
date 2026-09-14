@@ -59,6 +59,9 @@ dialog{width:min(640px,calc(100% - 32px));max-height:86dvh;border:1px solid #dbe
 @media(max-width:700px){.dish-image-frame{min-height:235px}.photo-caption{padding:11px 12px;font-size:10px;gap:8px}.photo-caption .photo-source{font-size:10px}}
 
 .collection-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px;font-size:12px;color:var(--muted)}.collection-clear{min-height:44px;padding:9px 15px;background:#fff1e9;color:#985631;border:1px solid #ecd7c9}.collection-clear:hover:not(:disabled){background:#fce4d7}.collection-clear:disabled{cursor:default;opacity:.45;transform:none}
+
+.random-category-picker{border-top:1px dashed var(--line);padding:17px 0 19px}.random-category-options{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}.random-category-option{display:flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:9px 15px;font-size:12px;background:#f5f7f2;border:1px solid transparent;border-radius:8px}.random-category-option small{font-size:10px;opacity:.7}.random-category-option:hover{background:var(--light)}.random-category-option[aria-pressed=true]{background:var(--forest);color:#fff}.all-cuisines-toggle{min-height:52px;text-align:left;white-space:normal}.all-cuisines-toggle>span:last-child{min-width:0}.all-cuisines-toggle small{display:block;margin:3px 0 0;font-size:11px;line-height:1.7}.all-cuisines-toggle .switch-track{flex:none}
+@media(max-width:700px){.random-category-picker{padding:14px 0 16px}.random-category-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.random-category-option{gap:4px;padding:8px 3px;font-size:12px}.random-category-option small{font-size:9px}.all-cuisines-toggle{font-size:12px}.all-cuisines-toggle small{font-size:11px}}
 </style>
 </head>
 <body>
@@ -91,7 +94,8 @@ dialog{width:min(640px,calc(100% - 32px));max-height:86dvh;border:1px solid #dbe
     <section class="selection-panel" aria-label="选菜偏好">
       <div class="filter-heading"><span class="small-label">今天想吃</span><span class="catalog-note"><strong id="total-count">—</strong> 道家常灵感 · 随心挑</span></div>
       <div class="cuisine-options" id="cuisine-options" role="group" aria-label="选择菜系"></div>
-      <div class="all-cuisines-row"><button class="all-cuisines-toggle" id="all-cuisines" aria-pressed="false"><span class="switch-track" aria-hidden="true"></span><span>全菜系随机 <small>只抽正餐，不含小吃</small></span></button></div>
+      <div class="random-category-picker"><span class="small-label">按菜式挑选</span><div class="random-category-options" id="random-category-options" role="group" aria-label="选择随机菜式"></div></div>
+      <div class="all-cuisines-row"><button class="all-cuisines-toggle" id="all-cuisines" aria-pressed="false"><span class="switch-track" aria-hidden="true"></span><span>全菜系随机 <small id="all-cuisines-note">不含小吃、甜品、烘焙、饮品</small></span></button></div>
       <div class="filter-bottom">
         <div class="preferences" role="group" aria-label="口味和时间"><button class="filter-toggle" id="no-spicy" aria-pressed="false"><svg class="icon"><use href="#i-pepper"/></svg>不吃辣</button><button class="filter-toggle" id="vegetarian" aria-pressed="false"><svg class="icon"><use href="#i-leaf"/></svg>只看素菜</button><label class="time-filter"><svg class="icon"><use href="#i-clock"/></svg><select id="max-time" aria-label="做饭时间"><option value="0">不限时间</option><option value="15">15 分钟内</option><option value="30">30 分钟内</option><option value="60">60 分钟内</option></select></label></div>
       </div>
@@ -307,7 +311,7 @@ window.PHOTOS = {"nw-mapo-tofu":{"src":"assets/photos/meishi-517906.webp","alt":
   const byId = new Map(recipes.map(recipe => [recipe.id, recipe]));
   const legacyIds = { 'sn-sesame-tangyuan':'es-ningbo-sesame-tangyuan', 'cat-641602e74693':'cat-1dbfa13b129d' };
   const cleanIds = value => Array.isArray(value) ? [...new Set(value.map(id=>legacyIds[id]||id).filter(id => typeof id === 'string' && byId.has(id)))].slice(0,collectionLimit) : [];
-  const initialFilters = () => ({ cuisine:'', allCuisines:false, noSpicy:false, vegetarian:false, maxTime:0, query:'' });
+  const initialFilters = () => ({ cuisine:'', category:'', allCuisines:false, noSpicy:false, vegetarian:false, maxTime:0, query:'' });
   const state = { favorites:cleanIds(stored.favorites), history:cleanIds(stored.history), filters:initialFilters(), current:null, menu:[], batchSize:1, busy:false, pool:recipes.slice(), dialogMode:'favorites', fridgeHasRun:false, checks:new Map() };
   const bag = new ShuffleBag();
   const catalog = { page:1, pageSize:24, filters:{...initialFilters(),category:''} };
@@ -373,7 +377,7 @@ window.PHOTOS = {"nw-mapo-tofu":{"src":"assets/photos/meishi-517906.webp","alt":
   }
   function updatePool() {
     state.pool=filterRecipes(recipes,state.filters);
-    $('#pool-count').textContent=`${state.filters.allCuisines?'不含小吃 · ':''}${state.pool.length} 道可选`;
+    $('#pool-count').textContent=`${state.filters.allCuisines?'正餐 · ':state.filters.category?state.filters.category+' · ':''}${state.pool.length} 道可选`;
     $('#shuffle-hint').textContent=state.pool.length<state.batchSize?`只有 ${state.pool.length} 道符合条件，不会重复凑数`:'同一桌不重复，点菜名就能看做法';
     $('#shuffle-dock').hidden=!state.pool.length;$('#quick-draw').hidden=!state.pool.length;
     if(!state.pool.length){$('#recipe').hidden=true;$('#recipe-detail').hidden=true;$('#menu-section').hidden=true;$('#empty-state').hidden=false;$('#announcement').textContent='没有符合筛选条件的菜谱';}
@@ -398,7 +402,8 @@ window.PHOTOS = {"nw-mapo-tofu":{"src":"assets/photos/meishi-517906.webp","alt":
     if(animate&&!reduced)rollTimer=setTimeout(complete,320);else complete();
   }
   function syncFilterControls() {
-    $('#cuisine-options').querySelectorAll('button').forEach(button=>button.setAttribute('aria-pressed',String(!state.filters.allCuisines&&button.dataset.cuisine===state.filters.cuisine)));
+    $('#cuisine-options').querySelectorAll('button').forEach(button=>button.setAttribute('aria-pressed',String(!state.filters.allCuisines&&!state.filters.category&&button.dataset.cuisine===state.filters.cuisine)));
+    $('#random-category-options').querySelectorAll('button').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.randomCategory===state.filters.category)));
     $('#all-cuisines').setAttribute('aria-pressed',String(state.filters.allCuisines));$('#no-spicy').setAttribute('aria-pressed',String(state.filters.noSpicy));$('#vegetarian').setAttribute('aria-pressed',String(state.filters.vegetarian));
   }
   function applyFilters(){finishRoll();syncFilterControls();draw(false);}
@@ -472,10 +477,12 @@ window.PHOTOS = {"nw-mapo-tofu":{"src":"assets/photos/meishi-517906.webp","alt":
     $('#announcement').textContent=`识别${ingredients.length}种食材，有${ready.length}道菜主料已齐，${almost.length}道还差少量配料。`;
   }
 
-  $('#cuisine-options').innerHTML=[['','随便都行'],...cuisines.map(cuisine=>[cuisine,cuisine])].map(([value,label])=>`<button class="cuisine-option" data-cuisine="${value}" aria-pressed="${value===''}">${label}</button>`).join('');
+  $('#cuisine-options').innerHTML=[['','随便都行'],...cuisines.filter(cuisine=>cuisine!=='小吃').map(cuisine=>[cuisine,cuisine])].map(([value,label])=>`<button class="cuisine-option" data-cuisine="${value}" aria-pressed="${value===''}">${label}</button>`).join('');
+  $('#random-category-options').innerHTML=categories.map(category=>`<button class="random-category-option" data-random-category="${escape(category)}" aria-pressed="false">${escape(category)}<small>${recipes.filter(recipe=>recipe.category===category).length}</small></button>`).join('');
   $('#batch-options').innerHTML=counts.map(count=>`<button class="batch-option" data-count="${count}" aria-pressed="${count===1}" aria-label="随机${countWords[count]}道菜">随机 <strong>${count}</strong> 道</button>`).join('');
-  $('#cuisine-options').addEventListener('click',event=>{const button=event.target.closest('[data-cuisine]');if(button){state.filters.cuisine=button.dataset.cuisine;state.filters.allCuisines=false;applyFilters();}});
-  $('#all-cuisines').addEventListener('click',()=>{state.filters.allCuisines=!state.filters.allCuisines;state.filters.cuisine='';applyFilters();});
+  $('#cuisine-options').addEventListener('click',event=>{const button=event.target.closest('[data-cuisine]');if(button){state.filters.cuisine=button.dataset.cuisine;state.filters.category='';state.filters.allCuisines=false;applyFilters();}});
+  $('#random-category-options').addEventListener('click',event=>{const button=event.target.closest('[data-random-category]');if(button){state.filters.category=button.dataset.randomCategory;state.filters.cuisine='';state.filters.allCuisines=false;applyFilters();}});
+  $('#all-cuisines').addEventListener('click',()=>{state.filters.allCuisines=!state.filters.allCuisines;state.filters.cuisine='';state.filters.category='';applyFilters();});
   $('#batch-options').addEventListener('click',event=>{const button=event.target.closest('[data-count]');if(button){finishRoll();state.batchSize=Number(button.dataset.count);setRandomLabels();draw();}});
   $('#menu-grid').addEventListener('click',event=>{const button=event.target.closest('[data-menu-recipe]');if(button){showRecipe(byId.get(button.dataset.menuRecipe),false);focusSection('#recipe-name');}});
   $('#save-menu').addEventListener('click',()=>{state.favorites=cleanIds([...state.menu.map(recipe=>recipe.id),...state.favorites]);persist('favorites');updateFavoriteCount();if(state.current){$('#favorite-recipe').setAttribute('aria-pressed','true');$('#favorite-recipe span').textContent='已收藏';}toast(storageAvailable?`已收藏这一桌 ${state.menu.length} 道菜`:'浏览器未允许保存，收藏仅在本次打开时有效');});

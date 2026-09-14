@@ -1,6 +1,6 @@
 {
   "name": "daily-dish",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "private": true,
   "description": "适配电脑和手机、可离线使用的每日随机菜谱",
   "scripts": {

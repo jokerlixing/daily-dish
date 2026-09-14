@@ -4,7 +4,7 @@ A responsive, dependency-free Chinese recipe picker for desktop and mobile.
 
 [在线使用 / Live demo](https://jokerlixing.github.io/daily-dish/) · [GitHub 仓库](https://github.com/jokerlixing/daily-dish)
 
-**v2.2.1 · 1000 道菜谱，每道使用独立的真实照片。** 支持分类浏览、分页跳转和手机使用；相近成品照片会显示实际菜名与差异说明。功能、分类数量与发布校验说明见 [本版更新记录](docs/catalog-1000-status.md)，[888 道版本记录](docs/catalog-888-status.md) 保留为历史。
+**v2.2.2 · 1000 道菜谱，每道使用独立的真实照片。** 支持分类浏览、分页跳转和手机使用；相近成品照片会显示实际菜名与差异说明。功能、分类数量与发布校验说明见 [本版更新记录](docs/catalog-1000-status.md)，[888 道版本记录](docs/catalog-888-status.md) 保留为历史。
 
 适配电脑和手机的随机菜单网页。收录 **1000 道菜谱**，覆盖八大菜系、家常菜与地方小吃；每道包含两人份食材用量、分步做法和烹饪提示。菜系与菜式独立分类，分类数量见 [菜库统计](docs/catalog-1000-counts.json)。
 
@@ -12,7 +12,8 @@ A responsive, dependency-free Chinese recipe picker for desktop and mobile.
 
 - 一次随机 **1、2、3、4、5、6、7、8、9、10 道菜**；点击菜单中的菜名查看完整做法，可收藏整桌菜单。
 - **全菜系随机**覆盖八大菜系和家常菜，排除小吃、甜品、烘焙和饮品；“随便都行”包含全部菜式。
-- 随机推荐可组合菜系、不吃辣、素菜和时长条件。
+- 主页提供八大菜系与家常菜入口，以及**热菜、凉菜、汤羹、主食、小吃、甜品、烘焙、饮品**八个菜式分类及数量。点击菜系或菜式即可随机抽取，可继续叠加不吃辣、素菜和时长条件。
+- “全菜系随机”按钮旁明确说明四个排除分类；切换到全菜系会清除单独菜式筛选。
 - **逛菜谱**保留菜名、食材和菜系搜索，按热菜、凉菜、汤羹、主食、小吃、甜品、烘焙、饮品筛选，每页 24 道；可编辑页码后按回车或点击“跳转”前往指定页。手机两列、平板三列、电脑四列，打开菜谱再返回时保留筛选与页码。
 - 同一桌不重复；候选不足时显示实际数量，不重复凑数。
 - 在独立的**冰箱**入口输入已有食材，区分“主料已齐”和“还缺食材”，支持番茄/西红柿等常见别名。
@@ -57,6 +58,7 @@ npm start
 - `scripts/photos.test.mjs`：逐菜照片覆盖、当前文件 SHA256 对应的视觉复核、文件及原图地址去重、来源信息与构建一致性检查。
 - `scripts/browser-check.cjs`：Playwright 浏览器检查；支持 `PLAYWRIGHT_MODULE`、`BROWSER_EXE`、`TEST_URL` 环境变量。
 - `scripts/collection-limits-check.cjs`：验证收藏和最近抽到各 1000 条的上限、刷新恢复、跨标签同步、清空与手机操作。
+- `scripts/random-categories-check.cjs`：验证主页八类完整覆盖、分类随机、全菜系排除项与手机点击。
 - `scripts/layout-check.cjs`：12 种屏幕宽度下的按钮遮挡、真实点击位置和九道菜回归检查。
 - `scripts/catalog-browser-check.cjs`：分类、搜索、分页、打开菜谱、收藏迁移与响应式网格检查。
 - `scripts/photo-release-check.mjs`：检查完整菜库的照片覆盖、本地文件、来源与权利信息、参考说明，并检查文件路径、内容和原图地址重复；发布前须通过。

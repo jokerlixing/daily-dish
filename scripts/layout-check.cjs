@@ -27,6 +27,15 @@ const url=process.env.TEST_URL||'http://localhost:4173/';
       await page.locator('#quick-draw').scrollIntoViewIfNeeded();await page.locator('#quick-draw').click();
       assert.equal(await page.locator('[data-menu-recipe]').count(),9);
       if([320,390,768,1440].includes(width)){
+        for(const category of ['热菜','凉菜','汤羹','主食','小吃','甜品','烘焙','饮品']){
+          const option=page.locator(`[data-random-category="${category}"]`);await option.scrollIntoViewIfNeeded();
+          const bounds=await option.boundingBox();assert.ok(bounds.x>=0&&bounds.x+bounds.width<=width&&bounds.height>=44,`${width}px ${category} tap target`);
+          assert.equal(await page.evaluate(({x,y})=>document.elementFromPoint(x,y)?.closest('[data-random-category]')?.dataset.randomCategory,{x:bounds.x+bounds.width/2,y:bounds.y+bounds.height/2}),category);
+          await page.mouse.click(bounds.x+bounds.width/2,bounds.y+bounds.height/2);
+          const categoryIds=await page.locator('[data-menu-recipe]').evaluateAll(nodes=>nodes.map(n=>n.dataset.menuRecipe));
+          assert.equal(categoryIds.length,9);assert.ok(await page.evaluate(({ids,category})=>ids.every(id=>window.RECIPES.find(r=>r.id===id).category===category),{ids:categoryIds,category}));
+        }
+        await page.locator('[data-cuisine=""]').click();
         await page.locator('#fridge-panel summary').click();await page.locator('#fridge-input').fill('番茄、鸡蛋');await page.locator('#find-fridge').click();
         assert.ok(await page.locator('.fridge-card').filter({has:page.locator('h3',{hasText:'番茄炒蛋'})}).isVisible());
         await page.locator('#fridge-panel summary').click();await page.locator('[data-count="1"]').click();

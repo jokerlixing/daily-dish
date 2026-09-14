@@ -14,7 +14,7 @@
   const byId = new Map(recipes.map(recipe => [recipe.id, recipe]));
   const legacyIds = { 'sn-sesame-tangyuan':'es-ningbo-sesame-tangyuan', 'cat-641602e74693':'cat-1dbfa13b129d' };
   const cleanIds = value => Array.isArray(value) ? [...new Set(value.map(id=>legacyIds[id]||id).filter(id => typeof id === 'string' && byId.has(id)))].slice(0,collectionLimit) : [];
-  const initialFilters = () => ({ cuisine:'', allCuisines:false, noSpicy:false, vegetarian:false, maxTime:0, query:'' });
+  const initialFilters = () => ({ cuisine:'', category:'', allCuisines:false, noSpicy:false, vegetarian:false, maxTime:0, query:'' });
   const state = { favorites:cleanIds(stored.favorites), history:cleanIds(stored.history), filters:initialFilters(), current:null, menu:[], batchSize:1, busy:false, pool:recipes.slice(), dialogMode:'favorites', fridgeHasRun:false, checks:new Map() };
   const bag = new ShuffleBag();
   const catalog = { page:1, pageSize:24, filters:{...initialFilters(),category:''} };
@@ -80,7 +80,7 @@
   }
   function updatePool() {
     state.pool=filterRecipes(recipes,state.filters);
-    $('#pool-count').textContent=`${state.filters.allCuisines?'不含小吃 · ':''}${state.pool.length} 道可选`;
+    $('#pool-count').textContent=`${state.filters.allCuisines?'正餐 · ':state.filters.category?state.filters.category+' · ':''}${state.pool.length} 道可选`;
     $('#shuffle-hint').textContent=state.pool.length<state.batchSize?`只有 ${state.pool.length} 道符合条件，不会重复凑数`:'同一桌不重复，点菜名就能看做法';
     $('#shuffle-dock').hidden=!state.pool.length;$('#quick-draw').hidden=!state.pool.length;
     if(!state.pool.length){$('#recipe').hidden=true;$('#recipe-detail').hidden=true;$('#menu-section').hidden=true;$('#empty-state').hidden=false;$('#announcement').textContent='没有符合筛选条件的菜谱';}
@@ -105,7 +105,8 @@
     if(animate&&!reduced)rollTimer=setTimeout(complete,320);else complete();
   }
   function syncFilterControls() {
-    $('#cuisine-options').querySelectorAll('button').forEach(button=>button.setAttribute('aria-pressed',String(!state.filters.allCuisines&&button.dataset.cuisine===state.filters.cuisine)));
+    $('#cuisine-options').querySelectorAll('button').forEach(button=>button.setAttribute('aria-pressed',String(!state.filters.allCuisines&&!state.filters.category&&button.dataset.cuisine===state.filters.cuisine)));
+    $('#random-category-options').querySelectorAll('button').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.randomCategory===state.filters.category)));
     $('#all-cuisines').setAttribute('aria-pressed',String(state.filters.allCuisines));$('#no-spicy').setAttribute('aria-pressed',String(state.filters.noSpicy));$('#vegetarian').setAttribute('aria-pressed',String(state.filters.vegetarian));
   }
   function applyFilters(){finishRoll();syncFilterControls();draw(false);}
@@ -179,10 +180,12 @@
     $('#announcement').textContent=`识别${ingredients.length}种食材，有${ready.length}道菜主料已齐，${almost.length}道还差少量配料。`;
   }
 
-  $('#cuisine-options').innerHTML=[['','随便都行'],...cuisines.map(cuisine=>[cuisine,cuisine])].map(([value,label])=>`<button class="cuisine-option" data-cuisine="${value}" aria-pressed="${value===''}">${label}</button>`).join('');
+  $('#cuisine-options').innerHTML=[['','随便都行'],...cuisines.filter(cuisine=>cuisine!=='小吃').map(cuisine=>[cuisine,cuisine])].map(([value,label])=>`<button class="cuisine-option" data-cuisine="${value}" aria-pressed="${value===''}">${label}</button>`).join('');
+  $('#random-category-options').innerHTML=categories.map(category=>`<button class="random-category-option" data-random-category="${escape(category)}" aria-pressed="false">${escape(category)}<small>${recipes.filter(recipe=>recipe.category===category).length}</small></button>`).join('');
   $('#batch-options').innerHTML=counts.map(count=>`<button class="batch-option" data-count="${count}" aria-pressed="${count===1}" aria-label="随机${countWords[count]}道菜">随机 <strong>${count}</strong> 道</button>`).join('');
-  $('#cuisine-options').addEventListener('click',event=>{const button=event.target.closest('[data-cuisine]');if(button){state.filters.cuisine=button.dataset.cuisine;state.filters.allCuisines=false;applyFilters();}});
-  $('#all-cuisines').addEventListener('click',()=>{state.filters.allCuisines=!state.filters.allCuisines;state.filters.cuisine='';applyFilters();});
+  $('#cuisine-options').addEventListener('click',event=>{const button=event.target.closest('[data-cuisine]');if(button){state.filters.cuisine=button.dataset.cuisine;state.filters.category='';state.filters.allCuisines=false;applyFilters();}});
+  $('#random-category-options').addEventListener('click',event=>{const button=event.target.closest('[data-random-category]');if(button){state.filters.category=button.dataset.randomCategory;state.filters.cuisine='';state.filters.allCuisines=false;applyFilters();}});
+  $('#all-cuisines').addEventListener('click',()=>{state.filters.allCuisines=!state.filters.allCuisines;state.filters.cuisine='';state.filters.category='';applyFilters();});
   $('#batch-options').addEventListener('click',event=>{const button=event.target.closest('[data-count]');if(button){finishRoll();state.batchSize=Number(button.dataset.count);setRandomLabels();draw();}});
   $('#menu-grid').addEventListener('click',event=>{const button=event.target.closest('[data-menu-recipe]');if(button){showRecipe(byId.get(button.dataset.menuRecipe),false);focusSection('#recipe-name');}});
   $('#save-menu').addEventListener('click',()=>{state.favorites=cleanIds([...state.menu.map(recipe=>recipe.id),...state.favorites]);persist('favorites');updateFavoriteCount();if(state.current){$('#favorite-recipe').setAttribute('aria-pressed','true');$('#favorite-recipe span').textContent='已收藏';}toast(storageAvailable?`已收藏这一桌 ${state.menu.length} 道菜`:'浏览器未允许保存，收藏仅在本次打开时有效');});
