@@ -165,3 +165,8 @@ dialog{width:min(640px,calc(100% - 32px));max-height:86dvh;border:1px solid #dbe
   .recommendation-heading>.recommendation-tools{gap:8px}
   .recommendation-tools>.button{font-size:11px;padding:10px;gap:6px}
 }
+
+/* Fridge matches show the whole dish instead of cropping portrait photos. */
+.fridge-card-photo{display:flex;align-items:center;justify-content:center;height:auto;min-height:0;aspect-ratio:4/3;overflow:hidden;background:linear-gradient(145deg,#edf2e7,#dfe8d5)}
+.fridge-card-photo img{display:block;width:100%;height:100%;object-fit:contain;background:transparent}
+@media(max-width:360px){.fridge-card{display:flex;flex-direction:column}.fridge-card-photo{width:100%;height:auto;min-height:0;aspect-ratio:4/3}}

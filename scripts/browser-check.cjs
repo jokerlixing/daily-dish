@@ -204,6 +204,8 @@ fs.mkdirSync(output,{recursive:true});
     for(const screen of screens){
       await page.setViewportSize(screen);await page.locator('[data-count="10"]').click();await ready();
       await openFridge();await page.locator('#fridge-input').fill('鸡蛋、番茄、土豆、青菜');await page.locator('#find-fridge').click();
+      const fridgePhotos=await page.locator('.fridge-card-photo').evaluateAll(nodes=>nodes.map(node=>{const rect=node.getBoundingClientRect(),img=node.querySelector('img');return {ratio:rect.width/rect.height,fit:img?getComputedStyle(img).objectFit:null};}));
+      assert.ok(fridgePhotos.length>0);assert.ok(fridgePhotos.every(photo=>Math.abs(photo.ratio-4/3)<.03&&photo.fit==='contain'),`${screen.width}px fridge photos should preserve the whole image: ${JSON.stringify(fridgePhotos.slice(0,3))}`);
       const sizes=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,viewport:innerWidth}));
       assert.ok(sizes.scroll<=sizes.viewport,`${screen.width}px overflow: ${JSON.stringify(sizes)}`);
       if(screen.width<=390){assert.equal(await page.locator('#shuffle-dock').evaluate(el=>getComputedStyle(el).position),'static');assert.ok(await page.locator('#quick-draw').isVisible());}
